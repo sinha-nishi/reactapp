@@ -1,0 +1,12 @@
+color:
+  button:
+    primary:
+      background:
+        value: "{palette.blue.500}"
+      text:
+        value: "{palette.white}"
+    secondary:
+      background:
+        value: "{palette.white}"
+      text:
+        value: "{palette.grey.800}"

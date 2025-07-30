@@ -1,0 +1,10 @@
+color:
+  button:
+    primary:
+      background:
+        value: "{palette.grey.100}"
+      text:
+        value: "{palette.grey.800}"
+shadow:
+  button:
+    value: "inset 5px 5px 10px #d9d9d9, inset -5px -5px 10px #ffffff"

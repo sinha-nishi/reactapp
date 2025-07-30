@@ -1,0 +1,22 @@
+{
+  "name": "@pkvsinha/react-myui",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "theme:flat": "node scripts/build-tokens.js default",
+    "theme:material": "node scripts/build-tokens.js material",
+    "theme:neumorphism": "node scripts/build-tokens.js neumorphism"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/react": "^18.2.0",
+    "js-yaml": "^4.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rollup": "^4.45.3",
+    "turbo": "^2.5.5",
+    "typescript": "^5.8.3"
+  },
+  "packageManager": "pnpm@10.13.1"
+}

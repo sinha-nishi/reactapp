@@ -1,0 +1,11 @@
+palette:
+  white:
+    value: "#ffffff"
+  grey:
+    "100":
+      value: "#f0f0f0"
+    "800":
+      value: "#333333"
+  blue:
+    "500":
+      value: "#1ea7fd"

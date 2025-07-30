@@ -1,0 +1,49 @@
+# tokens/themes/material.yaml
+modes:
+  light:
+    color:
+      button:
+        primary:
+          background:
+            value: '{palette.blue.500}'
+          text:
+            value: '{palette.white}'
+      surface:
+        primary:
+          value: '{palette.white}'
+    shadow:
+      button:
+        value: '0 2px 4px rgba(0,0,0,0.2)'
+  dark:
+    color:
+      button:
+        primary:
+          background:
+            value: '{palette.blue.200}'
+          text:
+            value: '{palette.black}'
+      surface:
+        primary:
+          value: '{palette.grey.900}'
+    shadow:
+      button:
+        value: '0 2px 6px rgba(0,0,0,0.4)'
+
+contrast:
+  high:
+    light:
+      color:
+        button:
+          primary:
+            background:
+              value: '{palette.blue.500}'
+            text:
+              value: '{palette.white}'
+    dark:
+      color:
+        button:
+          primary:
+            background:
+              value: '{palette.blue.200}'
+            text:
+              value: '{palette.black}'
