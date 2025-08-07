@@ -1,6 +1,11 @@
 # react-myui
 A customizable React UI implementation
 
+> [!WARNING]
+> This repostiory uses **pnpm** as package manager. Please pay close attention to this information as it is crucial for preventing potential issues or risks.
+> - install pnpm `npm install -g pnpm@latest`
+> - Ensure all dependencies are installed before running.
+
 ## Design System
 
 Our design system is built around key variables:
