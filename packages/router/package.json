@@ -1,6 +1,6 @@
 {
-  "name": "@pkvsinha/react-layout",
-  "version": "0.0.1",
+  "name": "@pkvsinha/react-router",
+  "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -36,7 +36,7 @@
     "@storybook/addon-docs": "9.0.18",
     "@storybook/react-vite": "9.0.18",
     "@types/js-yaml": "^4.0.9",
-    "@types/react": "^18.2.0",
+    "@types/react": "^19.1.8",
     "js-yaml": "^4.1.0",
     "rollup": "^4.45.3",
     "rollup-plugin-dts": "^6.2.1",
