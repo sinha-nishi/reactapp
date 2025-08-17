@@ -9,7 +9,7 @@ export interface BoxAttributes {
   height?: string;
 }
 
-export default function Box(props: BoxAttributes) {
+export function Box(props: BoxAttributes) {
   const { children, className, title, subtitle, width, height } = props;
   return (
     <div

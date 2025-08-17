@@ -5,7 +5,7 @@ export interface CenteredLayoutAttributes {
     className?: string;
 }
 
-export default function Centered(props: CenteredLayoutAttributes) {
+export function Centered(props: CenteredLayoutAttributes) {
   const { children, className } = props;
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}
