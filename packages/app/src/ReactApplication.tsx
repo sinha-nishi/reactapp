@@ -1,22 +1,25 @@
-import React, { useReducer } from "react";
+import React, { JSX } from "react";
 import { Routes } from "./types/Routes";
 import { Theme } from "./types/Theme";
+import { ApplicationContext } from "./context/ApplicationContext";
+import DefaultComponentView from "./views/DefaultComponentView";
 
 export interface ReactApplicationAttributes {
     topLevelNavigation?: React.ReactNode;
     routes: Routes,
     theme: Theme,
     children?: React.ReactNode;
+    views: any[];
 }
 
-function reducer(state, action) {
-    // Reducer logic can be added here if needed
-    return {};
-}
+export function ReactApplication({ children }: ReactApplicationAttributes): JSX.Element {
 
-export default function ReactApplication({ children }: ReactApplicationAttributes): JSX.Element {
-    const [state, dispatch] = useReducer(() => ({}), {});
-    return <div>
-        {children}
-    </div>
+    return (
+        <React.StrictMode>
+            <ApplicationContext value={{ s: "hello"}}>
+                {/* {children} */}
+                <DefaultComponentView />
+            </ApplicationContext>
+        </React.StrictMode>
+    );
 }
