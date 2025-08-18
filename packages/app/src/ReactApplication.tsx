@@ -1,7 +1,7 @@
 import React, { JSX } from "react";
 import { Routes } from "./types/Routes";
 import { Theme } from "./types/Theme";
-import { ApplicationContext } from "./context/ApplicationContext";
+import { ApplicationContext } from '@pkvsinha/react-hooks';
 import DefaultComponentView from "./views/DefaultComponentView";
 
 export interface ReactApplicationAttributes {

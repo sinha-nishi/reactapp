@@ -1,5 +1,5 @@
 {
-  "name": "@pkvsinha/react-router",
+  "name": "@pkvsinha/react-widgets",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -8,6 +8,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "src",
     "README.md",
     "LICENSE"
   ],
@@ -36,7 +37,7 @@
     "@storybook/addon-docs": "9.0.18",
     "@storybook/react-vite": "9.0.18",
     "@types/js-yaml": "^4.0.9",
-    "@types/react": "^19.1.8",
+    "@types/react": "^19.1.1",
     "js-yaml": "^4.1.0",
     "rollup": "^4.45.3",
     "rollup-plugin-dts": "^6.2.1",

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from '@pkvsinha/react-components';
-import { useApplicationContext } from "../hooks/useApplicationContext";
+import { useApplicationContext } from '@pkvsinha/react-hooks';
 
 export default function DefaultComponentView() {
     // const navigation = useNavigation();
@@ -15,9 +15,9 @@ export default function DefaultComponentView() {
      * <Footer />
      */
     return <>
-        {topNav && <Button />} 
-        {appBar && <Button />}
-        <span>This is a default View Component</span>
+        {true && <Button label="Nav Top" />} 
+        {true && <Button label="App Bar" />}
+        <span>A default View Component</span>
         {/* {children} */}
         {/* {context.appbar && <AppBar />}
      */}

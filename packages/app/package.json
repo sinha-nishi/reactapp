@@ -51,6 +51,7 @@
     "vite": "^7.0.6"
   },
   "dependencies": {
-    "@pkvsinha/react-components": "workspace:*"
+    "@pkvsinha/react-components": "workspace:*",
+    "@pkvsinha/react-hooks": "workspace:*"
   }
 }
