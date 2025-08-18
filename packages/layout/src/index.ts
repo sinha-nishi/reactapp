@@ -1,1 +1,1 @@
-console.log("this is the layout package")
+export * from './Centered'

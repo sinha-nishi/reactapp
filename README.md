@@ -6,6 +6,15 @@ A customizable React UI implementation
 > - install pnpm `npm install -g pnpm@latest`
 > - Ensure all dependencies are installed before running.
 
+## Depdencies
+
+```
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-components@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-hooks@workspace:*
+pnpm --filter @pkvsinha/components add @pkvsinha/base@workspace:*
+
+```
+
 ## Design System
 
 Our design system is built around key variables:

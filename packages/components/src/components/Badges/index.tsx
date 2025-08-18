@@ -11,7 +11,9 @@ export interface BadgeAttribute {
   floating?: boolean;
   position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   className?: string;
+
   style?: React.CSSProperties; 
+
   children?: React.ReactNode;
 }
 
