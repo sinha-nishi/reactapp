@@ -11,7 +11,9 @@ export interface ButtonAttribute {
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
+
   style?: React.CSSProperties; 
+
 }
 
 export const Button = ({

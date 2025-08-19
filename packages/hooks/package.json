@@ -1,5 +1,5 @@
 {
-  "name": "@pkvsinha/react-base",
+  "name": "@pkvsinha/react-hooks",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -8,6 +8,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "src",
     "README.md",
     "LICENSE"
   ],
