@@ -10,6 +10,9 @@ export interface ReactApplicationAttributes {
     theme: Theme,
     children?: React.ReactNode;
     views: any[];
+    navbar: any[];
+    footer: any[];
+    banner: any[];
 }
 
 export function ReactApplication({ children }: ReactApplicationAttributes): JSX.Element {

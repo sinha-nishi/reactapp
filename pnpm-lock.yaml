@@ -35,6 +35,9 @@ importers:
 
   packages/app:
     dependencies:
+      '@pkvsinha/react-base':
+        specifier: workspace:*
+        version: link:../base
       '@pkvsinha/react-components':
         specifier: workspace:*
         version: link:../components

@@ -14,14 +14,22 @@ function reducer(state: any, action: any) {
 }
 
 export function useApplicationContext() {
+    
     const [state, dispatch] = useReducer(reducer, {
         topLevelNavigation: null,
         routes: [],
         theme: 'light',
     });
+
     const context = useContext(ApplicationContext);
+    
     if (!context) {
         throw new Error("useAppContext must be used within an AppProvider");
     }
-    return { value: "hello", appBar: false, topNav: false };
+
+    function showAppBar() {
+        dispatch({ type: 'SHOW_APP_BAR' });
+    }
+
+    return { value: "hello", appBar: state.appBar, navbar: state.navbar, topNav: state.topLevelNavigation };
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import { Button } from '@pkvsinha/react-components';
+import { Button, NavBar } from '@pkvsinha/react-components';
+import { Container, Section } from '@pkvsinha/react-base';
 import { useApplicationContext } from '@pkvsinha/react-hooks';
 
 export default function DefaultComponentView() {
@@ -15,9 +16,17 @@ export default function DefaultComponentView() {
      * <Footer />
      */
     return <>
-        {true && <Button label="Nav Top" />} 
+        {true && <NavBar />}
         {true && <Button label="App Bar" />}
-        <span>A default View Component</span>
+        <div className="flex flex-col h-screen justify-center">
+            <Container>
+                <Section
+                    style={{ height: "calc(100vh - 200px)", marginBottom: "100px" }}
+                >
+                    <span>A View Component</span>
+                </Section>
+            </Container>
+      </div>
         {/* {children} */}
         {/* {context.appbar && <AppBar />}
      */}
