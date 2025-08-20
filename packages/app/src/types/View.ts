@@ -13,4 +13,8 @@ export interface View {
     view?: React.ReactNode; // if view property is present, render it inside a default view, all the logic is expected to be present inside view value
     stack?: StackView;
     grid?: GridView;
+    meta?: {
+        title: string;
+        content: string;
+    }
 }

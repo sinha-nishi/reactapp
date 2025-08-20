@@ -1,21 +1,7 @@
 import React, { JSX, useState } from "react";
-import { Routes } from "./types/Routes";
-import { Theme } from "./types/Theme";
 import { ApplicationContext } from '@pkvsinha/react-hooks';
 import DefaultComponentView from "./views/DefaultComponentView";
-import { View } from "./types/View";
-
-export interface ReactApplicationAttributes {
-    topLevelNavigation?: React.ReactNode;
-    routes: Routes,
-    theme: Theme,
-    children?: React.ReactNode;
-    view?: View;
-    views: View[];
-    navbar: any[];
-    footer: any[];
-    banner: any[];
-}
+import { ReactApplicationAttributes } from "./types/Application";
 
 export function ReactApplication({ views }: ReactApplicationAttributes): JSX.Element {
 
@@ -23,7 +9,7 @@ export function ReactApplication({ views }: ReactApplicationAttributes): JSX.Ele
 
     const viewComponents = views.filter(view => view.id === activeView).map(view => (
         <div key={view.id}>
-            {view.view ? <DefaultComponentView>
+            {view.view ? <DefaultComponentView meta={view.meta}>
                 {view.view}
             </DefaultComponentView> : null}
             

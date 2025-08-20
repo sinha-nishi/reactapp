@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, NavBar, AppBar } from '@pkvsinha/react-components';
 import { Container, Section } from '@pkvsinha/react-base';
 import { useApplicationContext } from '@pkvsinha/react-hooks';
 
-export default function DefaultComponentView({ children }: { children: React.ReactNode }) {
+interface DefaultComponentViewAttributes {
+    meta?: {
+        title: string;
+        content: string;
+    };
+    children: React.ReactNode;
+}
+
+export default function DefaultComponentView({ children, meta }: DefaultComponentViewAttributes) {
     // const navigation = useNavigation();
     // const view = useView();
     // const appbar = useAppBar();
     const { value, topNav, appBar } = useApplicationContext();
+
+    useEffect(() => {
+        document.title = meta?.title || "";
+    }, [])
 
     /**
      * <Navigation />
