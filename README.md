@@ -9,9 +9,12 @@ A customizable React UI implementation
 ## Depdencies
 
 ```
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-base@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-components@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-hooks@workspace:*
-pnpm --filter @pkvsinha/components add @pkvsinha/base@workspace:*
+
+pnpm --filter @pkvsinha/react-components add @pkvsinha/react-base@workspace:*
+pnpm --filter @pkvsinha/react-components add @pkvsinha/react-hooks@workspace:*
 
 ```
 
