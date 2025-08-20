@@ -11,6 +11,7 @@ export interface ReactApplicationAttributes {
     children?: React.ReactNode;
     view?: View;
     views: View[];
+    home?: string;
     navbar: any[];
     footer: any[];
     banner: any[];

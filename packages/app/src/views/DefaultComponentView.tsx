@@ -2,23 +2,21 @@ import React, { useEffect } from "react";
 import { Button, NavBar, AppBar } from '@pkvsinha/react-components';
 import { Container, Section } from '@pkvsinha/react-base';
 import { useApplicationContext } from '@pkvsinha/react-hooks';
+import { View } from "@/types/View";
 
 interface DefaultComponentViewAttributes {
-    meta?: {
-        title: string;
-        content: string;
-    };
+    view: View;
     children: React.ReactNode;
 }
 
-export default function DefaultComponentView({ children, meta }: DefaultComponentViewAttributes) {
+export default function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
     // const navigation = useNavigation();
     // const view = useView();
     // const appbar = useAppBar();
     const { value, topNav, appBar } = useApplicationContext();
 
     useEffect(() => {
-        document.title = meta?.title || "";
+        document.title = view.meta?.title || "";
     }, [])
 
     /**
@@ -28,8 +26,8 @@ export default function DefaultComponentView({ children, meta }: DefaultComponen
      * <Footer />
      */
     return <>
-        {true && <NavBar />}
-        {true && <AppBar text="App Bar" />}
+        {view.navBar?.display === false ? null : <NavBar />}
+        {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>
                 <Section
@@ -39,8 +37,5 @@ export default function DefaultComponentView({ children, meta }: DefaultComponen
                 </Section>
             </Container>
       </div>
-        {/* {children} */}
-        {/* {context.appbar && <AppBar />}
-     */}
     </>
 }

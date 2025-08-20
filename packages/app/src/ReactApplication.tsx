@@ -3,13 +3,13 @@ import { ApplicationContext } from '@pkvsinha/react-hooks';
 import DefaultComponentView from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 
-export function ReactApplication({ views }: ReactApplicationAttributes): JSX.Element {
+export function ReactApplication({ views, home }: ReactApplicationAttributes): JSX.Element {
 
-    const [activeView, setActiveView] = useState("home");
+    const [activeView, setActiveView] = useState(home || "home");
 
     const viewComponents = views.filter(view => view.id === activeView).map(view => (
         <div key={view.id}>
-            {view.view ? <DefaultComponentView meta={view.meta}>
+            {view.view ? <DefaultComponentView view={view}>
                 {view.view}
             </DefaultComponentView> : null}
             

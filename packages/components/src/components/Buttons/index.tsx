@@ -45,3 +45,50 @@ export const Button = ({
     </button>
   );
 };
+
+/**
+ * import React from "react";
+import PropTypes from "prop-types";
+
+const propTypes = {
+  title: PropTypes.string,
+  className: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
+};
+
+const defaultProps = {
+  title: "",
+  className: "",
+  disabled: false,
+  onClick: () => {},
+};
+
+export default function Button(props) {
+  const { title, className, disabled, onClick } = props;
+  return (
+    <button
+      type="submit"
+      className={className}
+      disabled={disabled}
+      onClick={onClick}
+      aria-label={title}
+      style={{
+        backgroundColor: "#28a745",
+        color: "white",
+        border: "none",
+        padding: "12px 24px",
+        borderRadius: "8px",
+        fontSize: "16px",
+        cursor: "pointer",
+        transition: "background-color 0.3s ease",
+      }}
+    >
+      {title}
+    </button>
+  );
+}
+
+Button.propTypes = propTypes;
+Button.defaultProps = defaultProps;
+ */
