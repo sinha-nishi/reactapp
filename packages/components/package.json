@@ -50,6 +50,7 @@
     "vite": "^7.0.6"
   },
   "dependencies": {
-    "@pkvsinha/react-base": "workspace:*"
+    "@pkvsinha/react-base": "workspace:*",
+    "@pkvsinha/react-hooks": "workspace:*"
   }
 }
