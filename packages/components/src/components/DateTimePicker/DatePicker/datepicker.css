@@ -315,9 +315,55 @@
     font-size: 16px;
     padding: 4px;
   }
+
+  .dp-cell.in-range {
+    background: rgba(103, 80, 164, 0.15);
+    border-radius: 0;
+  }
   
+  .dp-cell.selected.start,
+  .dp-cell.selected.end {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-radius: 50%;
+  }
+  .dp-input-overlay {
+    border: 1px solid #ccc;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    gap: 4px;
+    cursor: pointer;
+    background: white;
+    font-family: sans-serif;
+  }
   
+  .dp-input-overlay span {
+    min-width: 24px;
+    text-align: center;
+  }
   
+  .dp-dialog {
+    margin-top: 8px;
+  }
+  
+  .month-list, .year-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-top: 10px;
+  }
+  
+  .dp-option {
+    padding: 6px;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .dp-option:hover {
+    background: #f0f0f0;
+  }
   /* =========================================
      Animations
   ========================================= */
