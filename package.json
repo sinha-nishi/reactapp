@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
+    "pack:all": "pnpm run build && pnpm -r pack",
     "theme:flat": "node scripts/build-tokens.js default",
     "theme:material": "node scripts/build-tokens.js material",
     "theme:neumorphism": "node scripts/build-tokens.js neumorphism"
@@ -11,6 +12,7 @@
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
     "@types/react": "^19.1.1",
+    "@types/react-dom": "^19.1.7",
     "js-yaml": "^4.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

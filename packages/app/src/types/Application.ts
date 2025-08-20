@@ -4,15 +4,14 @@ import { Theme } from "./Theme";
 import { View } from "./View";
 
 export interface ReactApplicationAttributes {
-    topLevelNavigation?: React.ReactNode;
-    meta: MetaAttributes;
-    routes: Routes,
+    meta?: MetaAttributes;
+    routes?: Routes,
     theme: Theme,
     children?: React.ReactNode;
     view?: View;
     views: View[];
     home?: string;
-    navbar: any[];
-    footer: any[];
-    banner: any[];
+    navbar?: any[];
+    footer?: any[];
+    banner?: any[];
 }
