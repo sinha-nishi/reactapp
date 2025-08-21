@@ -1,7 +1,7 @@
 // src/components/Chips/Chip.stories.tsx
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Chip } from './';
+import  Chip  from './';
 import { fn } from 'storybook/test';
 
 const meta = {
