@@ -5,7 +5,7 @@ export type DatePickerProps = {
   variant?: "docked" | "modal" | "modal-input";
   initialDate?: Date;
   onChange?: (date: Date | { start: Date; end: Date }) => void;
-  mode?: "single" | "range"
+  mode?: "single" | "range";
 };
 
 const DatePicker: React.FC<DatePickerProps> = ({
@@ -39,16 +39,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
       }
     }
   }
-  
+
   function isInRange(day: Date) {
-    return (
-      rangeStart &&
-      rangeEnd &&
-      day >= rangeStart &&
-      day <= rangeEnd
-    );
+    return rangeStart && rangeEnd && day >= rangeStart && day <= rangeEnd;
   }
-  
 
   // ---- Calendar Renderer ----
   const renderCalendar = (
@@ -58,16 +52,16 @@ const DatePicker: React.FC<DatePickerProps> = ({
   ) => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-  
+
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-  
+
     const daysInMonth = lastDay.getDate();
     const startDay = firstDay.getDay();
     const totalCells = Math.ceil((startDay + daysInMonth) / 7) * 7;
-  
+
     const cells: React.ReactNode[] = [];
-  
+
     weekdays.forEach((w, i) => {
       cells.push(
         <div key={`weekday-${i}`} className="dp-weekday">
@@ -75,21 +69,24 @@ const DatePicker: React.FC<DatePickerProps> = ({
         </div>
       );
     });
-  
+
     for (let i = 0; i < totalCells; i++) {
       const dayNum = i - startDay + 1;
       if (i < startDay || dayNum > daysInMonth) {
         cells.push(<div key={`blank-${i}`} className="dp-cell empty" />);
       } else {
         const date = new Date(year, month, dayNum);
-  
+
         const isToday = date.toDateString() === new Date().toDateString();
-        const isSelected = !rangeMode && dateValue?.toDateString() === date.toDateString();
-  
-        const isStart = rangeMode && date.toDateString() === rangeStart?.toDateString();
-        const isEnd = rangeMode && date.toDateString() === rangeEnd?.toDateString();
+        const isSelected =
+          !rangeMode && dateValue?.toDateString() === date.toDateString();
+
+        const isStart =
+          rangeMode && date.toDateString() === rangeStart?.toDateString();
+        const isEnd =
+          rangeMode && date.toDateString() === rangeEnd?.toDateString();
         const inRange = rangeMode && isInRange(date);
-  
+
         cells.push(
           <button
             key={i}
@@ -111,10 +108,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
         );
       }
     }
-  
+
     return <div className="dp-grid">{cells}</div>;
   };
-  
 
   // ---- Modal Header (only for modal variant) ----
   const ModalHeader = () => (
@@ -200,80 +196,79 @@ const DatePicker: React.FC<DatePickerProps> = ({
   if (variant === "docked") {
     return (
       <div className="dp-field">
-  <label className="dp-label">Date</label>
+        <label className="dp-label">Date</label>
 
-  {/* Overlay input (MM/DD/YYYY clickable) */}
-  <div className="dp-input-overlay">
-    <span onClick={() => setViewMode("month")}>
-      {selectedDate
-        ? selectedDate.toLocaleDateString("en-US", { month: "2-digit" })
-        : "MM"}
-    </span>
-    /
-    <span onClick={() => setViewMode("day")}>
-      {selectedDate
-        ? selectedDate.toLocaleDateString("en-US", { day: "2-digit" })
-        : "DD"}
-    </span>
-    /
-    <span onClick={() => setViewMode("year")}>
-      {selectedDate ? selectedDate.getFullYear() : "YYYY"}
-    </span>
-  </div>
+        {/* Overlay input (MM/DD/YYYY clickable) */}
+        <div className="dp-input-overlay">
+          <span onClick={() => setViewMode("month")}>
+            {selectedDate
+              ? selectedDate.toLocaleDateString("en-US", { month: "2-digit" })
+              : "MM"}
+          </span>
+          /
+          <span onClick={() => setViewMode("day")}>
+            {selectedDate
+              ? selectedDate.toLocaleDateString("en-US", { day: "2-digit" })
+              : "DD"}
+          </span>
+          /
+          <span onClick={() => setViewMode("year")}>
+            {selectedDate ? selectedDate.getFullYear() : "YYYY"}
+          </span>
+        </div>
 
-  <div className="dp-dialog docked-variant">
-    {viewMode === "day" && (
-      <>
-        <MonthSelector />
-        {renderCalendar(selectedDate, setSelectedDate)}
-      </>
-    )}
+        <div className="dp-dialog docked-variant">
+          {viewMode === "day" && (
+            <>
+              <MonthSelector />
+              {renderCalendar(selectedDate, setSelectedDate)}
+            </>
+          )}
 
-    {viewMode === "month" && (
-      <div className="month-list">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div
-            key={i}
-            className="dp-option"
-            onClick={() => {
-              const newDate = new Date(selectedDate || currentDate);
-              newDate.setMonth(i);
-              setSelectedDate(newDate);
-              setCurrentDate(newDate);
-              setViewMode("day");
-            }}
-          >
-            {new Date(0, i).toLocaleString("en-US", { month: "long" })}
-          </div>
-        ))}
-      </div>
-    )}
-
-    {viewMode === "year" && (
-      <div className="year-list">
-        {Array.from({ length: 12 }).map((_, i) => {
-          const year = currentDate.getFullYear() - 6 + i;
-          return (
-            <div
-              key={year}
-              className="dp-option"
-              onClick={() => {
-                const newDate = new Date(selectedDate || currentDate);
-                newDate.setFullYear(year);
-                setSelectedDate(newDate);
-                setCurrentDate(newDate);
-                setViewMode("day");
-              }}
-            >
-              {year}
+          {viewMode === "month" && (
+            <div className="month-list">
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="dp-option"
+                  onClick={() => {
+                    const newDate = new Date(selectedDate || currentDate);
+                    newDate.setMonth(i);
+                    setSelectedDate(newDate);
+                    setCurrentDate(newDate);
+                    setViewMode("day");
+                  }}
+                >
+                  {new Date(0, i).toLocaleString("en-US", { month: "long" })}
+                </div>
+              ))}
             </div>
-          );
-        })}
-      </div>
-    )}
-  </div>
-</div>
+          )}
 
+          {viewMode === "year" && (
+            <div className="year-list">
+              {Array.from({ length: 12 }).map((_, i) => {
+                const year = currentDate.getFullYear() - 6 + i;
+                return (
+                  <div
+                    key={year}
+                    className="dp-option"
+                    onClick={() => {
+                      const newDate = new Date(selectedDate || currentDate);
+                      newDate.setFullYear(year);
+                      setSelectedDate(newDate);
+                      setCurrentDate(newDate);
+                      setViewMode("day");
+                    }}
+                  >
+                    {year}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
     );
   }
 
@@ -299,15 +294,15 @@ const DatePicker: React.FC<DatePickerProps> = ({
           ) : (
             <ModalHeader /> // your single date header component
           )}
-  
+
           {/* ---- Month Selector ---- */}
           <MonthSelector />
-  
+
           {/* ---- Calendar ---- */}
           {mode === "range"
             ? renderCalendar(null, () => {}, true) // range selection enabled
-            : renderCalendar(tempDate, setTempDate)} 
-  
+            : renderCalendar(tempDate, setTempDate)}
+
           {/* ---- Actions ---- */}
           <div className="dp-actions">
             <button
@@ -323,7 +318,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             >
               Cancel
             </button>
-  
+
             <button
               className="dp-action primary"
               onClick={() => {
@@ -346,7 +341,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </div>
     );
   }
-// ----------------- MODAL-INPUT -----------------
+  // ----------------- MODAL-INPUT -----------------
   if (variant === "modal-input") {
     return (
       <>
@@ -367,7 +362,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
                 ? selectedDate.toLocaleDateString()
                 : ""
             }
-            placeholder={mode === "range" ? "MM/DD/YYYY - MM/DD/YYYY" : "MM/DD/YYYY"}
+            placeholder={
+              mode === "range" ? "MM/DD/YYYY - MM/DD/YYYY" : "MM/DD/YYYY"
+            }
           />
         </div>
 
@@ -385,7 +382,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
               {renderCalendar(tempDate, setTempDate, mode === "range")}
 
               <div className="dp-actions">
-                <button className="dp-action" onClick={() => setShowModal(false)}>
+                <button
+                  className="dp-action"
+                  onClick={() => setShowModal(false)}
+                >
                   Cancel
                 </button>
                 <button
@@ -409,7 +409,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
       </>
     );
   }
-  
 
   return null;
 };

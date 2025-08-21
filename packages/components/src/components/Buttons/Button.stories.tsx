@@ -1,7 +1,7 @@
 // src/components/Buttons/Button.stories.tsx
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Button } from './';
+import  Button  from './';
 import {fn} from 'storybook/test'
 
 const meta = {
