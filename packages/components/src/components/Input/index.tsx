@@ -1,4 +1,5 @@
 import React from "react";
+import "./input.css";
 
 export interface InputAttributes {
   type: string;
@@ -24,72 +25,42 @@ export function Input(props: InputAttributes) {
     title,
     message,
   } = props;
+
   switch (type) {
     case "file":
       return (
-        <>
+        <div className="input-wrapper">
           <input
             type="file"
             accept={accept}
             multiple={multiple}
             onChange={onChange}
             onClick={onClick}
-            className={className}
+            className={`custom-input file-input ${className}`}
             disabled={disabled}
-            style={{
-              border: "2px dashed #28a745",
-              borderRadius: "8px",
-              padding: "30px",
-              cursor: "pointer",
-              display: "block",
-              width: "100%",
-              marginBottom: "20px",
-            }}
           />
           {title || message ? (
-            <p
-              style={{
-                marginTop: "15px",
-                color: "#d9534f",
-                fontWeight: "bold",
-              }}
-            >
-              {message || title}
-            </p>
+            <p className="input-message">{message || title}</p>
           ) : null}
-        </>
+        </div>
       );
+
     case "text":
     case "email":
     case "password":
     default:
       return (
-        <>
+        <div className="input-wrapper">
           <input
+            type={type}
             onChange={onChange}
-            type="text"
-            style={{
-              border: "2px dashed #28a745",
-              borderRadius: "8px",
-              padding: "30px",
-              cursor: "pointer",
-              display: "block",
-              width: "100%",
-              marginBottom: "20px",
-            }}
+            className={`custom-input text-input ${className}`}
+            disabled={disabled}
           />
           {title || message ? (
-            <p
-              style={{
-                marginTop: "15px",
-                color: "#d9534f",
-                fontWeight: "bold",
-              }}
-            >
-              {message || title}
-            </p>
+            <p className="input-message">{message || title}</p>
           ) : null}
-        </>
+        </div>
       );
   }
 }
