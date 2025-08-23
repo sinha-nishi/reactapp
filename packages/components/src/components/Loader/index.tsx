@@ -1,2 +1,2 @@
-export * from './LoadingIndicator/Loading';
+export * from './loading-indicator/Loading';
 export * from '../Loader/progress/ProgressIndicator'
