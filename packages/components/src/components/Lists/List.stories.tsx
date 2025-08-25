@@ -75,11 +75,11 @@ export const WithRadio = () => {
 };
 
 export const WithSwitch = () => {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState('Wi-Fi');
   return (
     <List>
-      <ListItem primary="Wi-Fi" withSwitch checked={checked} onChange={setChecked} />
-      <ListItem primary="Bluetooth" withSwitch checked={!checked} onChange={(c) => setChecked(!c)} />
+      <ListItem primary="Wi-Fi" withSwitch checked={checked === 'Wi-Fi'} onChange={() => setChecked("Wi-Fi")} />
+      <ListItem primary="Bluetooth" withSwitch checked={checked === 'Bluetooth'} onChange={() => setChecked("Bluetooth")} />
     </List>
   );
 };

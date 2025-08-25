@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./list.css";
 
 export type ListVariant = "one-line" | "two-line" | "three-line";
@@ -28,6 +28,14 @@ export function ListItem({
   withCheckBox = false,
   onChange,
 }: ListItemProps) {
+  const [isChecked, setIsChecked] = useState(checked);
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+  const handleChange = (value: boolean) => {
+    setIsChecked(value); // Local update
+    onChange?.(value); // Parent ko notify karo
+  };
   return (
     <li className={`list-item list-${variant}`}>
       {avatar && <img src={avatar} alt="avatar" className="list-avatar" />}
@@ -44,8 +52,8 @@ export function ListItem({
       {withRadio && (
         <input
           type="radio"
-          checked={checked}
-          onChange={(e) => onChange?.(e.target.checked)}
+          checked={isChecked}
+          onChange={(e) => handleChange(e.target.checked)}
         />
       )}
 
@@ -53,8 +61,8 @@ export function ListItem({
         <label className="switch">
           <input
             type="checkbox"
-            checked={checked}
-            onChange={(e) => onChange?.(e.target.checked)}
+            checked={isChecked}
+            onChange={(e) => handleChange(e.target.checked)}
           />
           <span className="slider"></span>
         </label>
@@ -63,8 +71,8 @@ export function ListItem({
         <label className="checkbox">
           <input
             type="checkbox"
-            checked={checked}
-            onChange={(e) => onChange?.(e.target.checked)}
+            checked={isChecked}
+            onChange={(e) => handleChange(e.target.checked)}
           />
           <span className="checkbox-box"></span>
         </label>
