@@ -54,6 +54,7 @@
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
     "@pkvsinha/react-components": "workspace:*",
-    "@pkvsinha/react-hooks": "workspace:*"
+    "@pkvsinha/react-hooks": "workspace:*",
+    "@pkvsinha/react-navigate": "workspace:*"
   }
 }

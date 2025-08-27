@@ -1,5 +1,5 @@
 {
-  "name": "@pkvsinha/react-router",
+  "name": "@pkvsinha/react-navigate",
   "version": "0.0.1",
   "description": "",
   "type": "module",
@@ -45,5 +45,8 @@
     "storybook": "9.0.18",
     "typescript": "^5.8.3",
     "vite": "^7.0.6"
+  },
+  "dependencies": {
+    "@pkvsinha/react-hooks": "workspace:*"
   }
 }
