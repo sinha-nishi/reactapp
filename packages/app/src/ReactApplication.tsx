@@ -3,6 +3,7 @@ import { ApplicationContext, NavigationContext } from '@pkvsinha/react-hooks';
 import { NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import DefaultComponentView from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
+import PageNotFound from "./views/PageNotFound";
 
 export function ReactApplication({ views, home }: ReactApplicationAttributes): JSX.Element {
 
@@ -25,9 +26,11 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): J
         }
 
         return {
-            [view.id]: ViewComponent
+            ["/"+view.id]: ViewComponent
         }
     }).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+    console.log("viewComponents", viewComponents);
 
     return (
         <React.StrictMode>
@@ -37,7 +40,7 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): J
                     {viewComponents}
                 </NavigationContext> */}
                 <NavigationProvider>
-                    <Router routes={viewComponents} x404={DefaultComponentView} />
+                    <Router routes={viewComponents} x404={PageNotFound} />
                 </NavigationProvider>
             </ApplicationContext>
         </React.StrictMode>

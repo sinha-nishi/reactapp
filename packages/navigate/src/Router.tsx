@@ -20,7 +20,9 @@ export const Router = ({ routes, x404 }: RouterAttributes) => {
     // Router implementation goes here
     const currentPath = useCurrentPath();
 
-    const ComponentToRender = routes[currentPath] || x404;
+    console.log("currentPath", currentPath, "matching routes: ", routes[currentPath], " from : ", routes);
+
+    const ComponentToRender = routes[currentPath] || routes["home"] || x404;
 
     return <ComponentToRender />;
 }
