@@ -1,4 +1,5 @@
-import { NavigationContext } from "@pkvsinha/react-hooks";
+import { Navigate } from "./Navigate";
+import { NavigationContext } from "./NavigationContext";
 import React, { useContext } from "react";
 
 export interface RouterAttributes {
@@ -20,9 +21,12 @@ export const Router = ({ routes, x404 }: RouterAttributes) => {
     // Router implementation goes here
     const currentPath = useCurrentPath();
 
-    console.log("currentPath", currentPath, "matching routes: ", routes[currentPath], " from : ", routes);
+    console.log("currentPath is :: ", currentPath, " from : ", routes);
 
     const ComponentToRender = routes[currentPath] || routes["home"] || x404;
 
-    return <ComponentToRender />;
+    return <>
+        <Navigate to="/apps" label="Route to Apps" />
+        <ComponentToRender />
+    </>;
 }

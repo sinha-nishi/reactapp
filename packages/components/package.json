@@ -18,7 +18,9 @@
   },
   "peerDependencies": {
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "@pkvsinha/react-base": "workspace:*",
+    "@pkvsinha/react-hooks": "workspace:*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -51,7 +53,6 @@
     "vite": "^7.0.6"
   },
   "dependencies": {
-    "@pkvsinha/react-base": "workspace:*",
-    "@pkvsinha/react-hooks": "workspace:*"
+    
   }
 }

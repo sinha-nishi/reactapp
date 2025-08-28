@@ -1,36 +1,35 @@
-import React, { JSX, useState } from "react";
-import { ApplicationContext, NavigationContext } from '@pkvsinha/react-hooks';
-import { NavigationProvider, Router } from "@pkvsinha/react-navigate";
+import React, { JSX, useState, useMemo } from "react";
+import { ApplicationContext } from '@pkvsinha/react-hooks';
+import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import DefaultComponentView from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 import PageNotFound from "./views/PageNotFound";
 
 export function ReactApplication({ views, home }: ReactApplicationAttributes): JSX.Element {
 
-    // const viewComponents = views.filter(view => view.id === activeView).map(view => (
-    //     <div key={view.id}>
-    //         {view.view ? <DefaultComponentView view={view}>
-    //             {view.view}
-    //         </DefaultComponentView> : null}
-            
-    //     </div>
-    // ));
+    const viewComponents = useMemo( () => {
+        const components = views.map(view => {
+            function ViewComponent () {
+                return (<div key={view.id}>
+                    {view.view ? <DefaultComponentView view={view}>
+                        <Navigate to="/apps" label="let's to Apps" />
+                        {view.view}
+                    </DefaultComponentView> : null}
+                </div>);
+            }
 
-    const viewComponents = views.map(view => {
-        function ViewComponent () {
-            return (<div key={view.id}>
-                {view.view ? <DefaultComponentView view={view}>
-                    {view.view}
-                </DefaultComponentView> : null}
-            </div>);
+            return {
+                ["/"+view.id]: ViewComponent
+            }
+        }).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+        if (home) {
+            components["/"] = components["/"+home]
         }
+        console.log("viewComponents", components);
 
-        return {
-            ["/"+view.id]: ViewComponent
-        }
-    }).reduce((acc, curr) => ({ ...acc, ...curr }), {});
-
-    console.log("viewComponents", viewComponents);
+        return components;
+    }, [views, home]);
 
     return (
         <React.StrictMode>
@@ -41,6 +40,7 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): J
                 </NavigationContext> */}
                 <NavigationProvider>
                     <Router routes={viewComponents} x404={PageNotFound} />
+                    <Navigate to="/apps" label="Go to Apps" />
                 </NavigationProvider>
             </ApplicationContext>
         </React.StrictMode>
