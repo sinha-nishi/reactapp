@@ -1,6 +1,6 @@
+import * as React from 'react';
 import { Navigate } from "./Navigate";
 import { NavigationContext } from "./NavigationContext";
-import React, { useContext } from "react";
 
 export interface RouterAttributes {
     routes: Record<string, React.ComponentType<any>>;
@@ -8,7 +8,7 @@ export interface RouterAttributes {
 }
 
 const useCurrentPath = () => {
-    const context = useContext(NavigationContext);
+    const context = React.useContext(NavigationContext);
 
     if (!context) {
         throw new Error("Router must be used within a NavigationContext");

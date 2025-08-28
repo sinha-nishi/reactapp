@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from "react";
+import * as React from 'react';
 import { ApplicationContext } from "../context/ApplicationContext";
 
 function reducer(state: any, action: any) {
@@ -15,13 +15,13 @@ function reducer(state: any, action: any) {
 
 export function useApplicationContext() {
     
-    const [state, dispatch] = useReducer(reducer, {
+    const [state, dispatch] = React.useReducer(reducer, {
         topLevelNavigation: null,
         routes: [],
         theme: 'light',
     });
 
-    const context = useContext(ApplicationContext);
+    const context = React.useContext(ApplicationContext);
     
     if (!context) {
         throw new Error("useAppContext must be used within an AppProvider");

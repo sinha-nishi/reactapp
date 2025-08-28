@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import * as React from 'react';
 import { Button, NavBar, AppBar } from '@pkvsinha/react-components';
 import { Container, Section } from '@pkvsinha/react-base';
 import { useApplicationContext } from '@pkvsinha/react-hooks';
@@ -15,7 +15,7 @@ export default function DefaultComponentView({ children, view }: DefaultComponen
     // const appbar = useAppBar();
     const { value, topNav, appBar } = useApplicationContext();
 
-    useEffect(() => {
+    React.useEffect(() => {
         document.title = view.meta?.title || "";
     }, [])
 

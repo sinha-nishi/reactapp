@@ -1,5 +1,5 @@
 // src/components/Badges/Badge.tsx
-import React from 'react';
+import * as React from 'react';
 import './Badge.css';
 
 export interface BadgeAttribute {

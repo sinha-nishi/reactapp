@@ -1,13 +1,13 @@
-import React, { JSX, useState, useMemo } from "react";
+import * as React from 'react';
 import { ApplicationContext } from '@pkvsinha/react-hooks';
 import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import DefaultComponentView from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 import PageNotFound from "./views/PageNotFound";
 
-export function ReactApplication({ views, home }: ReactApplicationAttributes): JSX.Element {
+export function ReactApplication({ views, home }: ReactApplicationAttributes): React.JSX.Element {
 
-    const viewComponents = useMemo( () => {
+    const viewComponents = React.useMemo( () => {
         const components = views.map(view => {
             function ViewComponent () {
                 return (<div key={view.id}>

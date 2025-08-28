@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import * as React from 'react';
 
 // Add this to the top of packages/react-navigate/src/index.ts
 (window as any).reactNavigateInstance = (window as any).reactNavigateInstance || Math.random();
@@ -10,4 +10,4 @@ interface NavigationContextState {
 
 console.log('Provider Instance ID in create context:', (window as any).reactNavigateInstance);
 
-export const NavigationContext = createContext<NavigationContextState | undefined>(undefined);
+export const NavigationContext = React.createContext<NavigationContextState | undefined>(undefined);

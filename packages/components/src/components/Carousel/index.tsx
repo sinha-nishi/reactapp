@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import * as React from 'react';
 import { useResponsive } from "@pkvsinha/react-hooks";
 
 interface ResponsiveAttributes {
@@ -104,12 +104,12 @@ export interface CarouselAttributes {
 export function Carousel(props: CarouselAttributes) {
   const { data } = props;
   const { length } = data;
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = React.useState(0);
   const [small, medium, large] = useResponsive();
 
   // console.log("small = ", small, ", medium = ", medium, ", large = ", large);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const intervalId = setInterval(() => {
       setActiveIndex((index) => (index + 1) % length);
     }, 6000);

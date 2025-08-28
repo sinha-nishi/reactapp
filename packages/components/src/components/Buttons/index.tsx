@@ -1,5 +1,5 @@
 // src/components/Buttons/Button.tsx
-import React from 'react';
+import * as React from 'react';
 import './Button.css';
 
 export interface ButtonAttribute {
@@ -47,7 +47,7 @@ export const Button = ({
 };
 
 /**
- * import React from "react";
+ * import * as React from 'react';
 import PropTypes from "prop-types";
 
 const propTypes = {
