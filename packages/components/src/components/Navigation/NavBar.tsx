@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Navigate } from "@pkvsinha/react-navigate";
 
 interface MenuLinkAttributes {
   href: string;
@@ -9,12 +10,12 @@ interface MenuLinkAttributes {
 function MenuLink({ href, label, icon }: MenuLinkAttributes) {
   return (
     <li className="flex flex-col md:flex-row w-16 sm:w-24 md:w-32 h-8 sm:h-12 md:h-16 p-2 items-center justify-center md:gap-2">
-      <a href={href}>
+      <Navigate to={href}>
         <i className={`text-sm sm:text fa-solid fa-${icon}`} />
-      </a>
-      <a href={href}>
+      </Navigate>
+      <Navigate to={href}>
         <span className="text-sm sm:text-base font-bold">{label}</span>
-      </a>
+      </Navigate>
     </li>
   );
 }

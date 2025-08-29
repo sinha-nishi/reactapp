@@ -30,7 +30,8 @@ export default [
       'react',
       'react-dom',
       '@pkvsinha/react-base',
-      '@pkvsinha/react-hooks'
+      '@pkvsinha/react-hooks',
+      '@pkvsinha/react-navigate'
     ],
   },
 
@@ -57,7 +58,8 @@ export default [
       'react',
       'react-dom',
       '@pkvsinha/react-base',
-      '@pkvsinha/react-hooks'
+      '@pkvsinha/react-hooks',
+      '@pkvsinha/react-navigate'
     ],
   },
 
