@@ -12,7 +12,6 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): R
             function ViewComponent () {
                 return (<div key={view.id}>
                     {view.view ? <DefaultComponentView view={view}>
-                        <Navigate to="/apps" label="let's to Apps" />
                         {view.view}
                     </DefaultComponentView> : null}
                 </div>);

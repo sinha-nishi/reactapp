@@ -6,6 +6,14 @@ A customizable React UI implementation
 > - install pnpm `npm install -g pnpm@latest`
 > - Ensure all dependencies are installed before running.
 
+## Upgrade version
+
+> pnpm -r exec pnpm version patch
+
+## Publish version
+
+> pnpm -r publish --access public
+
 ## Depdencies
 
 ```
