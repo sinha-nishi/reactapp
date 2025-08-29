@@ -1,6 +1,6 @@
 {
   "name": "@pkvsinha/react-navigate",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -47,7 +47,5 @@
     "typescript": "^5.8.3",
     "vite": "^7.0.6"
   },
-  "dependencies": {
-    
-  }
+  "dependencies": {}
 }
