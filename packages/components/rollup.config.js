@@ -26,7 +26,13 @@ export default [
         declarationDir: './dist/esm/types', // Generate types into a temp folder
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: [
+      'react',
+      'react-dom',
+      '@pkvsinha/react-base',
+      '@pkvsinha/react-hooks',
+      '@pkvsinha/react-navigate'
+    ],
   },
 
   // 2. Build for CJS
@@ -48,7 +54,13 @@ export default [
         declaration: false, // <-- This is the key
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: [
+      'react',
+      'react-dom',
+      '@pkvsinha/react-base',
+      '@pkvsinha/react-hooks',
+      '@pkvsinha/react-navigate'
+    ],
   },
 
   // 3. Bundle all the type declarations into a single file

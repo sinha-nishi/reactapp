@@ -1,7 +1,6 @@
+import * as React from 'react';
 
-import React, { JSX } from "react";
-
-export function AppBar({ text }: {text: string}): JSX.Element {
+export function AppBar({ text }: {text: string}): React.JSX.Element {
   return (
     <nav className="fixed z-50 top-0 w-full flex bg-slate-50 justify-between shadow-lg h-12 lg:h-16 items-center">
       <div className="w-1/3">

@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import * as React from 'react';
 
 // TODO: More manipulations from here:
 // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas
 export function Canvas() {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const span = useRef<HTMLSpanElement>(null);
-  const [ratio, setRatio] = useState(1);
+  const ref = React.useRef<HTMLCanvasElement>(null);
+  const span = React.useRef<HTMLSpanElement>(null);
+  const [ratio, setRatio] = React.useState(1);
 
   const baseWidth = 500;
   const baseHeight = 250;
@@ -77,7 +77,7 @@ export function Canvas() {
   }
 
   
-  useEffect(() => {
+  React.useEffect(() => {
     setupCanvasAndDraw(1);
     // 1. Get the device pixel ratio to account for high-DPI screens
     // const dpr = window.devicePixelRatio || 1;

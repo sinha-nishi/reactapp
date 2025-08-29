@@ -9,15 +9,15 @@ interface DefaultComponentViewAttributes {
     children: React.ReactNode;
 }
 
-export default function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
+export default function PageNotFound({ children, view }: DefaultComponentViewAttributes) {
     // const navigation = useNavigation();
     // const view = useView();
     // const appbar = useAppBar();
-    const { value, topNav, appBar } = useApplicationContext();
+    // const { value, topNav, appBar } = useApplicationContext();
 
-    React.useEffect(() => {
-        document.title = view.meta?.title || "";
-    }, [])
+    // useEffect(() => {
+    //     document.title = view.meta?.title || "";
+    // }, [])
 
     /**
      * <Navigation />
@@ -26,14 +26,12 @@ export default function DefaultComponentView({ children, view }: DefaultComponen
      * <Footer />
      */
     return <>
-        {view.navBar?.display === false ? null : <NavBar />}
-        {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>
                 <Section
                     style={{ height: "calc(100vh - 200px)", marginBottom: "100px" }}
                 >
-                    {children}
+                    Page not found
                 </Section>
             </Container>
       </div>

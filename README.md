@@ -6,15 +6,30 @@ A customizable React UI implementation
 > - install pnpm `npm install -g pnpm@latest`
 > - Ensure all dependencies are installed before running.
 
-## Depdencies
+## Upgrade version
+
+> pnpm -r exec pnpm version patch
+
+## Publish version
+
+> pnpm -r publish --access public
+
+## Dependencies
 
 ```
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-base@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-components@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-hooks@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-icons@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-layout@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-navigate@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-widgets@workspace:*
 
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-base@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-hooks@workspace:*
+pnpm --filter @pkvsinha/react-components add @pkvsinha/react-navigate@workspace:*
+
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-navigate@workspace:*
 
 ```
 

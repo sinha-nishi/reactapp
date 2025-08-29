@@ -1,26 +1,44 @@
-import React, { JSX, useState } from "react";
+import * as React from 'react';
 import { ApplicationContext } from '@pkvsinha/react-hooks';
+import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import DefaultComponentView from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
+import PageNotFound from "./views/PageNotFound";
 
-export function ReactApplication({ views, home }: ReactApplicationAttributes): JSX.Element {
+export function ReactApplication({ views, home }: ReactApplicationAttributes): React.JSX.Element {
 
-    const [activeView, setActiveView] = useState(home || "home");
+    const viewComponents = React.useMemo( () => {
+        const components = views.map(view => {
+            function ViewComponent () {
+                return (<div key={view.id}>
+                    {view.view ? <DefaultComponentView view={view}>
+                        {view.view}
+                    </DefaultComponentView> : null}
+                </div>);
+            }
 
-    const viewComponents = views.filter(view => view.id === activeView).map(view => (
-        <div key={view.id}>
-            {view.view ? <DefaultComponentView view={view}>
-                {view.view}
-            </DefaultComponentView> : null}
-            
-        </div>
-    ));
+            return {
+                ["/"+view.id]: ViewComponent
+            }
+        }).reduce((acc, curr) => ({ ...acc, ...curr }), {});
+
+        if (home) {
+            components["/"] = components["/"+home]
+        }
+        return components;
+    }, [views, home]);
 
     return (
         <React.StrictMode>
             <ApplicationContext value={{ s: "hello"}}>
                 {/* {children} */}
-                {viewComponents}
+                {/* <NavigationContext value={{path:"home"}}>
+                    {viewComponents}
+                </NavigationContext> */}
+                <NavigationProvider>
+                    <Router routes={viewComponents} x404={PageNotFound} />
+                    <Navigate to="/apps" label="Go to Apps" />
+                </NavigationProvider>
             </ApplicationContext>
         </React.StrictMode>
     );
