@@ -1,2 +1,1 @@
-
-export function Switch() {}
+export { default } from './Switch' 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useResponsive } from "@pkvsinha/react-hooks";
 
@@ -134,3 +135,4 @@ export function Carousel(props: CarouselAttributes) {
     </div>
   );
 }
+

@@ -1,3 +1,4 @@
+
 import React, { JSX } from "react";
 
 export function AppBar({ text }: {text: string}): JSX.Element {
@@ -15,3 +16,4 @@ export function AppBar({ text }: {text: string}): JSX.Element {
     </nav>
   );
 }
+
