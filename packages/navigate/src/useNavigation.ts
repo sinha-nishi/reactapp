@@ -3,7 +3,6 @@ import { NavigationContext } from "./NavigationContext";
 
 
 export function useNavigation() {
-    console.log('Consumer Instance ID in useNavigation:', (window as any).reactNavigateInstance);
     const context = React.useContext(NavigationContext);
         
     if (context === undefined) {

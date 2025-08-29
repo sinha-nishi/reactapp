@@ -6,6 +6,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist",
     "src",
@@ -18,11 +19,16 @@
   },
   "peerDependencies": {
     "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
     "@pkvsinha/react-components": "workspace:*",
     "@pkvsinha/react-hooks": "workspace:*",
-    "@pkvsinha/react-navigate": "workspace:*"
+    "@pkvsinha/react-icons": "workspace:*",
+    "@pkvsinha/react-layout": "workspace:*",
+    "@pkvsinha/react-navigate": "workspace:*",
+    "@pkvsinha/react-widgets": "workspace:*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -54,7 +60,5 @@
     "storybook": "9.0.18",
     "typescript": "^5.8.3",
     "vite": "^7.0.6"
-  },
-  "dependencies": {
   }
 }

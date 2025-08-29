@@ -47,9 +47,18 @@ importers:
       '@pkvsinha/react-hooks':
         specifier: workspace:*
         version: link:../hooks
+      '@pkvsinha/react-icons':
+        specifier: workspace:*
+        version: link:../icons
+      '@pkvsinha/react-layout':
+        specifier: workspace:*
+        version: link:../layout
       '@pkvsinha/react-navigate':
         specifier: workspace:*
         version: link:../navigate
+      '@pkvsinha/react-widgets':
+        specifier: workspace:*
+        version: link:../widgets
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -371,9 +380,6 @@ importers:
 
   packages/navigate:
     dependencies:
-      '@pkvsinha/react-hooks':
-        specifier: workspace:*
-        version: link:../hooks
       react:
         specifier: ^19.1.1
         version: 19.1.1

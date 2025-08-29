@@ -26,8 +26,6 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): R
         if (home) {
             components["/"] = components["/"+home]
         }
-        console.log("viewComponents", components);
-
         return components;
     }, [views, home]);
 

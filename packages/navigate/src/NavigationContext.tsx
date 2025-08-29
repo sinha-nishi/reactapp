@@ -8,6 +8,4 @@ interface NavigationContextState {
     navigate: (to: string) => void;
 }
 
-console.log('Provider Instance ID in create context:', (window as any).reactNavigateInstance);
-
 export const NavigationContext = React.createContext<NavigationContextState | undefined>(undefined);

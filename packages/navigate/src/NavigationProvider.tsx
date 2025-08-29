@@ -4,10 +4,8 @@ import { NavigationContext } from "./NavigationContext";
 export const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
     const [currentPath, setCurrentPath] = React.useState<string>(window.location.pathname);
 
-    console.log('Provider Instance ID in NavigationProvider:', (window as any).reactNavigateInstance);
     React.useEffect(() => {
         const handlePopState = () => {
-            console.log("Navigated to:", window.location.pathname);
             setCurrentPath(window.location.pathname);
         }
 

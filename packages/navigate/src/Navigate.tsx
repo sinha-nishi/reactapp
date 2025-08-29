@@ -19,7 +19,6 @@ interface NavigateChildrenAttribute extends NavigateAttributeBase {
 export type NavigateAttribute = NavigateLabelAttribute | NavigateChildrenAttribute;
 
 export function Navigate(props: NavigateAttribute) {
-    console.log('Consumer Instance ID in Navigate component:', (window as any).reactNavigateInstance);
     const { navigate } = useNavigation();
 
     const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {

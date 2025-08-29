@@ -21,12 +21,7 @@ export const Router = ({ routes, x404 }: RouterAttributes) => {
     // Router implementation goes here
     const currentPath = useCurrentPath();
 
-    console.log("currentPath is :: ", currentPath, " from : ", routes);
-
     const ComponentToRender = routes[currentPath] || routes["home"] || x404;
 
-    return <>
-        <Navigate to="/apps" label="Route to Apps" />
-        <ComponentToRender />
-    </>;
+    return <ComponentToRender />;
 }
