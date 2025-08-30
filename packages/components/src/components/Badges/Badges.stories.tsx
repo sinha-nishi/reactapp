@@ -1,7 +1,7 @@
 // src/components/Badges/Badge.stories.tsx
 import * as React from 'react';
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Badge } from "./";
+import Badge  from "./";
 
 const meta = {
   title: "Example/Badge",

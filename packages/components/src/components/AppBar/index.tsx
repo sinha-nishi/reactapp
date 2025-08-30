@@ -15,3 +15,4 @@ export function AppBar({ text }: {text: string}): React.JSX.Element {
     </nav>
   );
 }
+
