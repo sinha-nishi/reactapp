@@ -20,7 +20,7 @@ interface SearchViewProps {
   results: ResultItem[];
 }
 
-export default function SearchView({
+export function SearchView({
   open,
   variant = "fullscreen",
   query,

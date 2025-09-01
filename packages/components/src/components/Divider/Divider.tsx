@@ -8,7 +8,7 @@ export interface DividerProps {
   style?: React.CSSProperties;
 }
 
-export default function Divider({
+export function Divider({
   dashed = false,
   align = "center",
   className = "",

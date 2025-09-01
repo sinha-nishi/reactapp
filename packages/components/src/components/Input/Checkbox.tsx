@@ -14,7 +14,7 @@ export interface CheckboxProps {
   onChange?: (checked: boolean) => void;
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({
+export const Checkbox: React.FC<CheckboxProps> = ({
   checked,
   defaultChecked = false,
   label,
@@ -54,4 +54,4 @@ const Checkbox: React.FC<CheckboxProps> = ({
   );
 };
 
-export default Checkbox
+export Checkbox

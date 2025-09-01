@@ -64,7 +64,7 @@ const defaultProps = {
   onClick: () => {},
 };
 
-export default function Button(props) {
+export function Button(props) {
   const { title, className, disabled, onClick } = props;
   return (
     <button

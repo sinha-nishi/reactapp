@@ -67,7 +67,7 @@ const Icon = ({ name }: { name: NonNullable<TrailingAction["icon"]> }) => {
   }
 };
 
-export default function Search({
+export function Search({
   value,
   onChange,
   onSubmit,

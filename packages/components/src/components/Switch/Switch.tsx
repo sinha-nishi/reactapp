@@ -19,7 +19,7 @@ const VARIANT_COLOR: Record<Variant, string> = {
   error: "#ef4444",
 };
 
-export default function Switch({
+export function Switch({
   checked,
   onChange,
   label,

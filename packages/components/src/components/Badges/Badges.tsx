@@ -16,7 +16,8 @@ export interface BadgeAttribute {
 
   children?: React.ReactNode;
 }
- const Badge = ({
+
+export const Badge = ({
   variant = 'primary',
   size = 'md',
   rounded = false,
@@ -43,5 +44,3 @@ export interface BadgeAttribute {
 
   return <span className={classNames}>{!dot && children}</span>;
 };
-
-export default Badge

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ApplicationContext } from '@pkvsinha/react-hooks';
 import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
-import DefaultComponentView from "./views/DefaultComponentView";
+import { DefaultComponentView } from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
-import PageNotFound from "./views/PageNotFound";
+import { PageNotFound } from "./views/PageNotFound";
 
 export function ReactApplication({ views, home }: ReactApplicationAttributes): React.JSX.Element {
 
@@ -31,13 +31,8 @@ export function ReactApplication({ views, home }: ReactApplicationAttributes): R
     return (
         <React.StrictMode>
             <ApplicationContext value={{ s: "hello"}}>
-                {/* {children} */}
-                {/* <NavigationContext value={{path:"home"}}>
-                    {viewComponents}
-                </NavigationContext> */}
                 <NavigationProvider>
                     <Router routes={viewComponents} x404={PageNotFound} />
-                    <Navigate to="/apps" label="Go to Apps" />
                 </NavigationProvider>
             </ApplicationContext>
         </React.StrictMode>

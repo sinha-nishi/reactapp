@@ -11,7 +11,7 @@ export interface AuroraLoaderProps {
   glow?: boolean;           // glow effect toggle
 }
 
-export default function AuroraLoader({
+export function AuroraLoader({
   size = 72,
   color = "#6750A4",       // MD3 primary-ish
   trackColor = "rgba(103,80,164,0.15)",

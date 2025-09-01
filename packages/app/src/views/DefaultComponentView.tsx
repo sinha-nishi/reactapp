@@ -9,7 +9,7 @@ interface DefaultComponentViewAttributes {
     children: React.ReactNode;
 }
 
-export default function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
+export function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
     // const navigation = useNavigation();
     // const view = useView();
     // const appbar = useAppBar();
@@ -26,7 +26,7 @@ export default function DefaultComponentView({ children, view }: DefaultComponen
      * <Footer />
      */
     return <>
-        {view.navBar?.display === false ? null : <NavBar />}
+        {view.navBar?.display === false ? null : <NavBar links={[{ href: "/", label: "Home", icon: "🏠" }]} />}
         {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>

@@ -13,7 +13,7 @@ export interface InputAttributes {
   onChange: () => void;
 }
 
-export default function Input(props: InputAttributes) {
+export function Input(props: InputAttributes) {
   const {
     type,
     className,

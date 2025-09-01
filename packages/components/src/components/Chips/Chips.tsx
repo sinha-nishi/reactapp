@@ -77,5 +77,3 @@ export const Chip: React.FC<ChipProps> = ({
     </button>
   );
 };
-
-export default Chip;

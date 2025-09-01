@@ -35,7 +35,7 @@ export interface NavBarProps {
   logoAlt?: string;
 }
 
-export default function NavBar({
+export function NavBar({
   position = "bottom",
   links,
   logo,
@@ -57,7 +57,7 @@ export default function NavBar({
           </div>
         )}
         <ul className="menu">
-          {links.map((link, i) => (
+          {links?.map((link, i) => (
             <MenuLink key={i} {...link} />
           ))}
         </ul>

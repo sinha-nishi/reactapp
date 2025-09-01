@@ -19,7 +19,7 @@ interface TabsProps {
   onChange?: (index: number) => void;
 }
 
-export default function Tabs({
+export function Tabs({
   items,
   defaultIndex = 0,
   variant = "default",

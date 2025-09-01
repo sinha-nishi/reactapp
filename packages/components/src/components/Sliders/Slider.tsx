@@ -13,7 +13,7 @@ interface SliderProps {
   onChange?: (val: number | [number, number]) => void;
 }
 
-const Slider: React.FC<SliderProps> = ({
+export const Slider: React.FC<SliderProps> = ({
   variant = "continuous",
   min = 0,
   max = 100,
@@ -122,5 +122,3 @@ const Slider: React.FC<SliderProps> = ({
     </div>
   );
 };
-
-export default Slider;

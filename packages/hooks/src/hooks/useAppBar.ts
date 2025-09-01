@@ -1,4 +1,4 @@
-export default function useAppBar() {
+export function useAppBar() {
     return {
         appbar: true,
     }

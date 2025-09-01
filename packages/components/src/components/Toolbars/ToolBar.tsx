@@ -18,7 +18,7 @@ interface ToolbarProps {
   className?: string;
 }
 
-export default function Toolbar({
+export function Toolbar({
   children,
   variant = "flat",
   align = "space-between",
