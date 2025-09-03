@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ApplicationProvider } from '@pkvsinha/react-hooks';
+import { ApplicationProvider, deepMerge, AppContext } from '@pkvsinha/react-hooks';
 import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import { DefaultComponentView } from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 import { PageNotFound } from "./views/PageNotFound";
 import type { View } from './types/View';
+import { applicationDefaults } from './defaults/applicationDefaults';
 
 export function ReactApplication({ app, strictValidation }: ReactApplicationAttributes): React.JSX.Element {
 
@@ -36,11 +37,13 @@ export function ReactApplication({ app, strictValidation }: ReactApplicationAttr
         return components;
     }, [resolvedViews, home]);
 
-    const providerDefaults = React.useMemo(() => ({
-        // Library-defined defaults are in hooks; supply only minimal overrides here
-        views: resolvedViews,
-        home,
-    } as Partial<import('@pkvsinha/react-hooks').AppContext>), [resolvedViews, home]);
+    const providerDefaults = React.useMemo(() => {
+        // Merge app package defaults with computed minimal overrides
+        return deepMerge<Partial<AppContext>>(
+            applicationDefaults,
+            { views: resolvedViews, home }
+        );
+    }, [resolvedViews, home]);
 
     return (
         <React.StrictMode>

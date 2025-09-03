@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApplicationContext, AppContext, deepMerge, createDefaultAppContext, validateAppContext } from './ApplicationContext';
+import { ApplicationContext, AppContext, deepMerge, validateAppContext } from './ApplicationContext';
 
 export type ApplicationProviderProps = {
   value?: Partial<AppContext>;
@@ -10,7 +10,7 @@ export type ApplicationProviderProps = {
 
 export function ApplicationProvider({ value, defaults, strict, children }: ApplicationProviderProps) {
   const merged = React.useMemo(
-    () => deepMerge<AppContext>(createDefaultAppContext(defaults), value ?? {}),
+    () => deepMerge<AppContext>({}, defaults ?? {}, value ?? {}),
     [defaults, value]
   );
   // Validate and either warn or throw based on strict flag

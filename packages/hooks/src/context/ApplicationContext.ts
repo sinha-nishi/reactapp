@@ -89,24 +89,7 @@ export interface AppContext<Ext extends Record<string, unknown> = Record<string,
   ext?: Ext;
 }
 
-const defaultAppContext: AppContext = {
-  meta: { title: '' },
-  title: '',
-  brand: { name: '', logo: '' },
-  home: undefined,
-  config: {
-    theme: {},
-    images: {},
-    navBar: { display: true, links: [] },
-    appBar: { display: true, title: '', actions: [] },
-    sideBar: { display: false, collapsed: false, sections: [] },
-    footer: { display: false, text: '' },
-    header: { display: false, text: '', logo: '' },
-  },
-  views: [],
-  ui: { transitions: [], state: {} },
-  ext: {},
-};
+// Note: defaults now live in the app package.
 
 // Simple deep merge utility suitable for config/state trees
 function isObject(v: unknown): v is Record<string, unknown> {
@@ -133,7 +116,7 @@ export function deepMerge<T extends object>(...objects: Partial<T>[]): T {
   return result as T;
 }
 
-const ApplicationContext = React.createContext<AppContext>(defaultAppContext);
+const ApplicationContext = React.createContext<AppContext>({} as AppContext);
 
 export { ApplicationContext };
 
@@ -222,6 +205,4 @@ export function validateAppContext(value: unknown, basePath = 'app'): Validation
   return { ok: issues.length === 0, issues };
 }
 
-export function createDefaultAppContext(overrides?: Partial<AppContext>): AppContext {
-  return deepMerge<AppContext>(defaultAppContext, overrides ?? {});
-}
+// Note: No internal defaultAppContext; apps should supply defaults via ApplicationProvider.defaults
