@@ -1,14 +1,22 @@
 import * as React from 'react';
-import { ApplicationProvider, deepMerge } from '@pkvsinha/react-hooks';
+import { ApplicationProvider } from '@pkvsinha/react-hooks';
 import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import { DefaultComponentView } from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 import { PageNotFound } from "./views/PageNotFound";
+import type { View } from './types/View';
 
-export function ReactApplication({ views, home, app, appDefaults }: ReactApplicationAttributes): React.JSX.Element {
+export function ReactApplication({ app, strictValidation }: ReactApplicationAttributes): React.JSX.Element {
+
+    const resolvedViews = React.useMemo(() => {
+        const appViews = (app?.views as unknown as View[] | undefined) ?? [];
+        return appViews ?? [];
+    }, [app?.views]);
+
+    const home = app?.home;
 
     const viewComponents = React.useMemo( () => {
-        const components = views.map(view => {
+        const components = resolvedViews.map(view => {
             function ViewComponent () {
                 return (<div key={view.id}>
                     {view.view ? <DefaultComponentView view={view}>
@@ -26,17 +34,17 @@ export function ReactApplication({ views, home, app, appDefaults }: ReactApplica
             components["/"] = components["/"+home]
         }
         return components;
-    }, [views, home]);
+    }, [resolvedViews, home]);
 
-    const providerDefaults = React.useMemo(() => {
-        // Provide minimal defaults and include views; let caller override via app/appDefaults
-        const base = { views } as Partial<import('@pkvsinha/react-hooks').AppContext>;
-        return deepMerge<Partial<import('@pkvsinha/react-hooks').AppContext>>(base, appDefaults ?? {});
-    }, [views, appDefaults]);
+    const providerDefaults = React.useMemo(() => ({
+        // Library-defined defaults are in hooks; supply only minimal overrides here
+        views: resolvedViews,
+        home,
+    } as Partial<import('@pkvsinha/react-hooks').AppContext>), [resolvedViews, home]);
 
     return (
         <React.StrictMode>
-            <ApplicationProvider defaults={providerDefaults} value={app}>
+            <ApplicationProvider defaults={providerDefaults} value={app} strict={strictValidation}>
                 <NavigationProvider>
                     <Router routes={viewComponents} x404={PageNotFound} />
                 </NavigationProvider>
