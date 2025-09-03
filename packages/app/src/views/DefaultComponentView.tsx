@@ -10,23 +10,23 @@ interface DefaultComponentViewAttributes {
 }
 
 export function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
-    // const navigation = useNavigation();
-    // const view = useView();
-    // const appbar = useAppBar();
-    const { value, topNav, appBar } = useApplicationContext();
+    const app = useApplicationContext();
 
     React.useEffect(() => {
         document.title = view.meta?.title || "";
-    }, [])
+    }, [view.meta?.title]);
 
-    /**
-     * <Navigation />
-     * <View />
-     * <AppBar />
-     * <Footer />
-     */
+    const navLinks = React.useMemo(() => {
+        const links = (app as any)?.navbar?.links ?? (app as any)?.config?.navBar?.links ?? [];
+        return (links as any[]).map((ln: any) => ({
+            href: typeof ln?.path === 'string' ? (ln.path.startsWith('/') || ln.external ? ln.path : `/${ln.path}`) : '/',
+            label: ln?.title ?? ln?.path ?? '',
+            icon: ln?.icon ?? '',
+        }));
+    }, [app]);
+
     return <>
-        {view.navBar?.display === false ? null : <NavBar links={[{ href: "/", label: "Home", icon: "🏠" }]} />}
+        {view.navBar?.display === false ? null : <NavBar links={navLinks} logo={app?.brand?.logo} logoAlt={app?.brand?.name} />}
         {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>
@@ -39,3 +39,4 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
       </div>
     </>
 }
+
