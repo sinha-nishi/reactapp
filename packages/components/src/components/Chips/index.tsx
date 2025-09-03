@@ -1,1 +1,1 @@
-export { default } from './Chips'
+export { Chip } from './Chips'
