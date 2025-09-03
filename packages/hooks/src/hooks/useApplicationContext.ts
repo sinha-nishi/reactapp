@@ -1,35 +1,22 @@
 import * as React from 'react';
-import { ApplicationContext } from "../context/ApplicationContext";
+import { ApplicationContext, AppContext } from "../context/ApplicationContext";
 
-function reducer(state: any, action: any) {
-    // Reducer logic can be added here if needed
-    switch(action.type) {
-        case 'UPDATE_THEME':
-            return { ...state, theme: action.payload };
-        case 'UPDATE_ROUTES':
-            return { ...state, routes: action.payload };
-        default:
-            return state;
-    }
-}
+type Derived = {
+  // compatibility helpers for current app code
+  value?: string;
+  topNav?: unknown;
+  appBar?: unknown;
+  navbar?: unknown;
+};
 
-export function useApplicationContext() {
-    
-    const [state, dispatch] = React.useReducer(reducer, {
-        topLevelNavigation: null,
-        routes: [],
-        theme: 'light',
-    });
-
-    const context = React.useContext(ApplicationContext);
-    
-    if (!context) {
-        throw new Error("useAppContext must be used within an AppProvider");
-    }
-
-    function showAppBar() {
-        dispatch({ type: 'SHOW_APP_BAR' });
-    }
-
-    return { value: "hello", appBar: state.appBar, navbar: state.navbar, topNav: state.topLevelNavigation };
+export function useApplicationContext(): AppContext & Derived {
+  const context = React.useContext(ApplicationContext);
+  // create convenience/compatibility fields without mutating context
+  const derived: Derived = {
+    value: context.title || context.meta?.title || '',
+    appBar: context.config?.appBar,
+    navbar: context.config?.navBar,
+    topNav: context.config?.navBar,
+  };
+  return Object.assign({}, context, derived);
 }
