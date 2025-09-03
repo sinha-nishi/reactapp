@@ -17,7 +17,7 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
     }, [view.meta?.title]);
 
     const navLinks = React.useMemo(() => {
-        const links = (app as any)?.navbar?.links ?? (app as any)?.config?.navBar?.links ?? [];
+        const links = (app as any)?.navbar?.links ?? (app as any)?.navLinks ?? [];
         return (links as any[]).map((ln: any) => ({
             href: typeof ln?.path === 'string' ? (ln.path.startsWith('/') || ln.external ? ln.path : `/${ln.path}`) : '/',
             label: ln?.title ?? ln?.path ?? '',
@@ -26,7 +26,7 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
     }, [app]);
 
     return <>
-        {view.navBar?.display === false ? null : <NavBar links={navLinks} logo={app?.brand?.logo} logoAlt={app?.brand?.name} />}
+        {view.navBar?.display === false ? null : <NavBar links={navLinks} logo={(app as any)?.brandLogo} logoAlt={(app as any)?.brandName} />}
         {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>
@@ -39,4 +39,3 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
       </div>
     </>
 }
-

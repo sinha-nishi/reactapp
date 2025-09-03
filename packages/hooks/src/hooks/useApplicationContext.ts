@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApplicationContext, AppContext } from "../context/ApplicationContext";
+import { ApplicationContext, ApplicationDispatchContext, AppContext } from "../context/ApplicationContext";
 
 type Derived = {
   // compatibility helpers for current app code
@@ -7,16 +7,32 @@ type Derived = {
   topNav?: unknown;
   appBar?: unknown;
   navbar?: unknown;
+  // runtime actions
+  setTitle?: (title: string) => void;
+  setNavLinks?: (links: any[]) => void;
+  toggleAppBar?: (display?: boolean) => void;
+  toggleNavBar?: (display?: boolean) => void;
+  setBrand?: (args: { name?: string; logo?: string }) => void;
+  setTheme?: (theme: Record<string, unknown>) => void;
+  update?: (patch: Partial<AppContext>) => void;
 };
 
 export function useApplicationContext(): AppContext & Derived {
   const context = React.useContext(ApplicationContext);
+  const dispatch = React.useContext(ApplicationDispatchContext);
   // create convenience/compatibility fields without mutating context
   const derived: Derived = {
-    value: context.title || context.meta?.title || '',
-    appBar: context.config?.appBar,
-    navbar: context.config?.navBar,
-    topNav: context.config?.navBar,
+    value: (context as any)?.title || '',
+    appBar: { title: (context as any)?.appBarTitle, display: (context as any)?.appBarDisplay },
+    navbar: { links: (context as any)?.navLinks, display: (context as any)?.navBarDisplay },
+    topNav: (context as any)?.navLinks,
+    setTitle: (title: string) => dispatch?.({ type: 'SET_TITLE', title }),
+    setNavLinks: (links: any[]) => dispatch?.({ type: 'SET_NAV_LINKS', links }),
+    toggleAppBar: (display?: boolean) => dispatch?.({ type: 'TOGGLE_APP_BAR', display }),
+    toggleNavBar: (display?: boolean) => dispatch?.({ type: 'TOGGLE_NAV_BAR', display }),
+    setBrand: ({ name, logo }) => dispatch?.({ type: 'SET_BRAND', name, logo }),
+    setTheme: (theme) => dispatch?.({ type: 'SET_THEME', theme }),
+    update: (patch) => dispatch?.({ type: 'MERGE', payload: patch }),
   };
   return Object.assign({}, context, derived);
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ApplicationProvider, deepMerge, AppContext } from '@pkvsinha/react-hooks';
+import { ApplicationProvider, deepMerge, validateAppContext } from '@pkvsinha/react-hooks';
 import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import { DefaultComponentView } from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
@@ -37,17 +37,63 @@ export function ReactApplication({ app, strictValidation }: ReactApplicationAttr
         return components;
     }, [resolvedViews, home]);
 
+    // Build a flat runtime snapshot from defaults and app config
+    const flatDefaults = React.useMemo(() => {
+        const d = applicationDefaults as any;
+        return {
+            title: d?.title || d?.meta?.title || '',
+            home: d?.home,
+            views: d?.views ?? [],
+            brandName: d?.brand?.name ?? '',
+            brandLogo: d?.brand?.logo ?? '',
+            navLinks: d?.config?.navBar?.links ?? [],
+            appBarTitle: d?.config?.appBar?.title ?? '',
+            navBarDisplay: d?.config?.navBar?.display ?? true,
+            appBarDisplay: d?.config?.appBar?.display ?? true,
+            theme: d?.config?.theme ?? {},
+        } as Partial<import('@pkvsinha/react-hooks').AppContext>;
+    }, []);
+
+    const flatFromApp = React.useMemo(() => {
+        const a = app as any;
+        return a ? {
+            title: a?.title || a?.meta?.title,
+            home: a?.home,
+            views: a?.views,
+            brandName: a?.brand?.name,
+            brandLogo: a?.brand?.logo,
+            navLinks: a?.config?.navBar?.links,
+            appBarTitle: a?.config?.appBar?.title,
+            navBarDisplay: a?.config?.navBar?.display,
+            appBarDisplay: a?.config?.appBar?.display,
+            theme: a?.config?.theme,
+        } : {};
+    }, [app]);
+
     const providerDefaults = React.useMemo(() => {
-        // Merge app package defaults with computed minimal overrides
-        return deepMerge<Partial<AppContext>>(
-            applicationDefaults,
-            { views: resolvedViews, home }
-        );
-    }, [resolvedViews, home]);
+        return deepMerge<Partial<import('@pkvsinha/react-hooks').AppContext>>(flatDefaults, { views: resolvedViews, home });
+    }, [flatDefaults, resolvedViews, home]);
+
+    // Validate initial runtime (defaults merged with app overrides)
+    React.useEffect(() => {
+        const initialRuntime = deepMerge<import('@pkvsinha/react-hooks').AppContext>({} as any, providerDefaults as any, flatFromApp as any);
+        const result = validateAppContext(initialRuntime);
+        if (!result.ok) {
+            const msg = `Application runtime validation failed:\n` + result.issues.map(i => `- ${i.path}: ${i.message}`).join('\n');
+            if (strictValidation) {
+                throw new Error(msg);
+            } else {
+                // eslint-disable-next-line no-console
+                console.warn(msg);
+            }
+        }
+        // run once on changes to inputs that affect initial state
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [providerDefaults, flatFromApp, strictValidation]);
 
     return (
         <React.StrictMode>
-            <ApplicationProvider defaults={providerDefaults} value={app} strict={strictValidation}>
+            <ApplicationProvider defaults={providerDefaults} value={flatFromApp}>
                 <NavigationProvider>
                     <Router routes={viewComponents} x404={PageNotFound} />
                 </NavigationProvider>

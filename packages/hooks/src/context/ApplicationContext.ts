@@ -1,43 +1,5 @@
 import * as React from 'react';
 
-// Core Application Context Types (extensible)
-export type AppNavLink = {
-  title: string;
-  path: string;
-  icon?: string;
-  external?: boolean;
-};
-
-export type AppBarConfig = {
-  display?: boolean;
-  title?: string;
-  actions?: React.ReactNode[];
-};
-
-export type NavBarConfig = {
-  display?: boolean;
-  links?: AppNavLink[];
-};
-
-export type SideBarConfig = {
-  display?: boolean;
-  collapsed?: boolean;
-  sections?: Array<{ title?: string; items?: Array<AppNavLink> }>;
-};
-
-export type FooterConfig = {
-  display?: boolean;
-  text?: string;
-};
-
-export type HeaderConfig = {
-  display?: boolean;
-  text?: string;
-  logo?: string;
-};
-
-export type ThemeConfig = Record<string, unknown>;
-
 export type TransitionFn = (args: {
   from?: string | 'any';
   to?: string | 'any';
@@ -58,35 +20,27 @@ export interface UITransition {
   run: TransitionFn;
 }
 
-export interface AppContext<Ext extends Record<string, unknown> = Record<string, unknown>> {
-  meta?: {
-    title?: string;
-    description?: string;
-    keywords?: string[];
-  };
+// App-defined setup is intentionally opaque here to avoid cross-package coupling
+export interface AppContext {
+  // Flat runtime snapshot; built from app setup at boot
   title?: string;
-  brand?: {
-    name?: string;
-    logo?: string;
-  };
   home?: string;
-  config?: {
-    theme?: ThemeConfig;
-    images?: Record<string, string>;
-    navBar?: NavBarConfig;
-    appBar?: AppBarConfig;
-    sideBar?: SideBarConfig;
-    footer?: FooterConfig;
-    header?: HeaderConfig;
-  };
-  // Keep views generic to avoid package cycles. Apps can supply their own typing.
   views?: any[];
+  brandName?: string;
+  brandLogo?: string;
+  navLinks?: Array<Record<string, unknown>>;
+  appBarTitle?: string;
+  navBarDisplay?: boolean;
+  appBarDisplay?: boolean;
+  theme?: Record<string, unknown>;
+
+  // Runtime UI state managed by the framework/app
   ui?: {
     transitions?: UITransition[];
     state?: Record<string, unknown>;
   };
-  // Arbitrary extension bag for low-code additions
-  ext?: Ext;
+  // Optional runtime diagnostics/state
+  runtime?: Record<string, unknown>;
 }
 
 // Note: defaults now live in the app package.
@@ -120,6 +74,18 @@ const ApplicationContext = React.createContext<AppContext>({} as AppContext);
 
 export { ApplicationContext };
 
+// Actions for runtime updates
+export type AppAction =
+  | { type: 'SET_TITLE'; title: string }
+  | { type: 'SET_NAV_LINKS'; links: any[] }
+  | { type: 'TOGGLE_APP_BAR'; display?: boolean }
+  | { type: 'TOGGLE_NAV_BAR'; display?: boolean }
+  | { type: 'SET_BRAND'; name?: string; logo?: string }
+  | { type: 'SET_THEME'; theme: Record<string, unknown> }
+  | { type: 'MERGE'; payload: Partial<AppContext> };
+
+export const ApplicationDispatchContext = React.createContext<React.Dispatch<AppAction> | null>(null);
+
 // Lightweight runtime validation (no external deps)
 export type ValidationIssue = { path: string; message: string };
 export type ValidationResult = { ok: boolean; issues: ValidationIssue[] };
@@ -136,55 +102,7 @@ export function validateAppContext(value: unknown, basePath = 'app'): Validation
     return { ok: issues.length === 0, issues };
   }
 
-  if (v.meta && typeof v.meta !== 'object') push(issues, basePath + '.meta', 'must be an object');
-  if (v.meta && v.meta.title != null && typeof v.meta.title !== 'string') push(issues, basePath + '.meta.title', 'must be a string');
-  if (v.meta && v.meta.description != null && typeof v.meta.description !== 'string') push(issues, basePath + '.meta.description', 'must be a string');
-
-  if (v.title != null && typeof v.title !== 'string') push(issues, basePath + '.title', 'must be a string');
-  if ((v as any).home != null && typeof (v as any).home !== 'string') push(issues, basePath + '.home', 'must be a string');
-
-  if (v.brand) {
-    if (typeof v.brand !== 'object') push(issues, basePath + '.brand', 'must be an object');
-    else {
-      if ((v.brand as any).name != null && typeof (v.brand as any).name !== 'string') push(issues, basePath + '.brand.name', 'must be a string');
-      if ((v.brand as any).logo != null && typeof (v.brand as any).logo !== 'string') push(issues, basePath + '.brand.logo', 'must be a string');
-    }
-  }
-
-  if (v.config) {
-    if (typeof v.config !== 'object') push(issues, basePath + '.config', 'must be an object');
-    else {
-      const c: any = v.config;
-      if (c.images && typeof c.images !== 'object') push(issues, basePath + '.config.images', 'must be an object');
-
-      const nb = c.navBar;
-      if (nb) {
-        if (typeof nb !== 'object') push(issues, basePath + '.config.navBar', 'must be an object');
-        else if (nb.links != null) {
-          if (!Array.isArray(nb.links)) push(issues, basePath + '.config.navBar.links', 'must be an array');
-          else nb.links.forEach((ln: any, i: number) => {
-            const p = `${basePath}.config.navBar.links[${i}]`;
-            if (typeof ln !== 'object') push(issues, p, 'must be an object');
-            else {
-              if (typeof ln.title !== 'string') push(issues, p + '.title', 'is required string');
-              if (typeof ln.path !== 'string') push(issues, p + '.path', 'is required string');
-              if (ln.icon != null && typeof ln.icon !== 'string') push(issues, p + '.icon', 'must be a string');
-              if (ln.external != null && typeof ln.external !== 'boolean') push(issues, p + '.external', 'must be a boolean');
-            }
-          });
-        }
-      }
-
-      const ab = c.appBar;
-      if (ab) {
-        if (typeof ab !== 'object') push(issues, basePath + '.config.appBar', 'must be an object');
-        else {
-          if (ab.title != null && typeof ab.title !== 'string') push(issues, basePath + '.config.appBar.title', 'must be a string');
-          if (ab.actions != null && !Array.isArray(ab.actions)) push(issues, basePath + '.config.appBar.actions', 'must be an array');
-        }
-      }
-    }
-  }
+  // No setup/config validation here; apps provide their own typing/validation.
 
   if (v.ui) {
     if (typeof v.ui !== 'object') push(issues, basePath + '.ui', 'must be an object');

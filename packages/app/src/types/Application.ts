@@ -1,6 +1,6 @@
-import type { AppContext } from '@pkvsinha/react-hooks';
+import type { AppSetup } from '@/types/Setup';
 
 export interface ReactApplicationAttributes {
-    app?: Partial<AppContext>;
+    app?: Partial<AppSetup>;
     strictValidation?: boolean;
 }

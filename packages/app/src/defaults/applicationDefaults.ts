@@ -1,7 +1,7 @@
-import type { AppContext } from '@pkvsinha/react-hooks';
+import type { AppSetup } from '@/types/Setup';
 
 // App-level defaults live here (not in hooks)
-export const applicationDefaults: Partial<AppContext> = {
+export const applicationDefaults: Partial<AppSetup> = {
   meta: { title: '' },
   title: '',
   brand: { name: '', logo: '' },
@@ -16,7 +16,6 @@ export const applicationDefaults: Partial<AppContext> = {
     header: { display: false, text: '', logo: '' },
   },
   views: [],
-  ui: { transitions: [], state: {} },
   ext: {},
 };
 
