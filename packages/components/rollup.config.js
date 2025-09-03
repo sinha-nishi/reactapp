@@ -12,14 +12,20 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.module,
+      dir: 'dist/esm',
       format: 'esm',
       sourcemap: true,
+      preserveModules: true,
+      preserveModulesRoot: 'src',
     },
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+      }),
       typescript({
         tsconfig: './tsconfig.json',
         declaration: true,
@@ -31,7 +37,9 @@ export default [
       'react-dom',
       '@pkvsinha/react-base',
       '@pkvsinha/react-hooks',
-      '@pkvsinha/react-navigate'
+      '@pkvsinha/react-navigate',
+      'style-inject',
+      'style-inject/dist/style-inject.es.js'
     ],
   },
 
@@ -39,15 +47,21 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.main,
+      dir: 'dist/cjs',
       format: 'cjs',
       sourcemap: true,
       exports: 'auto',
+      preserveModules: true,
+      preserveModulesRoot: 'src',
     },
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+      }),
       // In the CJS build, we DO NOT generate types
       typescript({
         tsconfig: './tsconfig.json',
@@ -59,7 +73,9 @@ export default [
       'react-dom',
       '@pkvsinha/react-base',
       '@pkvsinha/react-hooks',
-      '@pkvsinha/react-navigate'
+      '@pkvsinha/react-navigate',
+      'style-inject',
+      'style-inject/dist/style-inject.es.js'
     ],
   },
 

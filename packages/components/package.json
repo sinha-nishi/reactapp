@@ -6,7 +6,10 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css",
+    "**/*.css.js"
+  ],
   "files": [
     "dist",
     "src",
@@ -24,7 +27,8 @@
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
     "@pkvsinha/react-hooks": "workspace:*",
-    "@pkvsinha/react-navigate": "workspace:*"
+    "@pkvsinha/react-navigate": "workspace:*",
+    "style-inject": "^0.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

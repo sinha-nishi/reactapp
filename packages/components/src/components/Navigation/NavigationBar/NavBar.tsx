@@ -1,5 +1,5 @@
 import React from "react";
-import "./NavBar.css";
+import "./navbar.css";
 
 export interface MenuLinkAttributes {
   href: string;
@@ -39,7 +39,7 @@ export function NavBar({
   position = "bottom",
   links,
   logo,
-  logoAlt = "Company Logo",
+  logoAlt = "Logo",
   className = "",
   style,
 }: NavBarProps) {
