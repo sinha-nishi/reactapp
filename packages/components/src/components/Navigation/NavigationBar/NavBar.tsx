@@ -1,5 +1,5 @@
 import React from "react";
-import "./NavBar.css";
+import "./navbar.css";
 
 export interface MenuLinkAttributes {
   href: string;
@@ -35,11 +35,11 @@ export interface NavBarProps {
   logoAlt?: string;
 }
 
-export default function NavBar({
+export function NavBar({
   position = "bottom",
   links,
   logo,
-  logoAlt = "Company Logo",
+  logoAlt = "Logo",
   className = "",
   style,
 }: NavBarProps) {
@@ -57,7 +57,7 @@ export default function NavBar({
           </div>
         )}
         <ul className="menu">
-          {links.map((link, i) => (
+          {links?.map((link, i) => (
             <MenuLink key={i} {...link} />
           ))}
         </ul>

@@ -16,7 +16,7 @@ interface TooltipProps {
   disabled?: boolean;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({
+export const Tooltip: React.FC<TooltipProps> = ({
   type = "plain",
   position = "top",
   title,
@@ -70,5 +70,3 @@ const Tooltip: React.FC<TooltipProps> = ({
     </div>
   );
 };
-
-export default Tooltip;

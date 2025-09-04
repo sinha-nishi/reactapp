@@ -20,7 +20,7 @@ export interface RadioButtonProps {
   onChange?: (value: string) => void;
 }
 
-export default function RadioButton({
+export function RadioButton({
   name,
   label,
   value,

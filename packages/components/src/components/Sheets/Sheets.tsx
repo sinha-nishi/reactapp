@@ -17,7 +17,7 @@ interface SheetProps {
   className?: string;
 }
 
-const Sheet: React.FC<SheetProps> = ({
+export const Sheet: React.FC<SheetProps> = ({
   open,
   onClose,
   position = "right",
@@ -57,5 +57,3 @@ const Sheet: React.FC<SheetProps> = ({
     </div>
   );
 };
-
-export default Sheet;

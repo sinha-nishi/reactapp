@@ -12,16 +12,37 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.module,
+      dir: 'dist/esm',
       format: 'esm',
       sourcemap: true,
+      preserveModules: true,
+      preserveModulesRoot: 'src',
     },
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+        // Inline a tiny injector to avoid external deps; keep plugin's own default export
+        inject: (cssVarName) => `
+          (function(css){
+            if(!css) return;
+            if(typeof document === 'undefined') return;
+            var head = document.head || document.getElementsByTagName('head')[0];
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.setAttribute('data-pkvs', 'components');
+            if (style.styleSheet){ style.styleSheet.cssText = css; }
+            else { style.appendChild(document.createTextNode(css)); }
+            head.appendChild(style);
+          })(${cssVarName});
+        `,
+      }),
       typescript({
         tsconfig: './tsconfig.json',
+        sourceMap: true,
         declaration: true,
         declarationDir: './dist/esm/types', // Generate types into a temp folder
       }),
@@ -39,15 +60,34 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.main,
+      dir: 'dist/cjs',
       format: 'cjs',
       sourcemap: true,
       exports: 'auto',
+      preserveModules: true,
+      preserveModulesRoot: 'src',
     },
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+        inject: (cssVarName) => `
+          (function(css){
+            if(!css) return;
+            if(typeof document === 'undefined') return;
+            var head = document.head || document.getElementsByTagName('head')[0];
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.setAttribute('data-pkvs', 'components');
+            if (style.styleSheet){ style.styleSheet.cssText = css; }
+            else { style.appendChild(document.createTextNode(css)); }
+            head.appendChild(style);
+          })(${cssVarName});
+        `,
+      }),
       // In the CJS build, we DO NOT generate types
       typescript({
         tsconfig: './tsconfig.json',
@@ -69,5 +109,36 @@ export default [
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
     external: [/\.css$/],
+  },
+
+  // 4. Aggregated CSS build (SSR-friendly single stylesheet)
+  {
+    input: 'src/index.ts',
+    output: {
+      file: 'dist/esm/styles.build.js',
+      format: 'esm',
+      sourcemap: false,
+    },
+    plugins: [
+      resolve(),
+      commonjs(),
+      postcss({
+        extract: 'styles.css',
+        minimize: true,
+        sourceMap: true,
+      }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        declaration: false,
+      }),
+    ],
+    treeshake: false,
+    external: [
+      'react',
+      'react-dom',
+      '@pkvsinha/react-base',
+      '@pkvsinha/react-hooks',
+      '@pkvsinha/react-navigate'
+    ],
   },
 ];

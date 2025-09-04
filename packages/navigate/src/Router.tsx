@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Navigate } from "./Navigate";
 import { NavigationContext } from "./NavigationContext";
+import { matchRoute } from './matcher';
 
 export interface RouterAttributes {
     routes: Record<string, React.ComponentType<any>>;
@@ -21,7 +21,14 @@ export const Router = ({ routes, x404 }: RouterAttributes) => {
     // Router implementation goes here
     const currentPath = useCurrentPath();
 
-    const ComponentToRender = routes[currentPath] || routes["home"] || x404;
+    const match = matchRoute(currentPath, routes);
 
-    return <ComponentToRender />;
+    if (match && match.Component) {
+        const { Component, params, query, hash } = match;
+        return <Component params={params} query={query} hash={hash} />;
+    }
+
+    const Component = routes["home"] || x404;
+
+    return <Component />;
 }

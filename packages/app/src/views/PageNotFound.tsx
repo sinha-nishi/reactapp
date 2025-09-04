@@ -9,7 +9,7 @@ interface DefaultComponentViewAttributes {
     children: React.ReactNode;
 }
 
-export default function PageNotFound({ children, view }: DefaultComponentViewAttributes) {
+export function PageNotFound({ children, view }: DefaultComponentViewAttributes) {
     // const navigation = useNavigation();
     // const view = useView();
     // const appbar = useAppBar();

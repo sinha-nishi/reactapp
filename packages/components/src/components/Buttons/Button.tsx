@@ -16,7 +16,7 @@ export interface ButtonAttribute {
 
 }
 
- const Button = ({
+export const Button = ({
   variant = 'primary',
   outlined = false,
   elevated = false,
@@ -48,7 +48,6 @@ export interface ButtonAttribute {
     </button>
   );
 };
-export default Button
 
 /**
  * import React from "react";
@@ -68,7 +67,7 @@ const defaultProps = {
   onClick: () => {},
 };
 
-export default function Button(props) {
+export function Button(props) {
   const { title, className, disabled, onClick } = props;
   return (
     <button

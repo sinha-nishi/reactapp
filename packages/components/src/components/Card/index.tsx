@@ -22,7 +22,7 @@ interface CardProps {
   onDrop?: (e: React.DragEvent<HTMLDivElement>) => void;
 }
 
-const Card: React.FC<CardProps> = ({
+export const Card: React.FC<CardProps> = ({
   variant = "elevated",
   state = "default",
   children,
@@ -47,5 +47,3 @@ const Card: React.FC<CardProps> = ({
     </div>
   );
 };
-
-export default Card

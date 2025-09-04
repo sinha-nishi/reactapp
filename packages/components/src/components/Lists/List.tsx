@@ -85,6 +85,6 @@ export interface ListProps {
   children: React.ReactNode;
 }
 
-export default function List({ children }: ListProps) {
+export function List({ children }: ListProps) {
   return <ul className="list">{children}</ul>;
 }

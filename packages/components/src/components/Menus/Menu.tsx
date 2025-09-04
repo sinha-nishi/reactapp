@@ -16,7 +16,7 @@ export interface MenuProps {
   label?: string;
 }
 
-export default function Menu({
+export function Menu({
   items,
   variant = "button",
   label = "Menu",

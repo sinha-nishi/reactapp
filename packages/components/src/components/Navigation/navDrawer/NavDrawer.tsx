@@ -12,7 +12,7 @@ export interface NavigationDrawerProps {
   width?: string;
 }
 
-export default function NavigationDrawer({
+export function NavigationDrawer({
   links,
   position = "left",
   width = "280px",

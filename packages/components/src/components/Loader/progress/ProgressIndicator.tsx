@@ -13,7 +13,7 @@ export interface ProgressIndicatorProps {
   showLabel?: boolean;
 }
 
-export default function ProgressIndicator({
+export function ProgressIndicator({
   variant = "linear",
   value,
   size = 80,

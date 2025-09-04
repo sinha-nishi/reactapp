@@ -17,7 +17,7 @@ interface NavigationRailProps {
   logo?: React.ReactNode;
 }
 
-export default function NavigationRail({
+export function NavigationRail({
   items,
   defaultActive,
   position = "left",

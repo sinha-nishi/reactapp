@@ -8,7 +8,7 @@ export type DatePickerProps = {
   mode?: "single" | "range";
 };
 
-const DatePicker: React.FC<DatePickerProps> = ({
+export const DatePicker: React.FC<DatePickerProps> = ({
   variant = "docked",
   initialDate = new Date(),
   mode,
@@ -412,5 +412,3 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   return null;
 };
-
-export default DatePicker;

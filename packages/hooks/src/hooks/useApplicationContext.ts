@@ -1,35 +1,38 @@
 import * as React from 'react';
-import { ApplicationContext } from "../context/ApplicationContext";
+import { ApplicationContext, ApplicationDispatchContext, AppContext } from "../context/ApplicationContext";
 
-function reducer(state: any, action: any) {
-    // Reducer logic can be added here if needed
-    switch(action.type) {
-        case 'UPDATE_THEME':
-            return { ...state, theme: action.payload };
-        case 'UPDATE_ROUTES':
-            return { ...state, routes: action.payload };
-        default:
-            return state;
-    }
-}
+type Derived = {
+  // compatibility helpers for current app code
+  value?: string;
+  topNav?: unknown;
+  appBar?: unknown;
+  navbar?: unknown;
+  // runtime actions
+  setTitle?: (title: string) => void;
+  setNavLinks?: (links: any[]) => void;
+  toggleAppBar?: (display?: boolean) => void;
+  toggleNavBar?: (display?: boolean) => void;
+  setBrand?: (args: { name?: string; logo?: string }) => void;
+  setTheme?: (theme: Record<string, unknown>) => void;
+  update?: (patch: Partial<AppContext>) => void;
+};
 
-export function useApplicationContext() {
-    
-    const [state, dispatch] = React.useReducer(reducer, {
-        topLevelNavigation: null,
-        routes: [],
-        theme: 'light',
-    });
-
-    const context = React.useContext(ApplicationContext);
-    
-    if (!context) {
-        throw new Error("useAppContext must be used within an AppProvider");
-    }
-
-    function showAppBar() {
-        dispatch({ type: 'SHOW_APP_BAR' });
-    }
-
-    return { value: "hello", appBar: state.appBar, navbar: state.navbar, topNav: state.topLevelNavigation };
+export function useApplicationContext(): AppContext & Derived {
+  const context = React.useContext(ApplicationContext);
+  const dispatch = React.useContext(ApplicationDispatchContext);
+  // create convenience/compatibility fields without mutating context
+  const derived: Derived = {
+    value: (context as any)?.title || '',
+    appBar: { title: (context as any)?.appBarTitle, display: (context as any)?.appBarDisplay },
+    navbar: { links: (context as any)?.navLinks, display: (context as any)?.navBarDisplay },
+    topNav: (context as any)?.navLinks,
+    setTitle: (title: string) => dispatch?.({ type: 'SET_TITLE', title }),
+    setNavLinks: (links: any[]) => dispatch?.({ type: 'SET_NAV_LINKS', links }),
+    toggleAppBar: (display?: boolean) => dispatch?.({ type: 'TOGGLE_APP_BAR', display }),
+    toggleNavBar: (display?: boolean) => dispatch?.({ type: 'TOGGLE_NAV_BAR', display }),
+    setBrand: ({ name, logo }) => dispatch?.({ type: 'SET_BRAND', name, logo }),
+    setTheme: (theme) => dispatch?.({ type: 'SET_THEME', theme }),
+    update: (patch) => dispatch?.({ type: 'MERGE', payload: patch }),
+  };
+  return Object.assign({}, context, derived);
 }

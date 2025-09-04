@@ -17,7 +17,7 @@ export interface DialogProps {
   dialogStyle?: React.CSSProperties; // custom style for inner dialog box
 }
 
-export default function Dialog({
+export function Dialog({
   open,
   title,
   header,
