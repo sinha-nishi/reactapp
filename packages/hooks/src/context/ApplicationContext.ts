@@ -28,10 +28,15 @@ export interface AppContext {
   views?: any[];
   brandName?: string;
   brandLogo?: string;
-  navLinks?: Array<Record<string, unknown>>;
-  appBarTitle?: string;
-  navBarDisplay?: boolean;
-  appBarDisplay?: boolean;
+  navBar: {
+    links?: Array<Record<string, unknown>>;
+    display?: boolean;
+    render?: () => React.ReactNode;
+  };
+  appBar: {
+    title?: string;
+    display?: boolean;
+  };
   theme?: Record<string, unknown>;
 
   // Runtime UI state managed by the framework/app
@@ -70,9 +75,7 @@ export function deepMerge<T extends object>(...objects: Partial<T>[]): T {
   return result as T;
 }
 
-const ApplicationContext = React.createContext<AppContext>({} as AppContext);
-
-export { ApplicationContext };
+export const ApplicationContext = React.createContext<AppContext>({} as AppContext);
 
 // Actions for runtime updates
 export type AppAction =

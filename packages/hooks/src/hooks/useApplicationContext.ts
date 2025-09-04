@@ -6,7 +6,7 @@ type Derived = {
   value?: string;
   topNav?: unknown;
   appBar?: unknown;
-  navbar?: unknown;
+  navBar?: unknown;
   // runtime actions
   setTitle?: (title: string) => void;
   setNavLinks?: (links: any[]) => void;
@@ -24,7 +24,13 @@ export function useApplicationContext(): AppContext & Derived {
   const derived: Derived = {
     value: (context as any)?.title || '',
     appBar: { title: (context as any)?.appBarTitle, display: (context as any)?.appBarDisplay },
-    navbar: { links: (context as any)?.navLinks, display: (context as any)?.navBarDisplay },
+    navBar: { 
+      links: context?.navBar?.links, 
+      display: context?.navBar?.display, 
+      render: () => {
+        return context?.navBar?.render ? context.navBar.render() : null;
+      }
+    },
     topNav: (context as any)?.navLinks,
     setTitle: (title: string) => dispatch?.({ type: 'SET_TITLE', title }),
     setNavLinks: (links: any[]) => dispatch?.({ type: 'SET_NAV_LINKS', links }),

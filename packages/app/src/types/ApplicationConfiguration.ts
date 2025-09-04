@@ -13,11 +13,13 @@ export type AppBarConfig = {
   display?: boolean;
   title?: string;
   actions?: React.ReactNode[];
+  render?: () => React.ReactNode;
 };
 
 export type NavBarConfig = {
   display?: boolean;
   links?: AppNavLink[];
+  render?: () => React.ReactNode;
 };
 
 export type SideBarConfig = {

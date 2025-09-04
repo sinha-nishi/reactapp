@@ -16,8 +16,12 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
         document.title = view.meta?.title || "";
     }, [view.meta?.title]);
 
+    const navRenderComponent = React.useMemo(() => {
+        return app.navBar?.render ? app.navBar?.render() : null;
+    }, [app]);
+
     const navLinks = React.useMemo(() => {
-        const links = (app as any)?.navbar?.links ?? (app as any)?.navLinks ?? [];
+        const links = app?.navBar?.links ?? app?.navBar?.links ?? [];
         return (links as any[]).map((ln: any) => ({
             href: typeof ln?.path === 'string' ? (ln.path.startsWith('/') || ln.external ? ln.path : `/${ln.path}`) : '/',
             label: ln?.title ?? ln?.path ?? '',
@@ -26,7 +30,11 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
     }, [app]);
 
     return <>
-        {view.navBar?.display === false ? null : <NavBar links={navLinks} logo={(app as any)?.brandLogo} logoAlt={(app as any)?.brandName} />}
+        {
+            view.navBar?.display === false ? null :
+                navRenderComponent ? navRenderComponent : 
+                    <NavBar links={navLinks} logo={(app as any)?.brandLogo} logoAlt={(app as any)?.brandName} />
+        }
         {view.appBar?.display === false ? null : <AppBar text={view.appBar?.title || ""} />}
         <div className="flex flex-col h-screen justify-center">
             <Container>

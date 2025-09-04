@@ -18,11 +18,11 @@ export function ApplicationProvider({ value, defaults, children }: ApplicationPr
       case 'SET_TITLE':
         return { ...state, title: action.title };
       case 'SET_NAV_LINKS':
-        return { ...state, navLinks: action.links };
+        return { ...state, navBar: { ...state.navBar, links: action.links } };
       case 'TOGGLE_APP_BAR':
-        return { ...state, appBarDisplay: action.display ?? !state.appBarDisplay };
+        return { ...state, appBar: { ...state.appBar, display: action.display ?? !state.appBar.display } };
       case 'TOGGLE_NAV_BAR':
-        return { ...state, navBarDisplay: action.display ?? !state.navBarDisplay };
+        return { ...state, navBar: { ...state.navBar, display: action.display ?? !state.navBar.display } };
       case 'SET_BRAND':
         return { ...state, brandName: action.name ?? state.brandName, brandLogo: action.logo ?? state.brandLogo };
       case 'SET_THEME':

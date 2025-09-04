@@ -4,8 +4,8 @@ import { ReactApplication } from "./ReactApplication";
 import { registerSW } from "./sw/register";
 import type { ApplicationConfiguration } from './types/ApplicationConfiguration';
 
-export function render(rootId: string, app: Partial<ApplicationConfiguration>, strictValidation?: boolean) {
-  const rootElement = document.getElementById(rootId);
+export function render(app: Partial<ApplicationConfiguration>, rootId: string, strictValidation?: boolean) {
+  const rootElement = document.getElementById(rootId || "app");
   if (rootElement) {
     const root = createRoot(rootElement);
     root.render(
