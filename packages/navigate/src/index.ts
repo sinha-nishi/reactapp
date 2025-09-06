@@ -3,3 +3,4 @@ export * from './NavigationProvider';
 export * from './useNavigation';
 export * from './Navigate';
 export * from './Router';
+export * from './NavigationStore';

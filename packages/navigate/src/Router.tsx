@@ -14,14 +14,14 @@ const useCurrentPath = () => {
         throw new Error("Router must be used within a NavigationContext");
     }
 
-    return context.path;
+    return context.location;
 }
 
 export const Router = ({ routes, x404 }: RouterAttributes) => {
     // Router implementation goes here
-    const currentPath = useCurrentPath();
+    const location = useCurrentPath();
 
-    const match = matchRoute(currentPath, routes);
+    const match = matchRoute(location.path, routes);
 
     if (match && match.Component) {
         const { Component, params, query, hash } = match;
