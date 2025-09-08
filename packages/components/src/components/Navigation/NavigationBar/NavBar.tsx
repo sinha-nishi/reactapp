@@ -1,5 +1,6 @@
 import React from "react";
 import "./navbar.css";
+import { Navigate } from "@pkvsinha/react-navigate";
 
 export interface MenuLinkAttributes {
   href: string;
@@ -18,10 +19,10 @@ function MenuLink({
 }: MenuLinkAttributes) {
   return (
     <li className={`menu-link ${className}`} style={style}>
-      <a href={href} className="menu-item">
+      <Navigate to={href} className="menu-item">
         <span className="menu-icon">{icon}</span>
         <span className="menu-label">{label}</span>
-      </a>
+      </Navigate>
     </li>
   );
 }

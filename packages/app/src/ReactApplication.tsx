@@ -6,6 +6,7 @@ import { ReactApplicationAttributes } from "./types/Application";
 import { PageNotFound } from "./views/PageNotFound";
 import type { View } from './types/View';
 import { applicationDefaults } from './defaults/applicationDefaults';
+import { render } from './BrowserApplication';
 
 export function ReactApplication({ app, strictValidation }: ReactApplicationAttributes): React.JSX.Element {
 
@@ -46,10 +47,14 @@ export function ReactApplication({ app, strictValidation }: ReactApplicationAttr
             views: d?.views ?? [],
             brandName: d?.brand?.name ?? '',
             brandLogo: d?.brand?.logo ?? '',
-            navLinks: d?.config?.navBar?.links ?? [],
-            appBarTitle: d?.config?.appBar?.title ?? '',
-            navBarDisplay: d?.config?.navBar?.display ?? true,
-            appBarDisplay: d?.config?.appBar?.display ?? true,
+            navBar: {
+                links: d?.config?.navBar?.links ?? [],
+                display: d?.config?.navBar?.display ?? true,
+            },
+            appBar: {
+                title: d?.config?.appBar?.title ?? '',
+                display: d?.config?.appBar?.display ?? true,
+            },
             theme: d?.config?.theme ?? {},
         } as Partial<import('@pkvsinha/react-hooks').AppContext>;
     }, []);
@@ -62,10 +67,15 @@ export function ReactApplication({ app, strictValidation }: ReactApplicationAttr
             views: a?.views,
             brandName: a?.brand?.name,
             brandLogo: a?.brand?.logo,
-            navLinks: a?.config?.navBar?.links,
-            appBarTitle: a?.config?.appBar?.title,
-            navBarDisplay: a?.config?.navBar?.display,
-            appBarDisplay: a?.config?.appBar?.display,
+            appBar: {
+                title: a?.config?.shell?.appBar?.title,
+                display: a?.config?.shell?.appBar?.display,
+            },
+            navBar: {
+                links: a?.config?.shell?.navBar?.links,
+                display: a?.config?.shell?.navBar?.display,
+                render: a?.config?.shell?.navBar?.render,
+            },
             theme: a?.config?.theme,
         } : {};
     }, [app]);

@@ -1,10 +1,13 @@
 import * as React from 'react';
 
-// Add this to the top of packages/react-navigate/src/index.ts
-(window as any).reactNavigateInstance = (window as any).reactNavigateInstance || Math.random();
+type Location = {
+  path: string;
+  query: Record<string, string>;
+  hash: string | null;
+};
 
 interface NavigationContextState {
-    path: string;
+    location: Location;
     navigate: (to: string) => void;
 }
 

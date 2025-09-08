@@ -1,6 +1,6 @@
-import type { AppSetup } from '@/types/Setup';
+import type { ApplicationConfiguration } from './ApplicationConfiguration';
 
 export interface ReactApplicationAttributes {
-    app?: Partial<AppSetup>;
+    app?: Partial<ApplicationConfiguration>;
     strictValidation?: boolean;
 }

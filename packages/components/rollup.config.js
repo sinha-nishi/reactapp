@@ -42,7 +42,6 @@ export default [
       }),
       typescript({
         tsconfig: './tsconfig.json',
-        sourceMap: true,
         declaration: true,
         declarationDir: './dist/esm/types', // Generate types into a temp folder
       }),

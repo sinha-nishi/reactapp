@@ -14,6 +14,7 @@ interface NavigateLabelAttribute extends NavigateAttributeBase {
 interface NavigateChildrenAttribute extends NavigateAttributeBase {
     label?: string;
     children: React.ReactNode;
+    as?: "button" | "a";
 }
 
 export type NavigateAttribute = NavigateLabelAttribute | NavigateChildrenAttribute;

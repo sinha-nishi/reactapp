@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useResponsive } from "@pkvsinha/react-hooks";
+import { Navigate } from '@pkvsinha/react-navigate';
 
 interface ResponsiveAttributes {
     small: boolean;
@@ -19,12 +20,12 @@ function MobileLayout({ title, subtitle, image, href }: SlideAttributes) {
     <div className="p-4">
       <div className="text-6xl my-8">{title}</div>
       <p className="text-slate-900 my-4">{subtitle}</p>
-      <a
-        href={href}
+      <Navigate
+        to={href}
         className="my-8 py-6 uppercase justify-center rounded-lg w-32 h-12 shadow-lg shadow-orange-500 text-white flex items-center bg-orange-600"
       >
         Read
-      </a>
+      </Navigate>
     </div>
   );
 }
