@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { NavigationContext } from "./NavigationContext";
 import { matchRoute } from './matcher';
+import { RoutingContext, RoutingProvider } from './RouterContext';
 
 export interface RouterAttributes {
     routes: Record<string, React.ComponentType<any>>;
@@ -23,12 +24,17 @@ export const Router = ({ routes, x404 }: RouterAttributes) => {
 
     const match = matchRoute(location.path, routes);
 
-    if (match && match.Component) {
-        const { Component, params, query, hash } = match;
-        return <Component params={params} query={query} hash={hash} />;
+    const routeParams = {  
+        path: location.path,
+        params: match?.params || {},
+        query: match?.query || {},
+        hash: match?.hash || "",
     }
 
-    const Component = routes["home"] || x404;
+    const FallbackComponent = routes["home"] || x404;
+    const Component = match?.Component ?? FallbackComponent;
 
-    return <Component />;
+    return <RoutingProvider value={routeParams}>
+        <Component />
+    </RoutingProvider>;
 }

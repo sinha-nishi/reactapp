@@ -3,14 +3,24 @@ import { Button, NavBar, AppBar } from '@pkvsinha/react-components';
 import { Container, Section } from '@pkvsinha/react-base';
 import { useApplicationContext } from '@pkvsinha/react-hooks';
 import { View } from "@/types/View";
+import { useRouteParams } from '@pkvsinha/react-navigate';
 
 interface DefaultComponentViewAttributes {
     view: View;
     children: React.ReactNode;
 }
 
+interface InjectedParams {
+    route: any;
+}
+
+interface InjectedProps {
+    params: InjectedParams;
+}
+
 export function DefaultComponentView({ children, view }: DefaultComponentViewAttributes) {
     const app = useApplicationContext();
+    const routeParams = useRouteParams();
 
     React.useEffect(() => {
         document.title = view.meta?.title || "";
@@ -29,6 +39,12 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
         }));
     }, [app]);
 
+    let child = children;
+
+    if (React.isValidElement(children)) {
+        child = React.cloneElement(children, { params: { route: routeParams } } as InjectedProps);
+    }
+
     return <>
         {
             view.navBar?.display === false ? null :
@@ -41,7 +57,7 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
                 <Section
                     style={{ height: "calc(100vh - 200px)", marginBottom: "100px" }}
                 >
-                    {children}
+                    {child}
                 </Section>
             </Container>
       </div>
