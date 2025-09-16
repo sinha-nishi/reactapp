@@ -3,6 +3,7 @@ import { useNavigation } from "./useNavigation";
 
 interface NavigateAttributeBase {
     to: string;
+    replace?: boolean;
     className?: string;
 }
 
@@ -20,13 +21,14 @@ interface NavigateChildrenAttribute extends NavigateAttributeBase {
 export type NavigateAttribute = NavigateLabelAttribute | NavigateChildrenAttribute;
 
 export function Navigate(props: NavigateAttribute) {
-    const { navigate } = useNavigation();
+    const { navigate, replace: doReplace } = useNavigation();
+    const go = () => (props.replace ? doReplace(props.to) : navigate(props.to));
 
     const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
         // Prevent the browser's default link behavior (full page refresh)
         event.preventDefault();
         // Use our custom navigate function
-        navigate(props.to);
+        go();
     };
 
     return <a href={props.to} className={props.className} onClick={handleClick}>{props.label || props.children || "Navigate"}</a>;

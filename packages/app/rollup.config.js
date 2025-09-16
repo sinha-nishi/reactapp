@@ -33,6 +33,7 @@ export default [
       '@pkvsinha/react-components',
       '@pkvsinha/react-hooks',
       '@pkvsinha/react-icons',
+      '@pkvsinha/react-integrate',
       '@pkvsinha/react-layout',
       '@pkvsinha/react-navigate',
       '@pkvsinha/react-widgets'
@@ -65,6 +66,7 @@ export default [
       '@pkvsinha/react-components',
       '@pkvsinha/react-hooks',
       '@pkvsinha/react-icons',
+      '@pkvsinha/react-integrate',
       '@pkvsinha/react-layout',
       '@pkvsinha/react-navigate',
       '@pkvsinha/react-widgets'

@@ -1,3 +1,4 @@
+import { Command } from '@pkvsinha/react-integrate';
 import * as React from 'react';
 
 type Location = {
@@ -8,7 +9,8 @@ type Location = {
 
 interface NavigationContextState {
     location: Location;
-    navigate: (to: string) => void;
+    // navigate: (to: string) => void;
+    send: (cmd: Command)  => Promise<void>;
 }
 
 export const NavigationContext = React.createContext<NavigationContextState | undefined>(undefined);
