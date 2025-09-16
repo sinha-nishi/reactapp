@@ -105,7 +105,7 @@ export default [
   // 3. Bundle all the type declarations into a single file
   {
     input: 'dist/esm/types/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'esm' }],
+    output: [{ file: 'dist/index.d.ts', format: 'esm', sourcemap: false }],
     plugins: [dts()],
     external: [/\.css$/],
   },
@@ -116,7 +116,7 @@ export default [
     output: {
       file: 'dist/esm/styles.build.js',
       format: 'esm',
-      sourcemap: false,
+      sourcemap: true,
     },
     plugins: [
       resolve(),
