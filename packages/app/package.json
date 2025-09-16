@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/pkvsinha/react-mui.git"
+    "url": "https://github.com/pkvsinha/reactapp.git"
   },
   "peerDependencies": {
     "react": "^19.1.1",
@@ -26,6 +26,7 @@
     "@pkvsinha/react-components": "workspace:*",
     "@pkvsinha/react-hooks": "workspace:*",
     "@pkvsinha/react-icons": "workspace:*",
+    "@pkvsinha/react-integrate": "workspace:*",
     "@pkvsinha/react-layout": "workspace:*",
     "@pkvsinha/react-navigate": "workspace:*",
     "@pkvsinha/react-widgets": "workspace:*"
