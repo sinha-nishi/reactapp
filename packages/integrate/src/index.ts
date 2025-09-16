@@ -3,7 +3,7 @@ import { bus } from './EventBus';
 export * from './EventBus';
 export * from './Registry';
 export * from './types';
-
+export * from './effects'
 
 export const enableLogging = () => {
     console.log("[NAVIGATION] Logging enabled");
