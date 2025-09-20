@@ -1,38 +1,50 @@
+import { render as _render } from './index';
 export * from './index';
 
 // ---- Auto-render from URL (?render=base64[&root=appId][&strict=1]) ----
 (function autoRenderFromQuery(global: any) {
   if (typeof window === "undefined") return;
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const encoded = params.get("render");
-    if (!encoded) return;
 
-    const rootId = params.get("root") || "app";
-    const strict = params.get("strict") === "1";
+  const run = () => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get("_render");
+      if (!encoded) return;
 
-    // support base64url too (-,_)
-    const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
-    const padded = normalized + "===".slice((normalized.length + 3) % 4);
+      const rootId = params.get("_root") || "app";
+      const strict = params.get("_strict") === "1";
 
-    // decode UTF-8 safely
-    const binary = atob(padded);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-    const json = new TextDecoder("utf-8").decode(bytes);
+      // support base64url too (-,_)
+      const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = normalized + "===".slice((normalized.length + 3) % 4);
 
-    const appConfig = JSON.parse(json);
+      // decode UTF-8 safely
+      const binary = atob(padded);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const json = new TextDecoder("utf-8").decode(bytes);
 
-    // Your normal render
-    if (global.ReactApp && typeof global.ReactApp.render === "function") {
-      global.ReactApp.render(appConfig, rootId, strict);
-    // } else if (typeof render === "function") {
-    //   // if tree-shaking in ESM kept it local
-    //   render(appConfig, rootId, strict);
-    } else {
-      console.error("[ReactApp] render() not found on window or module.");
+      const appConfig = JSON.parse(json);
+
+      // Your normal render
+      if (typeof _render === "function") {
+        _render(appConfig, { rootId, strictValidation: strict });
+      } else if (global.ReactApp && typeof global.ReactApp.render === "function") {
+        // fallback if needed
+        global.ReactApp.render(appConfig, { rootId, strictValidation: strict });
+      } else {
+        console.error("[ReactApp] render() not found on window or module.");
+      }
+    } catch (err) {
+      console.error("[ReactApp] Failed to auto-render from ?render=", err);
     }
-  } catch (err) {
-    console.error("[ReactApp] Failed to auto-render from ?render=", err);
+  };
+
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", run, { once: true });
+  } else {
+    // macrotask ensures it runs after UMD assigns the global
+    setTimeout(run, 0);
   }
+  
 })(typeof window !== "undefined" ? (window as any) : {});
