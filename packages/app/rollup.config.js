@@ -120,7 +120,7 @@ export default [
 
   // 3. Build for UMD (for CDN usage, all dependencies bundled & minified)
   {
-    input: 'src/index.ts',
+    input: 'src/umd.ts',
     external: [],
     output: {
       file: 'dist/umd/react-app.standalone.min.js',
@@ -145,7 +145,7 @@ export default [
 
   // 4. Build for UMD - Lean (for CDN usage, all dependencies bundled & minified)
   {
-    input: 'src/index.ts',
+    input: 'src/umd.ts',
     external: ["react", "react-dom"],
     output: {
       file: 'dist/umd/react-app.lean.min.js',
