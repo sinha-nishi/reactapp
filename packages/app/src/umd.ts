@@ -1,5 +1,10 @@
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as ReactDOMClient from "react-dom/client";
+
 import { render as _render } from './index';
 export * from './index';
+export { React, ReactDOM, ReactDOMClient };
 
 // ---- Auto-render from URL (?render=base64[&root=appId][&strict=1]) ----
 (function autoRenderFromQuery(global: any) {
