@@ -79,11 +79,11 @@ function isSimpleConfig(
   return (config as Partial<SimpleConfig>)?.view !== undefined;
 }
 
-function prepareView(view: string) {
+function prepareView(app: Partial<SimpleConfig>) {
   return {
     id: "home",
     meta: {
-      title: "React App Builder",
+      title: app?.brand || "React Application Builder",
     },
     appBar: {
       display: false,
@@ -93,7 +93,7 @@ function prepareView(view: string) {
     },
     //   type: "stackview",
     stack: ["carousel"],
-    view: "Welcome to React Application Builder!",
+    view: app.view || "Welcome to React Application Builder!",
     layout: "stack" as "stack",
   };
 }
@@ -110,7 +110,7 @@ export function prepareApp(
       ...DefaultApplicationConfig,
       views: [
         app?.view
-          ? { ...prepareView(app.view) }
+          ? { ...prepareView(app) }
           : { ...DefaultApplicationConfig.views[0] },
       ],
     };
