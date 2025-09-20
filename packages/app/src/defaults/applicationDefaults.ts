@@ -10,7 +10,7 @@ export const applicationDefaults: Partial<ApplicationConfiguration> = {
     themes: {},
     images: {},
     shell: {
-      navBar: { display: true, links: [] },
+      navBar: { display: false, links: [] },
       appBar: { display: true, title: '', actions: [] },
       sideBar: { display: false, collapsed: false, sections: [] },
       footer: { display: false, text: '' },

@@ -15,16 +15,16 @@ export interface View {
     grid?: GridView;
     appBar?: {
         display: boolean;
-        title: string;
-        actions: React.ReactNode[];
+        title?: string;
+        actions?: React.ReactNode[];
     };
     navBar?: {
         display: boolean;
-        title: string;
-        actions: React.ReactNode[];
+        title?: string;
+        actions?: React.ReactNode[];
     },
     meta?: {
         title: string;
-        content: string;
+        content?: string;
     }
 }

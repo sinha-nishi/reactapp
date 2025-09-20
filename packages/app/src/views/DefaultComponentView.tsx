@@ -45,9 +45,11 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
         child = React.cloneElement(children, { params: { route: routeParams } } as InjectedProps);
     }
 
+    console.log("Rendering DefaultComponentView for view:", view);
+
     return <>
         {
-            view.navBar?.display === false ? null :
+            view.navBar?.display === false || navLinks.length ? null :
                 navRenderComponent ? navRenderComponent : 
                     <NavBar links={navLinks} logo={(app as any)?.brandLogo} logoAlt={(app as any)?.brandName} />
         }

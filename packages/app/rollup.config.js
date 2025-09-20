@@ -26,13 +26,20 @@ const EXTERNAL_PEERS = ["react", "react-dom"];
 
 const isProd = process.env.NODE_ENV === "production";
 
-// Base plugins (no minify)
-const basePlugins = [
-  replace({
+const replacePlugin = () => replace({
     preventAssignment: true,
-    // "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production"),
     "process.env.NODE_ENV": JSON.stringify(isProd ? "production" : "development"),
-  }),
+  });
+
+const tscPlugin = (declaration = false) => typescript({
+    tsconfig: './tsconfig.json',
+    // ensure declaration emit in your tsconfig, not here
+    declaration,
+    declarationDir: declaration ? './dist/esm/types' : undefined,
+  });
+
+// Base plugins (no minify)
+const basePlugins = () => [
   resolve({
     browser: true,
     extensions: [".mjs", ".js", ".ts", ".tsx", ".json"],
@@ -40,86 +47,46 @@ const basePlugins = [
   }),
   commonjs(),
   postcss(),
-  typescript({
-    tsconfig: './tsconfig.json',
-    // ensure declaration emit in your tsconfig, not here
-  }),
+  
 ];
 
 // Minified variant
-const minify = terser({
+const minify = () => terser({
   compress: { passes: 2, pure_getters: true, drop_console: false },
   mangle: true,
 });
 
-export default [
-  // 1. Build for ESM (and generate all type declarations)
-  {
+const TypesBuild = {// 5. Bundle all the type declarations into a single file
+  input: 'dist/esm/types/index.d.ts',
+  output: [{ file: 'dist/index.d.ts', format: 'esm' }],
+  plugins: [dts()],
+  external: [/\.css$/],
+};
+
+const ESMBuild =   {
     input: 'src/index.ts',
+    external: [...EXTERNAL_PEERS, ...INTERNAL_PKG],
+    plugins: [ basePlugins(), tscPlugin(true) ],
     output: {
       file: pkg.module,
       format: 'esm',
       sourcemap: true,
     },
-    plugins: [
-      resolve(),
-      commonjs(),
-      postcss(),
-      typescript({
-        tsconfig: './tsconfig.json',
-        declaration: true,
-        declarationDir: './dist/esm/types', // Generate types into a temp folder
-      }),
-    ],
-    external: [
-      'react',
-      'react-dom',
-      '@pkvsinha/react-base',
-      '@pkvsinha/react-components',
-      '@pkvsinha/react-hooks',
-      '@pkvsinha/react-icons',
-      '@pkvsinha/react-integrate',
-      '@pkvsinha/react-layout',
-      '@pkvsinha/react-navigate',
-      '@pkvsinha/react-widgets'
-    ],
-  },
+  };
 
-  // 2. Build for CJS
-  {
+const CJSBuild =   {
     input: 'src/index.ts',
+    external: [...EXTERNAL_PEERS, ...INTERNAL_PKG],
+    plugins: [ basePlugins(), tscPlugin() ],
     output: {
       file: pkg.main,
       format: 'cjs',
       sourcemap: true,
       exports: 'named',
-    },
-    plugins: [
-      resolve(),
-      commonjs(),
-      postcss(),
-      // In the CJS build, we DO NOT generate types
-      typescript({
-        tsconfig: './tsconfig.json',
-        declaration: false, // <-- This is the key
-      }),
-    ],
-    external: [
-      'react',
-      'react-dom',
-      '@pkvsinha/react-base',
-      '@pkvsinha/react-components',
-      '@pkvsinha/react-hooks',
-      '@pkvsinha/react-icons',
-      '@pkvsinha/react-integrate',
-      '@pkvsinha/react-layout',
-      '@pkvsinha/react-navigate',
-      '@pkvsinha/react-widgets'
-    ],
-  },
+    }
+  };
 
-  // 3. Build for UMD (for CDN usage, all dependencies bundled & minified)
-  {
+const UMDBuild =   {
     input: 'src/umd.ts',
     external: [],
     output: {
@@ -129,24 +96,13 @@ export default [
       sourcemap: true,
       exports: "named",
     },
-    plugins: [...basePlugins, minify],
-    // plugins: [
-    //   resolve({ browser: true, extensions: [".ts", ".js"] }),
-    //   commonjs(),
-    //   postcss(),
-    //   typescript({
-    //     tsconfig: './tsconfig.json',
-    //     declaration: false,
-    //   }),
-    //   terser(), // Minify the UMD bundle
-    // ],
-    // No 'external' field here! All dependencies are bundled.
-  },
+    plugins: [replacePlugin(), basePlugins(), tscPlugin(), minify()],
+  };
 
-  // 4. Build for UMD - Lean (for CDN usage, all dependencies bundled & minified)
-  {
+const UMDLeanBuild =   {
     input: 'src/umd.ts',
-    external: ["react", "react-dom"],
+    external: [...EXTERNAL_PEERS],
+    plugins: [replacePlugin(), basePlugins(), tscPlugin(), minify()],
     output: {
       file: 'dist/umd/react-app.lean.min.js',
       format: 'umd',
@@ -158,15 +114,12 @@ export default [
         "react-dom": "ReactDOM",
       },
     },
-    plugins: [...basePlugins, minify],
-    // Lean with 'react' and 'react-dom' as externals! All internal dependencies are bundled.
-  },
+  };
 
-  // 5. Bundle all the type declarations into a single file
-  {
-    input: 'dist/esm/types/index.d.ts',
-    output: [{ file: 'dist/index.d.ts', format: 'esm' }],
-    plugins: [dts()],
-    external: [/\.css$/],
-  },
+export default [
+  ESMBuild, // 1. Build for ESM (and generate all type declarations)
+  CJSBuild, // 2. Build for CJS
+  UMDBuild, // 3. Build for UMD (for CDN usage, all dependencies bundled & minified)
+  UMDLeanBuild, // 4. Build for UMD - Lean (for CDN usage, all dependencies bundled & minified)
+  TypesBuild, // 5. Bundle all the type declarations into a single file
 ];

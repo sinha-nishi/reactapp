@@ -6,7 +6,6 @@ import { ReactApplicationAttributes } from "./types/Application";
 import { PageNotFound } from "./views/PageNotFound";
 import type { View } from './types/View';
 import { applicationDefaults } from './defaults/applicationDefaults';
-import { render } from './BrowserApplication';
 
 export function ReactApplication({ app, strictValidation }: ReactApplicationAttributes): React.JSX.Element {
 
@@ -73,7 +72,7 @@ export function ReactApplication({ app, strictValidation }: ReactApplicationAttr
             },
             navBar: {
                 links: a?.config?.shell?.navBar?.links,
-                display: a?.config?.shell?.navBar?.display,
+                display: a?.config?.shell?.navBar ? a?.config?.shell?.navBar?.display : false,
                 render: a?.config?.shell?.navBar?.render,
             },
             theme: a?.config?.theme,

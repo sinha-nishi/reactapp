@@ -2,6 +2,11 @@
 
 import { View } from "./View";
 
+export type RenderOptions = {
+  rootId?: string;
+  strictValidation?: boolean;
+}
+
 export type AppNavLink = {
   title: string;
   path: string;

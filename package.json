@@ -5,6 +5,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "pack:all": "pnpm run build && pnpm -r pack",
+    "prettier": "prettier --write packages",
     "theme:flat": "node scripts/build-tokens.js default",
     "theme:material": "node scripts/build-tokens.js material",
     "theme:neumorphism": "node scripts/build-tokens.js neumorphism"
@@ -19,6 +20,7 @@
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.7",
     "js-yaml": "^4.1.0",
+    "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "rollup": "^4.46.1",
