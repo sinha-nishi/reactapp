@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ApplicationProvider, deepMerge, validateAppContext } from '@pkvsinha/react-hooks';
-import { Navigate, NavigationProvider, Router } from "@pkvsinha/react-navigate";
+import { NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import { DefaultComponentView } from "./views/DefaultComponentView";
 import { ReactApplicationAttributes } from "./types/Application";
 import { PageNotFound } from "./views/PageNotFound";

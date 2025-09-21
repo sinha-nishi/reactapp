@@ -49,7 +49,7 @@ export function DefaultComponentView({ children, view }: DefaultComponentViewAtt
 
     return <>
         {
-            view.navBar?.display === false || navLinks.length ? null :
+            (view.navBar?.display === false || !navLinks.length) ? null :
                 navRenderComponent ? navRenderComponent : 
                     <NavBar links={navLinks} logo={(app as any)?.brandLogo} logoAlt={(app as any)?.brandName} />
         }
