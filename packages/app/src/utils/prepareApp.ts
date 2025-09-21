@@ -7,12 +7,14 @@ type SimpleConfig = {
   brand: string;
   theme: string;
   view: string;
+  contextPath: string;
 };
 
 const DefaultApplicationConfig: ApplicationConfiguration = {
   meta: {
     title: "React Application Builder",
   },
+  contextPath: "/",
   config: {
     themes: {},
     images: {},
@@ -108,6 +110,7 @@ export function prepareApp(
   if (isSimpleConfig(app)) { // Fill in the values from SimpleConfig to ApplicationConfiguration
     return {
       ...DefaultApplicationConfig,
+      contextPath: app.contextPath || "/",
       views: [
         app?.view
           ? { ...prepareView(app) }
@@ -119,6 +122,7 @@ export function prepareApp(
   return { // Merge the provided ApplicationConfiguration with defaults
     ...DefaultApplicationConfig,
     ...app,
+    contextPath: app.contextPath || "/",
     meta: {
       ...DefaultApplicationConfig.meta,
       ...(app?.meta ?? {}),

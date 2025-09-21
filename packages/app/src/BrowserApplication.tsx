@@ -15,7 +15,7 @@ export function render(app?: Partial<ApplicationConfiguration>, options?: Render
   root.render(
     <ReactApplication app={applicationConfig} strictValidation={options?.strictValidation} />
   );
-  attachBrowserAdapter();
+  attachBrowserAdapter(app?.contextPath);
   // registerSW();
 }
 

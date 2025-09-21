@@ -114,6 +114,7 @@ export interface ApplicationConfiguration<Ext extends Record<string, unknown> = 
     description?: string;
     keywords?: string[];
   };
+  contextPath: string;
   title: string;
   brand?: {
     name?: string;

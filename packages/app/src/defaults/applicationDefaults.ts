@@ -6,6 +6,7 @@ export const applicationDefaults: Partial<ApplicationConfiguration> = {
   title: '',
   brand: { name: '', logo: '' },
   home: undefined,
+  contextPath: "/",
   config: {
     themes: {},
     images: {},

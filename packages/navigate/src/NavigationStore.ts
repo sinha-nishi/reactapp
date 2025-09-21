@@ -15,7 +15,11 @@ class NavigationStore {
   constructor(initial: string = "/") {
     this._location = this.parse(initial);
 
-    bus.subscribe(cmd => this.onCommand(cmd));
+    bus.subscribe((cmd) => this.onCommand(cmd));
+  }
+
+  public reset(path: string = "/") {
+    this._location = this.parse(path);
   }
 
   private parse(url: string): Location {
@@ -67,20 +71,33 @@ class NavigationStore {
 
 export const navigationStore = new NavigationStore("/");
 
-export function attachBrowserAdapter() {
+export function attachBrowserAdapter(contextPath: string = "/") {
+
+  console.log("reseting the navigation store to account for current location: ", contextPath);
+
+  navigationStore.reset(contextPath); // need to see if we need to reset the listeners
 
   const onPop = () => {
     // navigationStore.navigate(window.location.pathname + window.location.search + window.location.hash);
-    bus.send({ type: "navigate", target: window.location.pathname + window.location.search + window.location.hash });
+    bus.send({
+      type: "navigate",
+      target:
+        window.location.pathname +
+        window.location.search +
+        window.location.hash,
+    });
   };
 
   // Sync from browser → store
   window.addEventListener("popstate", onPop);
 
   // Sync from store → browser
-  const unsub = navigationStore.subscribe(loc => {
-    const url = loc.path +
-      (Object.keys(loc.query).length ? "?" + new URLSearchParams(loc.query).toString() : "") +
+  const unsub = navigationStore.subscribe((loc) => {
+    const url =
+      loc.path +
+      (Object.keys(loc.query).length
+        ? "?" + new URLSearchParams(loc.query).toString()
+        : "") +
       (loc.hash ? "#" + loc.hash : "");
     window.history.pushState({}, "", url);
   });
