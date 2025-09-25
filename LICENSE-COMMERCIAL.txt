@@ -1,0 +1,30 @@
+Commercial License Agreement
+for Premium Add-ons of @pkvsinha/react-app
+
+Copyright (c) 2025 HEYPKV INNOVATIONS PVT LTD
+All rights reserved.
+
+1. Grant of License
+-------------------
+Subject to payment of the applicable fees, HEYPKV INNOVATIONS PVT LTD 
+(“Licensor”) hereby grants you (“Licensee”) a non-exclusive, non-transferable, 
+worldwide license to install, use, and integrate this Premium Add-on (the “Software”) 
+with your applications.
+
+2. Permitted Uses
+-----------------
+- You may use the Software in commercial or non-commercial applications, subject to the scope defined in your purchase agreement.
+- You may modify the Software solely for internal use within your organization.
+
+3. Restrictions
+---------------
+You may NOT:
+- Redistribute, sublicense, or resell the Software in whole or in part.
+- Incorporate the Software into any competing library, framework, or SaaS/PaaS product.
+- Remove or alter copyright, trademark, or attribution notices.
+- Share license keys or access credentials outside your organization.
+
+4. Ownership
+------------
+The Software is licensed, not sold. Licensor retains all right, title, and interest 
+in and to the Software,

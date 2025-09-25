@@ -41,4 +41,6 @@ class EventBus {
   }
 }
 
+export type { EventBus };
+
 export const bus = new EventBus();
