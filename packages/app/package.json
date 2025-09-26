@@ -9,6 +9,23 @@
   "unpkg": "dist/umd/react-app.standalone.min.js",
   "jsdelivr": "dist/umd/react-app.standalone.min.js",
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "import": "./dist/esm/server.js",
+      "require": "./dist/cjs/server.js",
+      "types": "./dist/server.d.ts"
+    },
+    "./adapters/browser": {
+      "import": "./dist/esm/adapters/browser.js",
+      "require": "./dist/cjs/adapters/browser.js",
+      "types": "./dist/browser.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
@@ -35,6 +52,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build:types": "rimraf dist && rollup -c && tsc -p tsconfig.build.json && rollup -c rollup-types.config.js",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

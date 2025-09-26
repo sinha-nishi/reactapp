@@ -63,6 +63,13 @@ const TypesBuild = {// 5. Bundle all the type declarations into a single file
   external: [/\.css$/],
 };
 
+const ServerTypesBuild = {// 5. Bundle all the type declarations into a single file
+  input: 'dist/esm/types/server.d.ts',
+  output: [{ file: 'dist/server.d.ts', format: 'esm' }],
+  plugins: [dts()],
+  external: [/\.css$/],
+};
+
 const ESMBuild =   {
     input: 'src/index.ts',
     external: [...EXTERNAL_PEERS, ...INTERNAL_PKG],
@@ -116,10 +123,26 @@ const UMDLeanBuild =   {
     },
   };
 
+const ServerBuild = {
+  input: "src/server.tsx",
+  external: [
+    "react",
+    "react-dom/server", // don’t bundle node/server renderer
+    // plus anything you want external on server side
+  ],
+  plugins: [basePlugins(), tscPlugin()],
+  output: [
+    { file: "dist/esm/server.js", format: "esm", sourcemap: true },
+    { file: "dist/cjs/server.js", format: "cjs", sourcemap: true, exports: "named" },
+  ],
+};
+
 export default [
   ESMBuild, // 1. Build for ESM (and generate all type declarations)
   CJSBuild, // 2. Build for CJS
   UMDBuild, // 3. Build for UMD (for CDN usage, all dependencies bundled & minified)
   UMDLeanBuild, // 4. Build for UMD - Lean (for CDN usage, all dependencies bundled & minified)
+  ServerBuild,
   TypesBuild, // 5. Bundle all the type declarations into a single file
+  ServerTypesBuild,
 ];

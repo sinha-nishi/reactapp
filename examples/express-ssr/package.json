@@ -2,19 +2,22 @@
   "type": "module",
   "scripts": {
     "dev": "tsx src/server.ts",
-    "build": "tsc && cp -r public dist/",
-    "start": "node dist/server.js"
+    "build": "tsc && npm run copy:assets && npm run copy:bundle",
+    "copy:assets": "node -e \"fs.cpSync('public', 'dist', { recursive: true })\"",
+    "copy:bundle": "node -e \"fs.cpSync('node_modules/@pkvsinha/react-app/dist/umd/react-app.standalone.min.js', 'dist/react-app.standalone.min.js', { recursive: true })\"",
+    "start": "node dist/server.js",
+    "install:local": "npm install ../../pkvsinha-react-app-0.0.7.tgz"
   },
   "dependencies": {
-    "@pkvsinha/react-app": "^0.0.7",
+    "@pkvsinha/react-app": "file:../../pkvsinha-react-app-0.0.7.tgz",
     "express": "^4.19.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
-    "tsx": "^4.16.0",
-    "typescript": "^5.5.4",
     "@types/express": "^5.0.3",
     "@types/node": "^24.5.2",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.4"
   }
 }
