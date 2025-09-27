@@ -37,8 +37,8 @@
     "url": "https://github.com/pkvsinha/reactapp.git"
   },
   "peerDependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
