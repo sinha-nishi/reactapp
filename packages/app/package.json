@@ -1,6 +1,6 @@
 {
   "name": "@pkvsinha/react-app",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "",
   "type": "module",
   "main": "dist/cjs/index.js",
@@ -41,8 +41,12 @@
     "react-dom": ">=18.2.0 <20"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": false },
-    "react-dom": { "optional": false }
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   },
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
