@@ -6,9 +6,9 @@ import {
 } from "@pkvsinha/react-hooks";
 import { NavigationProvider, Router } from "@pkvsinha/react-navigate";
 import { DefaultComponentView } from "./views/DefaultComponentView";
-import { ReactApplicationAttributes } from "./types/Application";
+import { ReactApplicationAttributes } from "./@types/Application";
 import { PageNotFound } from "./views/PageNotFound";
-import type { View } from "./types/View";
+import type { View } from "./@types/View";
 import { applicationDefaults } from "./defaults/applicationDefaults";
 
 export function ReactApplication({
@@ -20,7 +20,7 @@ export function ReactApplication({
     return (appViews ?? []).map((v) => ({
       navBar: app?.config?.shell?.navBar,
       appBar: app?.config?.shell?.appBar,
-      ...v
+      ...v,
     }));
   }, [app?.views]);
 
@@ -54,7 +54,7 @@ export function ReactApplication({
     return components;
   }, [resolvedViews, home]);
 
-  console.log("path to view components = ", viewComponents)
+  console.log("path to view components = ", viewComponents);
 
   // Build a flat runtime snapshot from defaults and app config
   const flatDefaults = React.useMemo(() => {

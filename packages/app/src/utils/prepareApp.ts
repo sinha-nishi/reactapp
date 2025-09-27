@@ -1,7 +1,7 @@
 import {
   ApplicationConfiguration,
   RenderOptions,
-} from "@/types/ApplicationConfiguration";
+} from "@/@types/ApplicationConfiguration";
 
 type SimpleConfig = {
   brand: string;
@@ -19,8 +19,12 @@ const DefaultApplicationConfig: ApplicationConfiguration = {
     themes: {},
     images: {},
     shell: {
-        navBar: { display: false, links: [] },
-        appBar: { display: false, title: "React Application Builder", actions: [] },
+      navBar: { display: false, links: [] },
+      appBar: {
+        display: false,
+        title: "React Application Builder",
+        actions: [],
+      },
       //   navBar: {
       //     render: () => <NavBar />,
       //     links: [
@@ -43,8 +47,8 @@ const DefaultApplicationConfig: ApplicationConfiguration = {
       appBar: {
         display: false,
       },
-      navBar : {
-          display: false,
+      navBar: {
+        display: false,
       },
       //   type: "stackview",
       stack: ["carousel"],
@@ -90,8 +94,8 @@ function prepareView(app: Partial<SimpleConfig>) {
     appBar: {
       display: false,
     },
-    navBar : {
-        display: false,
+    navBar: {
+      display: false,
     },
     //   type: "stackview",
     stack: ["carousel"],
@@ -107,7 +111,8 @@ export function prepareApp(
   if (!app) {
     return { ...DefaultApplicationConfig };
   }
-  if (isSimpleConfig(app)) { // Fill in the values from SimpleConfig to ApplicationConfiguration
+  if (isSimpleConfig(app)) {
+    // Fill in the values from SimpleConfig to ApplicationConfiguration
     return {
       ...DefaultApplicationConfig,
       contextPath: app.contextPath || "/",
@@ -119,7 +124,8 @@ export function prepareApp(
     };
   }
 
-  return { // Merge the provided ApplicationConfiguration with defaults
+  return {
+    // Merge the provided ApplicationConfiguration with defaults
     ...DefaultApplicationConfig,
     ...app,
     contextPath: app.contextPath || "/",

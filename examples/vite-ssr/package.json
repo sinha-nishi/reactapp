@@ -5,16 +5,20 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build --ssr src/server.tsx",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "cross-env NODE_ENV=production node dist/server.js",
+    "install:local": "npm install ../../pkvsinha-react-app-0.0.7.tgz"
   },
   "dependencies": {
+    "@pkvsinha/react-app": "file:../../pkvsinha-react-app-0.0.7.tgz",
+    "cross-env": "^10.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/node": "^24.5.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.3",

@@ -10,7 +10,7 @@ import { NavigationProvider } from "@pkvsinha/react-navigate";
 import {
   ApplicationConfiguration,
   RenderOptions,
-} from "./types/ApplicationConfiguration";
+} from "./@types/ApplicationConfiguration";
 // For edge runtimes (optional):
 // import { renderToReadableStream } from "react-dom/server";
 

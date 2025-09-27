@@ -13,6 +13,8 @@ export * from "@pkvsinha/react-layout";
 export * from "@pkvsinha/react-navigate";
 export * from "@pkvsinha/react-widgets";
 
+export type * from "./@types";
+
 export const enableAuth = () => {
     bus.use((cmd, next) => {
         if (cmd.type === "navigate" && cmd.target === "/admin") {
