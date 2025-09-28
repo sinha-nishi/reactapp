@@ -13,7 +13,7 @@ import {
 } from "./@types/ApplicationConfiguration";
 import { compile } from "./utils/compile";
 import { routes } from "./utils/routes";
-import { AppConfig } from "./umd";
+import { AppConfig } from "./@types/AppConfig";
 // For edge runtimes (optional):
 // import { renderToReadableStream } from "react-dom/server";
 

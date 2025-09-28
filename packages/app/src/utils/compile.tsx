@@ -1,4 +1,4 @@
-import { ApplicationConfiguration } from "@/@types";
+import { AppConfig, ApplicationConfiguration } from "@/@types";
 import { RenderOptions } from "@/@types/ApplicationConfiguration";
 import { View } from "@/@types/View";
 import { applicationDefaults } from "@/defaults/applicationDefaults";
@@ -7,7 +7,7 @@ import {
   deepMerge,
   validateAppContext,
 } from "@pkvsinha/react-hooks";
-import { AppConfig, prepareApp } from "./prepareApp";
+import { prepareApp } from "./prepareApp";
 
 const views = (app: Partial<ApplicationConfiguration>) => {
   const appViews = (app?.views as unknown as View[] | undefined) ?? [];

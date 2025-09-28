@@ -14,7 +14,6 @@ export * from "@pkvsinha/react-navigate";
 export * from "@pkvsinha/react-widgets";
 
 export type * from "./@types";
-export type { AppConfig } from "./utils/prepareApp";
 
 export const enableAuth = () => {
     bus.use((cmd, next) => {

@@ -9,9 +9,10 @@ import type {
 import { attachBrowserAdapter } from "@pkvsinha/react-navigate";
 import { compile } from "./utils/compile";
 import { routes } from "./utils/routes";
+import type { AppConfig } from "./@types/AppConfig";
 
 export function render(
-  app?: Partial<ApplicationConfiguration>,
+  app?: AppConfig,
   options?: RenderOptions,
 ) {
   const rootElement = getRootElement(options);

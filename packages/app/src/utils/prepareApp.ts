@@ -1,14 +1,9 @@
+import { AppConfig } from "@/@types/AppConfig";
 import {
   ApplicationConfiguration,
   RenderOptions,
 } from "@/@types/ApplicationConfiguration";
-
-type SimpleConfig = {
-  brand: string;
-  theme: string;
-  view: string;
-  contextPath: string;
-};
+import { SimpleConfig } from "@/config/SimpleConfig";
 
 const DefaultApplicationConfig: ApplicationConfiguration = {
   meta: {
@@ -73,11 +68,6 @@ const DefaultApplicationConfig: ApplicationConfiguration = {
   //   },
   home: "home",
 };
-
-export type AppConfig =
-  | Partial<ApplicationConfiguration>
-  | Partial<SimpleConfig>
-  | undefined;
 
 function isSimpleConfig(
   config: Partial<ApplicationConfiguration> | Partial<SimpleConfig> | undefined,

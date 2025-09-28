@@ -2,7 +2,7 @@
 export class SimpleConfig {
   brand: string;
   theme: string;
-  view: string;
+  view: string | React.ReactNode;
   contextPath: string;
 
   constructor(brand: string, theme: string, view: string, contextPath: string) {
