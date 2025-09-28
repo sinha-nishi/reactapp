@@ -74,7 +74,7 @@ const DefaultApplicationConfig: ApplicationConfiguration = {
   home: "home",
 };
 
-type AppConfig =
+export type AppConfig =
   | Partial<ApplicationConfiguration>
   | Partial<SimpleConfig>
   | undefined;

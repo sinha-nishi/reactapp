@@ -7,7 +7,8 @@ import type {
   RenderOptions,
 } from "./@types/ApplicationConfiguration";
 import { attachBrowserAdapter } from "@pkvsinha/react-navigate";
-import { prepareApp } from "./utils/prepareApp";
+import { compile } from "./utils/compile";
+import { routes } from "./utils/routes";
 
 export function render(
   app?: Partial<ApplicationConfiguration>,
@@ -15,12 +16,12 @@ export function render(
 ) {
   const rootElement = getRootElement(options);
   const root = createRoot(rootElement);
-  const applicationConfig = prepareApp(app, options);
-  console.log("Starting application with config:", applicationConfig);
+  const { views, home, contextPath, init } = compile(app);
+
   root.render(
     <ReactApplication
-      app={applicationConfig}
-      strictValidation={options?.strictValidation}
+      init={init}
+      routes={routes(views, contextPath, home)}
     />,
   );
   attachBrowserAdapter(app?.contextPath);

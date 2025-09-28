@@ -1,6 +1,6 @@
 import { bus } from '@pkvsinha/react-integrate';
 
-export { render } from './BrowserApplication';
+export { render } from './browser';
 export { ReactApplication } from './ReactApplication';
 export * from './utils/ErrorBoundary';
 
@@ -14,6 +14,7 @@ export * from "@pkvsinha/react-navigate";
 export * from "@pkvsinha/react-widgets";
 
 export type * from "./@types";
+export type { AppConfig } from "./utils/prepareApp";
 
 export const enableAuth = () => {
     bus.use((cmd, next) => {

@@ -1,14 +1,11 @@
-'use client';
+"use client";
 
-import { ReactApplication } from "@pkvsinha/react-app";
+import { sc } from "@pkvsinha/react-app/server";
 
-const config = { views: [
-    
-  ] }
+const config = {
+  view: "Welcome to the world of apps",
+};
 
 export default function Home() {
-    return <ReactApplication
-      app={config}
-      strictValidation={false}
-    />
+  return sc(config);
 }

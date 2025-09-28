@@ -11,8 +11,13 @@ import {
   ApplicationConfiguration,
   RenderOptions,
 } from "./@types/ApplicationConfiguration";
+import { compile } from "./utils/compile";
+import { routes } from "./utils/routes";
+import { AppConfig } from "./umd";
 // For edge runtimes (optional):
 // import { renderToReadableStream } from "react-dom/server";
+
+export * from "./sc";
 
 type SSRResult = {
   html: string; // app HTML
@@ -24,7 +29,7 @@ type SSRResult = {
 };
 
 export async function renderToStringSSR(
-  app: Partial<ApplicationConfiguration>,
+  app: AppConfig,
   url: string,
   opts?: RenderOptions,
 ): Promise<SSRResult> {
@@ -33,9 +38,9 @@ export async function renderToStringSSR(
 
   // Optionally kick prefetch plugins for this URL
   // if (opts?.prefetch) await opts.prefetch(bus, url);
-
+  const { views, home, contextPath, init } = compile(app);
   const element = (
-    <ReactApplication app={app} strictValidation={opts?.strictValidation} />
+    <ReactApplication init={init} routes={routes(views, contextPath, home)} />
   );
 
   const html = renderToString(element);
