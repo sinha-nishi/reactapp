@@ -19,7 +19,25 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+        // Inline a tiny injector to avoid external deps; keep plugin's own default export
+        inject: (cssVarName) => `
+          (function(css){
+            if(!css) return;
+            if(typeof document === 'undefined') return;
+            var head = document.head || document.getElementsByTagName('head')[0];
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.setAttribute('data-pkvs', 'layout');
+            if (style.styleSheet){ style.styleSheet.cssText = css; }
+            else { style.appendChild(document.createTextNode(css)); }
+            head.appendChild(style);
+          })(${cssVarName});
+        `,
+      }),
       typescript({
         tsconfig: './tsconfig.json',
         declaration: true,
@@ -41,7 +59,25 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      postcss(),
+      postcss({
+        extract: false, // inject styles per used component
+        minimize: true,
+        sourceMap: true,
+        // Inline a tiny injector to avoid external deps; keep plugin's own default export
+        inject: (cssVarName) => `
+          (function(css){
+            if(!css) return;
+            if(typeof document === 'undefined') return;
+            var head = document.head || document.getElementsByTagName('head')[0];
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.setAttribute('data-pkvs', 'layout');
+            if (style.styleSheet){ style.styleSheet.cssText = css; }
+            else { style.appendChild(document.createTextNode(css)); }
+            head.appendChild(style);
+          })(${cssVarName});
+        `,
+      }),
       // In the CJS build, we DO NOT generate types
       typescript({
         tsconfig: './tsconfig.json',

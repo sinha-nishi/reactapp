@@ -1,0 +1,63 @@
+{
+  "name": "@pkvsinha/react-theme",
+  "version": "0.0.8",
+  "description": "",
+  "type": "module",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pkvsinha/reactapp.git"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@storybook/addon-docs": "9.0.18",
+    "@storybook/react-vite": "9.0.18",
+    "@types/js-yaml": "^4.0.9",
+    "@types/react": "^19.1.1",
+    "autoprefixer": "^10.4.21",
+    "cssnano": "^7.1.1",
+    "js-yaml": "^4.1.0",
+    "postcss": "^8.5.6",
+    "postcss-import": "^16.1.1",
+    "postcss-nesting": "^13.0.2",
+    "rollup": "^4.52.3",
+    "rollup-plugin-dts": "^6.2.1",
+    "rollup-plugin-postcss": "^4.0.2",
+    "storybook": "9.0.18",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6"
+  }
+}
