@@ -47,12 +47,14 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "pnpm run clean && tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css && pnpm run minifiy",
-    "minifiy": "cross-env MINIFY=1 postcss dist/pkv.theme.min.css -o dist/pkv.theme.min.css",
+    "clean": "rimraf dist",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css",
+    "minify": "cross-env MINIFY=1 postcss dist/pkv.theme.min.css -o dist/pkv.theme.min.css",
+    "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "clean": "rimraf dist"
+    "build-storybook": "storybook build"
+    
   },
   "keywords": [],
   "author": "",

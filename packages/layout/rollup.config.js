@@ -12,9 +12,11 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.module,
+      dir: 'dist/esm',
       format: 'esm',
       sourcemap: true,
+      preserveModules: true,
+      
     },
     plugins: [
       resolve(),
@@ -44,17 +46,18 @@ export default [
         declarationDir: './dist/esm/types', // Generate types into a temp folder
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', "@pkvsinha/react-theme", "@pkvsinha/react-base"],
   },
 
   // 2. Build for CJS
   {
     input: 'src/index.ts',
     output: {
-      file: pkg.main,
+      dir: 'dist/cjs',
       format: 'cjs',
       sourcemap: true,
       exports: 'named',
+      preserveModules: true,
     },
     plugins: [
       resolve(),
@@ -84,12 +87,12 @@ export default [
         declaration: false, // <-- This is the key
       }),
     ],
-    external: ['react', 'react-dom'],
+    external: ['react', 'react-dom', "@pkvsinha/react-theme", "@pkvsinha/react-base"],
   },
 
   // 3. Bundle all the type declarations into a single file
   {
-    input: 'dist/esm/types/index.d.ts',
+    input: 'dist/esm/types/src/index.d.ts',
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
     external: [/\.css$/],

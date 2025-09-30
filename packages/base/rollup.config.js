@@ -53,7 +53,7 @@ export default [
 
   // 3. Bundle all the type declarations into a single file
   {
-    input: 'dist/esm/types/index.d.ts',
+    input: 'dist/esm/types/src/index.d.ts',
     output: [{ file: 'dist/index.d.ts', format: 'esm' }],
     plugins: [dts()],
     external: [/\.css$/],

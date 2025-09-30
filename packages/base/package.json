@@ -47,8 +47,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebuild": "tsx scripts/build-css.ts && postcss dist/pkv.base.css -o dist/pkv.base.css && pnpm run minify",
+    "clean": "rimraf dist",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.base.css -o dist/pkv.base.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.base.min.css -o dist/pkv.base.min.css",
+    "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

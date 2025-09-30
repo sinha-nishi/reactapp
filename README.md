@@ -34,6 +34,9 @@ pnpm --filter @pkvsinha/react-components add @pkvsinha/react-base@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-hooks@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-navigate@workspace:*
 
+pnpm --filter @pkvsinha/react-layout add @pkvsinha/react-theme@workspace:*
+pnpm --filter @pkvsinha/react-layout add @pkvsinha/react-base@workspace:*
+
 pnpm --filter @pkvsinha/react-base add @pkvsinha/react-theme@workspace:*
 
 ```
