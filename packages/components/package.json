@@ -11,6 +11,20 @@
     "**/*.css",
     "**/*.css.js"
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./css": {
+      "default": "./dist/pkv.components.min.css"
+    },
+    "./builder": {
+      "import": "./dist/esm/builder/index.js",
+      "types": "./dist/esm/builder/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
@@ -36,10 +50,16 @@
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
     "@pkvsinha/react-hooks": "workspace:*",
-    "@pkvsinha/react-navigate": "workspace:*"
+    "@pkvsinha/react-layout": "workspace:*",
+    "@pkvsinha/react-navigate": "workspace:*",
+    "@pkvsinha/react-theme": "workspace:*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.components.css -o dist/pkv.components.css",
+    "minify": "cross-env MINIFY=1 postcss dist/pkv.components.min.css -o dist/pkv.components.min.css",
+    "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -65,8 +85,8 @@
     "rollup-plugin-dts": "^6.2.1",
     "rollup-plugin-postcss": "^4.0.2",
     "storybook": "9.0.18",
+    "style-inject": "^0.3.0",
     "typescript": "^5.8.3",
-    "vite": "^7.0.6",
-    "style-inject": "^0.3.0"
+    "vite": "^7.0.6"
   }
 }

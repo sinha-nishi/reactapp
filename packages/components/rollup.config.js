@@ -51,6 +51,7 @@ export default [
       'react-dom',
       '@pkvsinha/react-base',
       '@pkvsinha/react-hooks',
+      '@pkvsinha/react-layout',
       '@pkvsinha/react-navigate'
     ],
   },
@@ -62,7 +63,7 @@ export default [
       dir: 'dist/cjs',
       format: 'cjs',
       sourcemap: true,
-      exports: 'auto',
+      exports: 'named',
       preserveModules: true,
       preserveModulesRoot: 'src',
     },
@@ -98,13 +99,14 @@ export default [
       'react-dom',
       '@pkvsinha/react-base',
       '@pkvsinha/react-hooks',
+      '@pkvsinha/react-layout',
       '@pkvsinha/react-navigate'
     ],
   },
 
   // 3. Bundle all the type declarations into a single file
   {
-    input: 'dist/esm/types/index.d.ts',
+    input: 'dist/esm/types/src/index.d.ts',
     output: [{ file: 'dist/index.d.ts', format: 'esm', sourcemap: false }],
     plugins: [dts()],
     external: [/\.css$/],
