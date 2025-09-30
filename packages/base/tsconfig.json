@@ -1,4 +1,3 @@
-// packages/components/tsconfig.json
 {
   "compilerOptions": {
     "target": "ES6",
@@ -20,7 +19,7 @@
     // "declaration", "declarationDir", and "outDir" are removed
     // Rollup will control these now
   },
-  "include": ["src", "stories"],
+  "include": ["src", "scripts", "stories"],
   "exclude": [
     "node_modules",
     "dist",

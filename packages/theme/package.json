@@ -6,7 +6,23 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/esm/index.d.ts"
+    },
+    "./css": {
+      "default": "./dist/pkv.theme.min.css"
+    },
+    "./builder": {
+      "import": "./dist/esm/builder/index.js",
+      "types": "./dist/esm/builder/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
@@ -31,9 +47,12 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "pnpm run clean && tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css && pnpm run minifiy",
+    "minifiy": "cross-env MINIFY=1 postcss dist/pkv.theme.min.css -o dist/pkv.theme.min.css",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "clean": "rimraf dist"
   },
   "keywords": [],
   "author": "",
