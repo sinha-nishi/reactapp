@@ -7,3 +7,4 @@ export * from './components/Input';
 export * from './components/Navigation';
 export * from './components/Switch';
 export * from './components/Loader';
+export * from './builder/plugin/component';
