@@ -689,6 +689,21 @@ importers:
 
   packages/widgets:
     dependencies:
+      '@pkvsinha/react-base':
+        specifier: workspace:*
+        version: link:../base
+      '@pkvsinha/react-components':
+        specifier: workspace:*
+        version: link:../components
+      '@pkvsinha/react-layout':
+        specifier: workspace:*
+        version: link:../layout
+      '@pkvsinha/react-navigate':
+        specifier: workspace:*
+        version: link:../navigate
+      '@pkvsinha/react-theme':
+        specifier: workspace:*
+        version: link:../theme
       react:
         specifier: '>=18.2.0 <20'
         version: 19.1.1
