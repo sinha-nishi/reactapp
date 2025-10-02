@@ -1,6 +1,12 @@
 {
- 
-  
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
   "include": ["src", "stories"],
   "exclude": [
     "node_modules",

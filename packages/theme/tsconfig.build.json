@@ -6,8 +6,6 @@
     "paths": {
       "@/*": ["src/*"]
     }
-    // "declaration", "declarationDir", and "outDir" are removed
-    // Rollup will control these now
   },
   "include": ["src"],
   "exclude": [

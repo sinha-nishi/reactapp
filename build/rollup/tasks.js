@@ -28,11 +28,11 @@ export const serverDts = () =>
     external: [/\.css$/],
   });
 
-export const esm = () =>
+export const esm = (options = {}) =>
   extend({
     input: "src/index.ts",
     external: isExternal,
-    plugins: [basePlugins(), tscPlugin(true)],
+    plugins: [basePlugins(options), tscPlugin(true)],
     output: {
       dir: "dist/esm",
       format: "esm",
@@ -107,6 +107,26 @@ export const ssr = () =>
         exports: "named",
       },
     ],
+  });
+
+export const styles = () =>
+  extend({
+    input: "src/index.ts",
+    external: isExternal,
+    output: {
+      file: "dist/esm/styles.build.js",
+      format: "esm",
+      sourcemap: true,
+    },
+    plugins: [
+      basePlugins({
+        plugins: {
+          postcss: { extract: "styles.css", minimize: true, sourceMap: true },
+        },
+      }),
+      tscPlugin(),
+    ],
+    treeshake: false,
   });
 
 // Build CSS-only: pkvsinha.css + pkvsinha.min.css

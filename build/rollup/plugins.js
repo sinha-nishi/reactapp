@@ -9,14 +9,14 @@ import dts from "rollup-plugin-dts";
 export const rollupDts = () => [dts()];
 
 // Base plugins (no minify)
-export const basePlugins = () => [
+export const basePlugins = (options = {}) => [
   resolve({
     browser: true,
     extensions: [".mjs", ".js", ".ts", ".tsx", ".json"],
     exportConditions: ["browser", "module", "default"],
   }),
   commonjs(),
-  postcss(),
+  postcss(options?.plugins?.postcss || { extract: false, minimize: true, sourceMap: true }),
 ];
 
 const isProd = process.env.NODE_ENV === "production";
