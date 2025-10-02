@@ -1,24 +1,11 @@
-// packages/components/tsconfig.json
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "lib": ["DOM", "ES6", "DOM.Iterable", "ESNext"],
-    "jsx": "react",
-    "strict": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "importHelpers": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "sourceMap": true, // Keep sourcemap for debugging
-    "baseUrl": ".",
+    "noEmit": true,
     "paths": {
       "@/*": ["src/*"]
-    }
-    // "declaration", "declarationDir", and "outDir" are removed
-    // Rollup will control these now
+    },
+    "baseUrl": "."
   },
   "include": ["src", "stories"],
   "exclude": [
