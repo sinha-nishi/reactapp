@@ -36,6 +36,7 @@
     "react-dom": "19.1.0",
     "rimraf": "^6.0.1",
     "rollup": "^4.46.1",
+    "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-postcss": "^4.0.2",
     "tsx": "^4.20.6",
     "turbo": "^2.5.5",

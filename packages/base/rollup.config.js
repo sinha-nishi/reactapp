@@ -21,7 +21,7 @@ export default [
       commonjs(),
       postcss(),
       typescript({
-        tsconfig: './tsconfig.json',
+        tsconfig: './tsconfig.build.json',
         declaration: true,
         declarationDir: './dist/esm/types', // Generate types into a temp folder
       }),
@@ -44,7 +44,7 @@ export default [
       postcss(),
       // In the CJS build, we DO NOT generate types
       typescript({
-        tsconfig: './tsconfig.json',
+        tsconfig: './tsconfig.build.json',
         declaration: false, // <-- This is the key
       }),
     ],

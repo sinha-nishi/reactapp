@@ -82,6 +82,9 @@ importers:
       rollup:
         specifier: ^4.46.1
         version: 4.52.3
+      rollup-plugin-dts:
+        specifier: ^6.2.3
+        version: 6.2.3(rollup@4.52.3)(typescript@5.9.2)
       rollup-plugin-postcss:
         specifier: ^4.0.2
         version: 4.0.2(postcss@8.5.6)

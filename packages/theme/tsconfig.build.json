@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true,
+    "baseUrl": ".",
+    "rootDir": "./src",
     "paths": {
       "@/*": ["src/*"]
-    },
-    "baseUrl": "."
+    }
+    // "declaration", "declarationDir", and "outDir" are removed
+    // Rollup will control these now
   },
-  "include": ["src", "scripts", "stories"],
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "dist",

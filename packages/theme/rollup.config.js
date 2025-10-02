@@ -9,7 +9,7 @@ import postcss from "rollup-plugin-postcss";
 import path from "node:path";
 import dts from "rollup-plugin-dts";
 
-import pkg from "./package.json" with { type: "json" };
+// import { dts, esm, cjs } from "../../build/rollup/index.js";
 
 export default [
   // Build CSS-only: pkvsinha.css + pkvsinha.min.css
@@ -49,6 +49,7 @@ export default [
   //   output: { dir: "dist", assetFileNames: "[name][extname]" },
   // },
   // 1. Build for ESM (and generate all type declarations)
+  // esm(),
   {
     input: "src/index.ts",
     external: ["react", "react-dom"],
@@ -71,13 +72,15 @@ export default [
     ],
   },
 
+  // cjs(),
+
   {
     input: "src/index.ts",
     output: {
       dir: "dist/cjs",
       format: "cjs",
       sourcemap: true,
-      exports: "auto",  //   exports: "named",
+      exports: "named", //   exports: "named",
       preserveModules: true,
       preserveModulesRoot: "src",
     },
@@ -90,10 +93,7 @@ export default [
         declaration: false, // <-- This is the key
       }),
     ],
-    external: [
-      "react",
-      "react-dom"
-    ],
+    external: ["react", "react-dom"],
   },
 
   // 3. Bundle all the type declarations into a single file
@@ -103,4 +103,6 @@ export default [
     plugins: [dts()],
     external: [/\.css$/],
   },
+
+  // dts(),
 ];

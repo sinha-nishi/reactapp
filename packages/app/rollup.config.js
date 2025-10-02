@@ -7,6 +7,9 @@ import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import dts from "rollup-plugin-dts";
 
+// To read package.json
+import pkg from "./package.json" with { type: "json" };
+
 // Handy lists
 const INTERNAL_PKG = [
   "@pkvsinha/react-base",
@@ -76,10 +79,10 @@ const ServerTypesBuild = {
 
 const isExternal = (id) => {
   // React & subpaths
-  if (/^react($|\/)/.test(id)) return true; // react, react/jsx-runtime, react/jsx-dev-runtime
-  if (/^react-dom($|\/)/.test(id)) return true; // react-dom, react-dom/client, react-dom/server
-  if (/^scheduler($|\/)/.test(id)) return true; // scheduler (peer of react-dom)
-  if (id === "object-assign") return true; // tiny dep used by React
+  if (/^react($|\/)/.test(id)) return true;               // react, react/jsx-runtime, react/jsx-dev-runtime
+  if (/^react-dom($|\/)/.test(id)) return true;           // react-dom, react-dom/client, react-dom/server
+  if (/^scheduler($|\/)/.test(id)) return true;           // scheduler (peer of react-dom)
+  if (id === "object-assign") return true;                // tiny dep used by React
 
   // your monorepo packages – keep them external for ESM/CJS
   if (INTERNAL_PKG.some((p) => id === p || id.startsWith(p + "/"))) return true;
@@ -95,21 +98,19 @@ const ESMBuild = {
     dir: "dist/esm",
     format: "esm",
     sourcemap: true,
-    preserveModules: true,
-    preserveModulesRoot: "src",
+    preserveModules: true
   },
 };
 
 const CJSBuild = {
   input: "src/index.ts",
-  external: isExternal,
+  external: [...EXTERNAL_PEERS, ...INTERNAL_PKG],
   plugins: [basePlugins(), tscPlugin()],
   output: {
     dir: "dist/cjs",
     format: "cjs",
     sourcemap: true,
     preserveModules: true,
-    preserveModulesRoot: "src",
     exports: "named",
   },
 };
