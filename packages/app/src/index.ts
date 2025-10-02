@@ -14,6 +14,7 @@ export * from "@pkvsinha/react-navigate";
 export * from "@pkvsinha/react-widgets";
 
 export type * from "./@types";
+export * from "./theme";
 
 export const enableAuth = () => {
     bus.use((cmd, next) => {

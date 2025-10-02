@@ -25,6 +25,7 @@ pnpm --filter @pkvsinha/react-app add @pkvsinha/react-icons@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-layout@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-navigate@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-widgets@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-theme@workspace:*
 
 pnpm --filter @pkvsinha/react-navigate add @pkvsinha/react-integrate@workspace:*
 

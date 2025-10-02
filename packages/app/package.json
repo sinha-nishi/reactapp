@@ -6,9 +6,12 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
+  "style": "dist/pkv.material.min.css",
   "unpkg": "dist/umd/react-app.standalone.min.js",
   "jsdelivr": "dist/umd/react-app.standalone.min.js",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "import": "./dist/esm/index.js",
@@ -24,6 +27,18 @@
       "import": "./dist/esm/adapters/browser.js",
       "require": "./dist/cjs/adapters/browser.js",
       "types": "./dist/browser.d.ts"
+    },
+    "./material": {
+      "default": "./dist/pkv.material.min.css"
+    },
+    "./material-css": {
+      "types": "./types/css.d.ts",
+      "default": "./dist/pkv.material.css"
+    },
+    "./builder/css": {
+      "import": "./dist/esm/theme/css.js",
+      "require": "./dist/cjs/theme/css.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -56,10 +71,15 @@
     "@pkvsinha/react-integrate": "workspace:*",
     "@pkvsinha/react-layout": "workspace:*",
     "@pkvsinha/react-navigate": "workspace:*",
+    "@pkvsinha/react-theme": "workspace:*",
     "@pkvsinha/react-widgets": "workspace:*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css",
+    "minify": "cross-env MINIFY=1 postcss dist/pkv.material.min.css -o dist/pkv.material.min.css",
+    "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build:types": "rimraf dist && rollup -c && tsc -p tsconfig.build.json && rollup -c rollup-types.config.js",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",

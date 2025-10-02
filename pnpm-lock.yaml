@@ -118,6 +118,9 @@ importers:
       '@pkvsinha/react-navigate':
         specifier: workspace:*
         version: link:../navigate
+      '@pkvsinha/react-theme':
+        specifier: workspace:*
+        version: link:../theme
       '@pkvsinha/react-widgets':
         specifier: workspace:*
         version: link:../widgets

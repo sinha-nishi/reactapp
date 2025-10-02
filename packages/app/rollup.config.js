@@ -7,9 +7,6 @@ import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import dts from "rollup-plugin-dts";
 
-// To read package.json
-import pkg from "./package.json" with { type: "json" };
-
 // Handy lists
 const INTERNAL_PKG = [
   "@pkvsinha/react-base",
@@ -19,6 +16,7 @@ const INTERNAL_PKG = [
   "@pkvsinha/react-integrate",
   "@pkvsinha/react-layout",
   "@pkvsinha/react-navigate",
+  "@pkvsinha/react-theme",
   "@pkvsinha/react-widgets",
 ];
 
@@ -62,7 +60,7 @@ const minify = () =>
 
 const TypesBuild = {
   // 5. Bundle all the type declarations into a single file
-  input: "dist/esm/types/index.d.ts",
+  input: "dist/esm/types/src/index.d.ts",
   output: [{ file: "dist/index.d.ts", format: "esm" }],
   plugins: [dts()],
   external: [/\.css$/],
@@ -70,7 +68,7 @@ const TypesBuild = {
 
 const ServerTypesBuild = {
   // 5. Bundle all the type declarations into a single file
-  input: "dist/esm/types/server.d.ts",
+  input: "dist/esm/types/src/server.d.ts",
   output: [{ file: "dist/server.d.ts", format: "esm" }],
   plugins: [dts()],
   external: [/\.css$/],
@@ -78,10 +76,10 @@ const ServerTypesBuild = {
 
 const isExternal = (id) => {
   // React & subpaths
-  if (/^react($|\/)/.test(id)) return true;               // react, react/jsx-runtime, react/jsx-dev-runtime
-  if (/^react-dom($|\/)/.test(id)) return true;           // react-dom, react-dom/client, react-dom/server
-  if (/^scheduler($|\/)/.test(id)) return true;           // scheduler (peer of react-dom)
-  if (id === "object-assign") return true;                // tiny dep used by React
+  if (/^react($|\/)/.test(id)) return true; // react, react/jsx-runtime, react/jsx-dev-runtime
+  if (/^react-dom($|\/)/.test(id)) return true; // react-dom, react-dom/client, react-dom/server
+  if (/^scheduler($|\/)/.test(id)) return true; // scheduler (peer of react-dom)
+  if (id === "object-assign") return true; // tiny dep used by React
 
   // your monorepo packages – keep them external for ESM/CJS
   if (INTERNAL_PKG.some((p) => id === p || id.startsWith(p + "/"))) return true;
@@ -94,20 +92,24 @@ const ESMBuild = {
   external: isExternal,
   plugins: [basePlugins(), tscPlugin(true)],
   output: {
-    file: pkg.module,
+    dir: "dist/esm",
     format: "esm",
     sourcemap: true,
+    preserveModules: true,
+    preserveModulesRoot: "src",
   },
 };
 
 const CJSBuild = {
   input: "src/index.ts",
-  external: [...EXTERNAL_PEERS, ...INTERNAL_PKG],
+  external: isExternal,
   plugins: [basePlugins(), tscPlugin()],
   output: {
-    file: pkg.main,
+    dir: "dist/cjs",
     format: "cjs",
     sourcemap: true,
+    preserveModules: true,
+    preserveModulesRoot: "src",
     exports: "named",
   },
 };
