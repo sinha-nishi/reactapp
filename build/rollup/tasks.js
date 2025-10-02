@@ -22,7 +22,7 @@ export const dts = () =>
 export const serverDts = () =>
   extend({
     // 5. Bundle all the type declarations into a single file
-    input: "dist/esm/types/src/server.d.ts",
+    input: "dist/esm/types/server.d.ts",
     output: [{ file: "dist/server.d.ts", format: "esm" }],
     plugins: [rollupDts()],
     external: [/\.css$/],
