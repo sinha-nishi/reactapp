@@ -1,6 +1,6 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { createThemeBuilder } from "../src/builder/plugins/theme";
+import { createThemeBuilder } from "../src";
 
 const outDir = resolve(process.cwd(), "dist");
 mkdirSync(outDir, { recursive: true });

@@ -1,0 +1,23 @@
+import { readFileSync } from "node:fs";
+import { resolve, extname } from "node:path";
+import { parsePkvCss } from "./parse";
+
+export async function loadAndParse(file: string) {
+  const abs = resolve(process.cwd(), file);
+  const ext = extname(abs);
+
+  let css = "";
+  if (ext === ".scss" || ext === ".sass") {
+    const { compile } = await import("sass"); // dart-sass
+    css = compile(abs, { style: "expanded" }).css;
+  } else if (ext === ".less") {
+    const less = await import("less");
+    const src = readFileSync(abs, "utf8");
+    const out = await less.render(src, { filename: abs });
+    css = out.css;
+  } else {
+    css = readFileSync(abs, "utf8");
+  }
+
+  return parsePkvCss(css, { layerFromPath: true, acceptUnprefixedLayer: true });
+}

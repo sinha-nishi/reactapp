@@ -35,8 +35,3 @@ export const themePlugin =
       b.rule("utilities", `.u-p-${i}`, `padding:${rem}`, `u-p-${i}`);
     });
   };
-
-export function createThemeBuilder(opts?: ThemeOptions) {
-  const builder = new CssBuilder({ prefix: "pkv" });
-  return builder.use(themePlugin(opts));
-}
