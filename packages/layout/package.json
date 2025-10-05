@@ -48,13 +48,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.layout.css -o dist/pkv.layout.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.layout.css -o dist/pkv.layout.css && prettier --write dist/pkv.layout.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.layout.min.css -o dist/pkv.layout.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
-    
   },
   "keywords": [],
   "author": "",

@@ -77,7 +77,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css && prettier --write dist/pkv.material.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.material.min.css -o dist/pkv.material.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build:types": "rimraf dist && rollup -c && tsc -p tsconfig.build.json && rollup -c rollup-types.config.js",

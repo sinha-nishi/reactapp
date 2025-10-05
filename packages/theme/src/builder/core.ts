@@ -1,4 +1,4 @@
-import { CSSProperties } from "@/@types/CSSProperties";
+import { CSSProperties } from "../@types/CSSProperties";
 
 export type Tokens = Record<string, string>;
 export type LayerName =
@@ -97,7 +97,7 @@ export class CssBuilder {
   }
 
   rule(layer: LayerName, selector: string, body: string, key?: string) {
-    const css = this._isBodyBlock(body) ? `${selector}{${body}}` : body;
+    const css = this._isBodyBlock(body) ? body : `${selector}{${body}}`;
     return this.layer(layer, css, key);
   }
 

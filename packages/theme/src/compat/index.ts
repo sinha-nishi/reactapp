@@ -9,9 +9,9 @@ const tw = (b: any) => {
   const s = (i: number) => toRem(spacing[i] ?? 0);
 
   // Display
-  b.rule("utilities", `.flex`, `display:flex`, "tw-flex");
-  b.rule("utilities", `.inline-flex`, `display:inline-flex`, "tw-inline-flex");
-  b.rule("utilities", `.grid`, `display:grid`, "tw-grid");
+  b.utilities(`.flex`, `display:flex`, "tw-flex");
+  b.utilities(`.inline-flex`, `display:inline-flex`, "tw-inline-flex");
+  b.utilities(`.grid`, `display:grid`, "tw-grid");
 
   // Flex/grid alignment
   b.rule("utilities", `.items-center`, `align-items:center`, "tw-items-center");

@@ -57,7 +57,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.components.css -o dist/pkv.components.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.components.css -o dist/pkv.components.css && prettier --write dist/pkv.components.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.components.min.css -o dist/pkv.components.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
