@@ -5,11 +5,12 @@ export default {
     "presets/**/*.scss",
     "presets/**/*.css",
   ],
-  presetsDir: "./presets",
+  presetsDir: "./presets", // resolves --preset names here
   compat: { tailwind: true, bootstrap: true },
   validation: {
     classPrefix: [/^(c|o|l|u)-/, /^is-/, /^has-/],
     disallowedPropsByLayer: { utilities: ["position", "z-index"] },
     severity: "warn",
   },
+  strict: true, // make warnings fail build (equiv to --strict)
 };
