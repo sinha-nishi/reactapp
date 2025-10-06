@@ -1,5 +1,10 @@
 export default {
-  include: ["styles/**/*.scss", "overrides/**/*.css"],
+  include: [
+    "styles/**/*.scss",
+    "overrides/**/*.css",
+    "presets/**/*.scss",
+    "presets/**/*.css",
+  ],
   presetsDir: "./presets",
   compat: { tailwind: true, bootstrap: true },
   validation: {

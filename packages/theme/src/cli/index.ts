@@ -87,6 +87,10 @@ program
         absolute: true,
       })
     ).at(0);
+    console.log(
+      `ℹ️  config file ${opts.config || guess || "(none)"} from cwd: `,
+      process.cwd(),
+    );
     const configPath = opts.config || guess;
     if (configPath) {
       if (configPath.endsWith(".json"))
@@ -98,20 +102,24 @@ program
       }
     }
     // Merge: flags override config
-    const opt = (k: string, fallback: any) => opts[k] ?? cfg[k] ?? fallback;
-    const compatCfg = cfg.compat || {};
+    // const opt = (k: string, fallback: any) => opts[k] ?? cfg[k] ?? fallback;
+    // const compatCfg = cfg.compat || {};
 
     // const cfg = {
     //   validation: { classPrefix: ["pkv-", "app-"], severity: "warn" },
     // };
 
     // NEW: ingest authored styles
-    const include = opts.in || (cfg.include ? [].concat(cfg.include).join(',') : '');
+    const include =
+      opts.in || (cfg.include ? [].concat(cfg.include).join(",") : "");
+    console.log(`ℹ️  inclusion pattern ${include}...`);
     if (include) {
       const patterns = String(include)
         .split(",")
         .map((p: string) => posix.normalize(p.trim().replace(/\\/g, "/"))); // normalize backslashes
+      console.log(`ℹ️  locating input files pattern ${patterns}...`);
       const files = await fg(patterns, { dot: true, onlyFiles: true });
+      console.log(`ℹ️  processing ${files.length} input files...`, files);
       for (const f of files) {
         const parsed = await loadAndParse(
           f,
