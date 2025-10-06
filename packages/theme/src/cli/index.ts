@@ -79,6 +79,10 @@ program
       );
     }
 
+    const cfg = {
+      validation: { classPrefix: ["pkv-", "app-"], severity: "warn" },
+    };
+
     // NEW: ingest authored styles
     if (opts.in) {
       const patterns = String(opts.in)
@@ -86,7 +90,21 @@ program
         .map((p: string) => posix.normalize(p.trim().replace(/\\/g, "/"))); // normalize backslashes
       const files = await fg(patterns, { dot: true, onlyFiles: true });
       for (const f of files) {
-        const parsed = await loadAndParse(f);
+        const parsed = await loadAndParse(
+          f,
+          cfg.validation ? { validation: cfg.validation } : undefined,
+        );
+        if (parsed.diagnostics?.length) {
+          for (const d of parsed.diagnostics) {
+            const tag = d.type === "error" ? "ERROR" : "WARN";
+            const loc = d.node?.source?.start
+              ? ` (${f}:${d.node.source.start.line}:${d.node.source.start.column})`
+              : "";
+            console.log(`[${tag}] ${d.message}${loc}`);
+          }
+          if (parsed.diagnostics.some((d) => d.type === "error"))
+            process.exitCode = 1;
+        }
         applyParsedToBuilder(builder, parsed);
       }
     }

@@ -18,6 +18,13 @@ export interface ExtractedRule {
 export interface Extracted {
   tokens: Tokens;
   rules: ExtractedRule[];
+  diagnostics?: Diagnostics[];
+}
+
+export interface Diagnostics {
+  type: "error" | "warn";
+  message: string;
+  node?: ChildNode;
 }
 
 export interface PkvOptions {
@@ -25,6 +32,11 @@ export interface PkvOptions {
   layerFromPath?: boolean;
   /** If true, accept @layer <name> without pkv. prefix */
   acceptUnprefixedLayer?: boolean;
+  validation?: {
+    classPrefix?: (string | RegExp)[];
+    disallowedPropsByLayer?: Partial<Record<LayerName, string[]>>;
+    severity?: "error" | "warn"; // default warn
+  };
 }
 
 function layerFromFilepath(filepath?: string): LayerName | undefined {
@@ -60,8 +72,32 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
   postcssPlugin: "postcss-pkv",
   Once(root, { result }) {
     const out: Extracted = { tokens: {}, rules: [] };
+    const diagnostics: Diagnostics[] = [];
 
-    const pushRule = (layer: LayerName, css: string, key?: string) => {
+    const pushRule = (
+      layer: LayerName,
+      css: string,
+      key?: string,
+      node?: ChildNode,
+    ) => {
+      if (opts.validation?.classPrefix && node?.type === "rule") {
+        const sel = (node as any).selector || "";
+        const classes = sel.match(/\\.[A-Za-z0-9_-]/g) || [];
+        for (const cls of classes) {
+          const name = cls.slice(1);
+          const ok = opts.validation.classPrefix.some((p) =>
+            typeof p === "string"
+              ? name.startsWith(p)
+              : (p as RegExp).test(name),
+          );
+          if (!ok)
+            diagnostics.push({
+              type: opts.validation.severity ?? "warn",
+              message: `Class \`${name}\` violates prefix policy`,
+              node,
+            });
+        }
+      }
       out.rules.push({ layer, css, key });
     };
 
@@ -78,7 +114,22 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
       at.walkRules((r) => {
         const { layer: metaLayer, key } = findCommentMeta(r);
         const finalLayer = (metaLayer || layer || "utilities") as LayerName;
-        pushRule(finalLayer, getNodeCss(r), key);
+        if (opts.validation?.disallowedPropsByLayer?.[finalLayer]) {
+          r.walkDecls((d) => {
+            if (
+              opts.validation!.disallowedPropsByLayer![finalLayer]!.includes(
+                d.prop,
+              )
+            ) {
+              diagnostics.push({
+                type: opts.validation!.severity ?? "warn",
+                message: `Property \`${d.prop}\` disallowed in layer ${finalLayer}`,
+                node: d,
+              });
+            }
+          });
+        }
+        pushRule(finalLayer, getNodeCss(r), key, r);
       });
 
       at.walkDecls((d: Declaration) => {
@@ -114,7 +165,12 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
       pushRule(layer, getNodeCss(n), key);
     });
 
-    result.messages.push({ type: "pkv", plugin: "postcss-pkv", out });
+    result.messages.push({
+      type: "pkv",
+      plugin: "postcss-pkv",
+      out,
+      diagnostics,
+    });
   },
 });
 

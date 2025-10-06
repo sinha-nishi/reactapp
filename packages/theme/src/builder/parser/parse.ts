@@ -14,8 +14,14 @@ export async function parsePkvCss(
   const result = await postcss([postcssPkv(options)]).process(css, {
     from: undefined,
   });
+  // const msg = result.messages.find(
+  //   (m: Message): m is PkvMessage => m.type === "pkv" && !!m.out,
+  // );
+  // return (msg?.out || { tokens: {}, rules: [] }) as Extracted;
   const msg = result.messages.find(
     (m: Message): m is PkvMessage => m.type === "pkv" && !!m.out,
   );
-  return (msg?.out || { tokens: {}, rules: [] }) as Extracted;
+  const out = (msg?.out || { tokens: {}, rules: [] }) as any;
+  out.diagnostics = msg?.diagnostics || [];
+  return out as Extracted & { diagnostics?: any[] };
 }

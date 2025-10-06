@@ -1,8 +1,9 @@
 import { readFileSync } from "node:fs";
 import { resolve, extname } from "node:path";
 import { parsePkvCss } from "./parse";
+import { PkvOptions } from "./postcss";
 
-export async function loadAndParse(file: string) {
+export async function loadAndParse(file: string, opts?: any) {
   const abs = resolve(process.cwd(), file);
   const ext = extname(abs);
 
@@ -19,5 +20,5 @@ export async function loadAndParse(file: string) {
     css = readFileSync(abs, "utf8");
   }
 
-  return parsePkvCss(css, { layerFromPath: true, acceptUnprefixedLayer: true });
+  return parsePkvCss(css, { layerFromPath: true, acceptUnprefixedLayer: true, ...(opts || {}) });
 }
