@@ -9,6 +9,7 @@ import { createThemeBuilder } from "../styles";
 import { compatPlugin } from "@/compat";
 import { loadAndParse } from "../builder/parser/ingest";
 import { applyParsedToBuilder } from "@/builder/parser";
+import { formatCss } from "./format";
 
 const program = new Command();
 
@@ -92,7 +93,7 @@ program
       ? opts.out
       : resolve(process.cwd(), opts.out);
     mkdirSync(dirname(outPath), { recursive: true });
-    writeFileSync(outPath, css, "utf8");
+    writeFileSync(outPath, await formatCss(css), "utf8");
 
     console.log(`✔ wrote ${outPath}`);
   });

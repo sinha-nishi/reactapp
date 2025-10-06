@@ -15,6 +15,7 @@ export default [
     external: [
       "sass",
       "less",
+      "prettier",
       // builtins are auto-external, but it doesn't hurt to be explicit
       "fs",
       "path",
