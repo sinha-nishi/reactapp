@@ -10,11 +10,18 @@ const CANDIDATES = [
 ];
 
 async function findConfig(cwd = process.cwd()) {
-  const matches = await fg(["pkv.config.{mjs,cjs,js,json}"], {
-    cwd,
-    absolute: true,
-    onlyFiles: true,
-  });
+  const matches = await fg(
+    [
+      "pkv.config.{mjs,cjs,js,json}",
+      "{src,config}/pkv.config.{mjs,cjs,js,json}",
+    ],
+    {
+      cwd,
+      absolute: true,
+      onlyFiles: true,
+      ignore: ["**/node_modules/**", "**/dist/**", "**/.git/**"],
+    },
+  );
   return matches.at(0);
 }
 
@@ -22,13 +29,10 @@ async function lookupConfig(start = process.cwd()) {
   let dir = path.resolve(start);
   // stop at filesystem root
   while (true) {
-    for (const name of CANDIDATES) {
-      const p = path.join(dir, name);
-      try {
-        await access(p); // file exists & is readable
-        return [await findConfig(dir), dir] as [string, string];
-      } catch {}
-    }
+    try {
+      const config = await findConfig(dir);
+      if (config) return [config, dir] as [string, string]; // file exists & is readable
+    } catch {}
     const parent = path.dirname(dir);
     if (parent === dir) break;
     dir = parent;
