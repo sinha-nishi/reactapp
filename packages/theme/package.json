@@ -29,6 +29,7 @@
   "files": [
     "dist",
     "src",
+    "presets",
     "README.md",
     "LICENSE"
   ],
@@ -89,6 +90,7 @@
     "commander": "^14.0.1",
     "fast-glob": "^3.3.3",
     "less": "^4.4.1",
-    "sass": "^1.93.2"
+    "sass": "^1.93.2",
+    "prettier": "^3.6.2"
   }
 }

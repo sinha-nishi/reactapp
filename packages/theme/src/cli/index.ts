@@ -1,6 +1,6 @@
 import { Command } from "commander";
 import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
-import { resolve, dirname, isAbsolute } from "node:path";
+import { resolve, dirname, isAbsolute, posix } from "node:path";
 import { fileURLToPath } from "node:url";
 import fg from "fast-glob";
 
@@ -26,7 +26,10 @@ program
     "-t, --tokens <path>",
     "path to custom tokens JSON (same shape as presets)",
   )
-  .option("--in", "input path - dir or file")
+  .option(
+    "-i, --in <globs>",
+    'one or more input globs (comma-separated), e.g. "styles/**/*.scss,overrides/*.css"',
+  )
   .option("-o, --out <file>", "output CSS file", "dist/pkv.custom.css")
   .option("--min", "minify output")
   .option("--legacy", "emit legacy build (no @layer)")
@@ -78,10 +81,10 @@ program
 
     // NEW: ingest authored styles
     if (opts.in) {
-      const files = await fg(
-        opts.in.split(",").map((p: string) => p.trim()),
-        { dot: true },
-      );
+      const patterns = String(opts.in)
+        .split(",")
+        .map((p: string) => posix.normalize(p.trim().replace(/\\/g, "/"))); // normalize backslashes
+      const files = await fg(patterns, { dot: true, onlyFiles: true });
       for (const f of files) {
         const parsed = await loadAndParse(f);
         applyParsedToBuilder(builder, parsed);
