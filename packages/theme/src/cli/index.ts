@@ -10,6 +10,7 @@ import { compatPlugin } from "@/compat";
 import { loadAndParse } from "../builder/parser/ingest";
 import { applyParsedToBuilder } from "@/builder/parser";
 import { formatCss } from "./format";
+import { lookupConfig } from "./config";
 
 const program = new Command();
 
@@ -81,15 +82,10 @@ program
     }
 
     let cfg: any = {};
-    const guess = (
-      await fg(["pkv.config.{mjs,cjs,js,json}"], {
-        cwd: process.cwd(),
-        absolute: true,
-      })
-    ).at(0);
+    const [guess, dir] = await lookupConfig();
     console.log(
-      `ℹ️  config file ${opts.config || guess || "(none)"} from cwd: `,
-      process.cwd(),
+      `ℹ️ config file ${opts.config || guess || "(none)"} from cwd: `,
+      dir,
     );
     const configPath = opts.config || guess;
     if (configPath) {
