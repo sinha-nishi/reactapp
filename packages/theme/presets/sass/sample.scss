@@ -1,0 +1,32 @@
+@layer pkv.settings {
+  :root {
+    --pkv-color-primary-500: #10b981;
+    --pkv-radius-md: 12px;
+    --pkv-space-3: 0.75rem;
+  }
+}
+
+@layer pkv.components {
+  .c-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--pkv-radius-md);
+    padding: 0.5rem 0.875rem;
+  }
+  .c-button--primary {
+    background: var(--pkv-color-primary-500);
+    color: #fff;
+  }
+}
+
+/* pkv:layer=utilities */
+.u-m-0 {
+  margin: 0;
+}
+.u-m-1 {
+  margin: 0.25rem;
+}
+.u-p-1 {
+  padding: 0.25rem;
+}

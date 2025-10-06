@@ -23,6 +23,9 @@
       "types": "./dist/esm/builder/index.d.ts"
     }
   },
+  "bin": {
+    "pkvcss": "dist/cli.js"
+  },
   "files": [
     "dist",
     "src",
@@ -49,7 +52,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css && prettier --write dist/pkv.theme.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css && prettier --write dist/pkv.theme.css dist/pkv.theme.legacy.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.theme.min.css -o dist/pkv.theme.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",

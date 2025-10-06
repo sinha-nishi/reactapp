@@ -29,7 +29,12 @@
       "types": "./dist/browser.d.ts"
     },
     "./material": {
-      "default": "./dist/pkv.material.min.css"
+      "default": "./dist/pkv.material.min.css",
+      "types": "./types/css.d.ts"
+    },
+    "./material/legacy": {
+      "default": "./dist/pkv.material.legacy.min.css",
+      "types": "./types/css.d.ts"
     },
     "./material-css": {
       "types": "./types/css.d.ts",

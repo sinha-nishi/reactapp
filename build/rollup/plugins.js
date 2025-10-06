@@ -5,6 +5,7 @@ import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
 import postcss from "rollup-plugin-postcss";
 import dts from "rollup-plugin-dts";
+import { extend } from "./utils.js";
 
 export const rollupDts = () => [dts()];
 
@@ -16,7 +17,13 @@ export const basePlugins = (options = {}) => [
     exportConditions: ["browser", "module", "default"],
   }),
   commonjs(),
-  postcss(options?.plugins?.postcss || { extract: false, minimize: true, sourceMap: true }),
+  postcss(
+    options?.plugins?.postcss || {
+      extract: false,
+      minimize: true,
+      sourceMap: true,
+    },
+  ),
 ];
 
 const isProd = process.env.NODE_ENV === "production";
@@ -28,13 +35,15 @@ export const replacePlugin = () =>
     ),
   });
 
-export const tscPlugin = (declaration = false) =>
-  typescript({
-    tsconfig: "./tsconfig.build.json",
-    // ensure declaration emit in your tsconfig, not here
-    declaration,
-    declarationDir: declaration ? "./dist/esm/types" : undefined,
-  });
+export const tscPlugin = ({ declaration = false, ...opts } = {}) =>
+  typescript(
+    extend({
+      tsconfig: "./tsconfig.build.json",
+      // ensure declaration emit in your tsconfig, not here
+      declaration,
+      declarationDir: declaration ? "./dist/esm/types" : undefined,
+    }, opts),
+  );
 
 // Minified variant
 export const minify = () =>

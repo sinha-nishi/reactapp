@@ -7,11 +7,20 @@ mkdirSync(outDir, { recursive: true });
 
 const builder = createThemeBuilder();
 builder.use(compatPlugin({ tailwind: true }));
+
 const css = builder.toString({ minify: false });
 const cssMin = builder.toString({ minify: true });
+const cssLegacy = builder.toString({ minify: false, legacy: true });
+const cssLegacyMin = builder.toString({ minify: true, legacy: true });
 
 writeFileSync(resolve(outDir, "pkv.theme.css"), css, "utf8");
 writeFileSync(resolve(outDir, "pkv.theme.min.css"), cssMin, "utf8");
+writeFileSync(resolve(outDir, "pkv.theme.legacy.css"), cssLegacy, "utf8");
+writeFileSync(
+  resolve(outDir, "pkv.theme.legacy.min.css"),
+  cssLegacyMin,
+  "utf8",
+);
 
 // const cssCompat = builder.toString({ minify: false });
 // const cssCompatMin = builder.toString({ minify: true });

@@ -1,4 +1,4 @@
-import { isExternal, EXTERNAL_PEERS } from "./utils.js";
+import { isExternal, EXTERNAL_PEERS, extend } from "./utils.js";
 import {
   basePlugins,
   tscPlugin,
@@ -6,10 +6,6 @@ import {
   minify,
   rollupDts,
 } from "./plugins.js";
-
-function extend(obj = {}, ext = {}) {
-  return { ...obj, ...ext };
-}
 
 export const dts = () =>
   extend({
@@ -32,7 +28,7 @@ export const esm = (options = {}) =>
   extend({
     input: "src/index.ts",
     external: isExternal,
-    plugins: [basePlugins(options), tscPlugin(true)],
+    plugins: [basePlugins(options), tscPlugin({ declaration: true })],
     output: {
       dir: "dist/esm",
       format: "esm",

@@ -2,8 +2,6 @@ import postcss from "postcss";
 import type { Message } from "postcss";
 import { postcssPkv, type Extracted, type PkvOptions } from "./postcss";
 
-export { applyParsedToBuilder } from "./build";
-
 interface PkvMessage extends Message {
   type: "pkv";
   out?: Extracted;

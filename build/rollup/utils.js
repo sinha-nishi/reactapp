@@ -1,3 +1,7 @@
+export function extend(obj = {}, ext = {}) {
+  return { ...obj, ...ext };
+}
+
 // Handy lists
 export const INTERNAL_PKG = [
   "@pkvsinha/react-base",
@@ -14,7 +18,7 @@ export const INTERNAL_PKG = [
 
 export const EXTERNAL_PEERS = ["react", "react-dom"];
 
-export const isExternal = (id) => {
+export const isExternal = (id = "") => {
   // React & subpaths
   if (/^react($|\/)/.test(id)) return true; // react, react/jsx-runtime, react/jsx-dev-runtime
   if (/^react-dom($|\/)/.test(id)) return true; // react-dom, react-dom/client, react-dom/server
