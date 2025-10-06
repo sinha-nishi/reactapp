@@ -114,6 +114,88 @@ const tw = (b: any) => {
   );
   b.rule("utilities", `.mx-auto`, `margin-inline:auto`, "tw-mx-auto");
   b.rule("utilities", `.px-4`, `padding-inline:1rem`, "tw-px-4");
+
+  // direction/wrap
+  for (const [k, v] of Object.entries({ row: "row", col: "column" }))
+    b.rule("utilities", `.flex-${k}`, `flex-direction:${v}`, `tw-flex-${k}`);
+  for (const [k, v] of Object.entries({ wrap: "wrap", nowrap: "nowrap" }))
+    b.rule("utilities", `.flex-${k}`, `flex-wrap:${v}`, `tw-flex-${k}`);
+  // justify / items
+  const jmap = {
+    start: "flex-start",
+    end: "flex-end",
+    center: "center",
+    between: "space-between",
+    around: "space-around",
+    evenly: "space-evenly",
+  };
+  for (const [k, v] of Object.entries(jmap))
+    b.rule(
+      "utilities",
+      `.justify-${k}`,
+      `justify-content:${v}`,
+      `tw-justify-${k}`,
+    );
+  const amap = {
+    start: "flex-start",
+    end: "flex-end",
+    center: "center",
+    baseline: "baseline",
+    stretch: "stretch",
+  };
+  for (const [k, v] of Object.entries(amap))
+    b.rule("utilities", `.items-${k}`, `align-items:${v}`, `tw-items-${k}`);
+  // widths/heights
+  const fracs = {
+    "1/2": "50%",
+    "1/3": "33.333%",
+    "2/3": "66.666%",
+    "1/4": "25%",
+    "3/4": "75%",
+    full: "100%",
+  };
+  for (const [k, v] of Object.entries(fracs)) {
+    const key = k.replace("/", "\\/");
+    b.rule("utilities", `.w-${key}`, `width:${v}`, `tw-w-${k}`);
+    b.rule("utilities", `.h-${key}`, `height:${v}`, `tw-h-${k}`);
+  }
+  // text align/weight
+  for (const [k, v] of Object.entries({
+    left: "left",
+    center: "center",
+    right: "right",
+  }))
+    b.rule("utilities", `.text-${k}`, `text-align:${v}`, `tw-text-${k}`);
+  for (const [k, v] of Object.entries({
+    thin: 100,
+    extralight: 200,
+    light: 300,
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  }))
+    b.rule("utilities", `.font-${k}`, `font-weight:${v}`, `tw-font-${k}`);
+  // rounding
+  for (const [k, v] of Object.entries({
+    sm: "6px",
+    md: "var(--pkv-radius-md)",
+    lg: "16px",
+    full: "9999px",
+  }))
+    b.rule(
+      "utilities",
+      `.rounded-${k}`,
+      `border-radius:${v}`,
+      `tw-rounded-${k}`,
+    );
+  b.rule(
+    "utilities",
+    `.shadow`,
+    `box-shadow:0 1px 2px rgba(0,0,0,.08),0 1px 1px rgba(0,0,0,.06)`,
+    "tw-shadow",
+  );
+  b.rule("utilities", `.shadow-none`, `box-shadow:none`, "tw-shadow-none");
 };
 
 const bs = (b: any) => {
@@ -145,6 +227,86 @@ const bs = (b: any) => {
     `background:var(--pkv-color-primary-500);color:#fff`,
     "bs-btn-primary",
   );
+
+  // display
+  for (const d of ["block", "inline", "inline-block", "flex", "grid", "none"])
+    b.rule("utilities", `.d-${d}`, `display:${d}`, `bs-d-${d}`);
+  // justify/align
+  const jmap = {
+    start: "flex-start",
+    end: "flex-end",
+    center: "center",
+    between: "space-between",
+    around: "space-around",
+    evenly: "space-evenly",
+  };
+  for (const [k, v] of Object.entries(jmap))
+    b.rule(
+      "utilities",
+      `.justify-content-${k}`,
+      `justify-content:${v}`,
+      `bs-justify-${k}`,
+    );
+  const amap = {
+    start: "flex-start",
+    end: "flex-end",
+    center: "center",
+    baseline: "baseline",
+    stretch: "stretch",
+  };
+  for (const [k, v] of Object.entries(amap))
+    b.rule(
+      "utilities",
+      `.align-items-${k}`,
+      `align-items:${v}`,
+      `bs-align-${k}`,
+    );
+  // spacing 0..5 (0..3rem)
+  const step = {
+    0: "0",
+    1: ".25rem",
+    2: ".5rem",
+    3: "1rem",
+    4: "1.5rem",
+    5: "3rem",
+  };
+  const dirs = [
+    ["", ""],
+    ["x", "inline"],
+    ["y", "block"],
+    ["t", "block-start"],
+    ["r", "inline-end"],
+    ["b", "block-end"],
+    ["l", "inline-start"],
+  ];
+  for (const [i, val] of Object.entries(step))
+    for (const [k, prop] of dirs) {
+      b.rule(
+        "utilities",
+        `.m${k ? "-" + k : ""}-${i}`,
+        `${prop ? `margin-${prop}` : "margin"}:${val}`,
+        `bs-m-${k}-${i}`,
+      );
+      b.rule(
+        "utilities",
+        `.p${k ? "-" + k : ""}-${i}`,
+        `${prop ? `padding-${prop}` : "padding"}:${val}`,
+        `bs-p-${k}-${i}`,
+      );
+    }
+  // columns
+  for (let i = 1; i <= 12; i++) {
+    const pct = ((i / 12) * 100)
+      .toFixed(6)
+      .replace(/0+$/, "")
+      .replace(/\\.$/, "");
+    b.rule(
+      "utilities",
+      `.col-${i}`,
+      `flex:0 0 auto;width:${pct}%`,
+      `bs-col-${i}`,
+    );
+  }
 };
 
 export const compatPlugin =

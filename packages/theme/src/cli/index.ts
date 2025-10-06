@@ -34,6 +34,7 @@ program
   .option("--min", "minify output")
   .option("--legacy", "emit legacy build (no @layer)")
   .option("--compat <list>", "comma-separated: tailwind,bootstrap")
+  .option("-c, --config <path>", "path to pkv.config.(mjs|cjs|js|json)")
   .action(async (opts) => {
     const tokens: Record<string, string> = {};
 
@@ -79,13 +80,35 @@ program
       );
     }
 
-    const cfg = {
-      validation: { classPrefix: ["pkv-", "app-"], severity: "warn" },
-    };
+    let cfg: any = {};
+    const guess = (
+      await fg(["pkv.config.{mjs,cjs,js,json}"], {
+        cwd: process.cwd(),
+        absolute: true,
+      })
+    ).at(0);
+    const configPath = opts.config || guess;
+    if (configPath) {
+      if (configPath.endsWith(".json"))
+        cfg = JSON.parse(readFileSync(configPath, "utf8"));
+      else {
+        const { pathToFileURL } = await import("url");
+        const mod = await import(pathToFileURL(configPath).href);
+        cfg = mod.default ?? mod;
+      }
+    }
+    // Merge: flags override config
+    const opt = (k: string, fallback: any) => opts[k] ?? cfg[k] ?? fallback;
+    const compatCfg = cfg.compat || {};
+
+    // const cfg = {
+    //   validation: { classPrefix: ["pkv-", "app-"], severity: "warn" },
+    // };
 
     // NEW: ingest authored styles
-    if (opts.in) {
-      const patterns = String(opts.in)
+    const include = opts.in || (cfg.include ? [].concat(cfg.include).join(',') : '');
+    if (include) {
+      const patterns = String(include)
         .split(",")
         .map((p: string) => posix.normalize(p.trim().replace(/\\/g, "/"))); // normalize backslashes
       const files = await fg(patterns, { dot: true, onlyFiles: true });
