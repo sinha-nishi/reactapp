@@ -1,12 +1,51 @@
 {
   "name": "@pkvsinha/react-app",
-  "version": "0.0.4",
+  "version": "0.0.9",
   "description": "",
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
+  "style": "dist/pkv.material.min.css",
+  "unpkg": "dist/umd/react-app.standalone.min.js",
+  "jsdelivr": "dist/umd/react-app.standalone.min.js",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "import": "./dist/esm/server.js",
+      "require": "./dist/cjs/server.js",
+      "types": "./dist/server.d.ts"
+    },
+    "./adapters/browser": {
+      "import": "./dist/esm/adapters/browser.js",
+      "require": "./dist/cjs/adapters/browser.js",
+      "types": "./dist/browser.d.ts"
+    },
+    "./material": {
+      "default": "./dist/pkv.material.min.css",
+      "types": "./types/css.d.ts"
+    },
+    "./material/legacy": {
+      "default": "./dist/pkv.material.legacy.min.css",
+      "types": "./types/css.d.ts"
+    },
+    "./material-css": {
+      "types": "./types/css.d.ts",
+      "default": "./dist/pkv.material.css"
+    },
+    "./builder/css": {
+      "import": "./dist/esm/theme/css.js",
+      "require": "./dist/cjs/theme/css.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "src",
@@ -18,8 +57,16 @@
     "url": "https://github.com/pkvsinha/reactapp.git"
   },
   "peerDependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react": ">=18.2.0 <20",
+    "react-dom": ">=18.2.0 <20"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": false
+    },
+    "react-dom": {
+      "optional": false
+    }
   },
   "dependencies": {
     "@pkvsinha/react-base": "workspace:*",
@@ -29,10 +76,16 @@
     "@pkvsinha/react-integrate": "workspace:*",
     "@pkvsinha/react-layout": "workspace:*",
     "@pkvsinha/react-navigate": "workspace:*",
+    "@pkvsinha/react-theme": "workspace:*",
     "@pkvsinha/react-widgets": "workspace:*"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rimraf dist",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css && prettier --write dist/pkv.material.css",
+    "minify": "cross-env MINIFY=1 postcss dist/pkv.material.min.css -o dist/pkv.material.min.css",
+    "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
+    "build:types": "rimraf dist && rollup -c && tsc -p tsconfig.build.json && rollup -c rollup-types.config.js",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"

@@ -25,14 +25,26 @@ pnpm --filter @pkvsinha/react-app add @pkvsinha/react-icons@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-layout@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-navigate@workspace:*
 pnpm --filter @pkvsinha/react-app add @pkvsinha/react-widgets@workspace:*
+pnpm --filter @pkvsinha/react-app add @pkvsinha/react-theme@workspace:*
 
 pnpm --filter @pkvsinha/react-navigate add @pkvsinha/react-integrate@workspace:*
 
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-navigate@workspace:*
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-theme@workspace:*
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-base@workspace:*
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-layout@workspace:*
+pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-components@workspace:*
+
+pnpm --filter @pkvsinha/react-components add @pkvsinha/react-theme@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-base@workspace:*
+pnpm --filter @pkvsinha/react-components add @pkvsinha/react-layout@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-hooks@workspace:*
 pnpm --filter @pkvsinha/react-components add @pkvsinha/react-navigate@workspace:*
 
-pnpm --filter @pkvsinha/react-widgets add @pkvsinha/react-navigate@workspace:*
+pnpm --filter @pkvsinha/react-layout add @pkvsinha/react-theme@workspace:*
+pnpm --filter @pkvsinha/react-layout add @pkvsinha/react-base@workspace:*
+
+pnpm --filter @pkvsinha/react-base add @pkvsinha/react-theme@workspace:*
 
 ```
 

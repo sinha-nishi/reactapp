@@ -1,0 +1,40 @@
+{
+  "name": "example-next-ssr",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "biome check",
+    "format": "biome format --write",
+    "install:local": "npm install ../../pkvsinha-react-base-0.0.8.tgz ../../pkvsinha-react-integrate-0.0.8.tgz ../../pkvsinha-react-hooks-0.0.8.tgz ../../pkvsinha-react-components-0.0.8.tgz ../../pkvsinha-react-icons-0.0.8.tgz ../../pkvsinha-react-layout-0.0.8.tgz ../../pkvsinha-react-navigate-0.0.8.tgz ../../pkvsinha-react-widgets-0.0.8.tgz ../../pkvsinha-react-app-0.0.8.tgz"
+  },
+  "dependencies": {
+    "@pkvsinha/react-app": "file:../../pkvsinha-react-app-0.0.8.tgz",
+    "@pkvsinha/react-base": "file:../../pkvsinha-react-base-0.0.8.tgz",
+    "@pkvsinha/react-components": "file:../../pkvsinha-react-components-0.0.8.tgz",
+    "@pkvsinha/react-hooks": "file:../../pkvsinha-react-hooks-0.0.8.tgz",
+    "@pkvsinha/react-icons": "file:../../pkvsinha-react-icons-0.0.8.tgz",
+    "@pkvsinha/react-integrate": "file:../../pkvsinha-react-integrate-0.0.8.tgz",
+    "@pkvsinha/react-layout": "file:../../pkvsinha-react-layout-0.0.8.tgz",
+    "@pkvsinha/react-navigate": "file:../../pkvsinha-react-navigate-0.0.8.tgz",
+    "@pkvsinha/react-widgets": "file:../../pkvsinha-react-widgets-0.0.8.tgz",
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.0",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

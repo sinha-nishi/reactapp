@@ -83,6 +83,7 @@ export type AppAction =
   | { type: 'SET_NAV_LINKS'; links: any[] }
   | { type: 'TOGGLE_APP_BAR'; display?: boolean }
   | { type: 'TOGGLE_NAV_BAR'; display?: boolean }
+  
   | { type: 'SET_BRAND'; name?: string; logo?: string }
   | { type: 'SET_THEME'; theme: Record<string, unknown> }
   | { type: 'MERGE'; payload: Partial<AppContext> };

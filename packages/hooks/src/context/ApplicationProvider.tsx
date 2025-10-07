@@ -2,16 +2,11 @@ import * as React from 'react';
 import { ApplicationContext, ApplicationDispatchContext, AppContext, AppAction, deepMerge } from './ApplicationContext';
 
 export type ApplicationProviderProps = {
-  value?: Partial<AppContext>;
-  defaults?: Partial<AppContext>;
+  value: AppContext;
   children: React.ReactNode;
 };
 
-export function ApplicationProvider({ value, defaults, children }: ApplicationProviderProps) {
-  const initial = React.useMemo(
-    () => deepMerge<AppContext>({}, defaults ?? {}, value ?? {}),
-    [defaults, value]
-  );
+export function ApplicationProvider({ value, children }: ApplicationProviderProps) {
 
   function reducer(state: AppContext, action: AppAction): AppContext {
     switch (action.type) {
@@ -34,7 +29,7 @@ export function ApplicationProvider({ value, defaults, children }: ApplicationPr
     }
   }
 
-  const [state, dispatch] = React.useReducer(reducer, initial);
+  const [state, dispatch] = React.useReducer(reducer, value);
 
   return (
     <ApplicationDispatchContext.Provider value={dispatch}>

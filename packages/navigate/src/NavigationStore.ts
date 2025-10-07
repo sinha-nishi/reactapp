@@ -1,3 +1,5 @@
+import { bus, Command } from "@pkvsinha/react-integrate";
+
 type Location = {
   path: string;
   query: Record<string, string>;
@@ -12,6 +14,12 @@ class NavigationStore {
 
   constructor(initial: string = "/") {
     this._location = this.parse(initial);
+
+    bus.subscribe((cmd) => this.onCommand(cmd));
+  }
+
+  public reset(path: string = "/") {
+    this._location = this.parse(path);
   }
 
   private parse(url: string): Location {
@@ -33,35 +41,75 @@ class NavigationStore {
     return () => this.listeners.delete(listener);
   }
 
-  navigate(to: string) {
-    this._location = this.parse(to);
+  // navigate(to: string) {
+  //   this._location = this.parse(to);
+  //   for (const l of this.listeners) l(this._location);
+  // }
+
+  // INTERNAL: called from bus
+  private onCommand(cmd: Command) {
+    console.log("NavigationStore: received command", cmd);
+    switch (cmd.type) {
+      case "navigate":
+      case "replace":
+        if (typeof cmd.target === "string") {
+          this._location = this.parse(cmd.target);
+          this.emit();
+        }
+        break;
+      // back/forward are handled by adapters; they will translate into navigate/replace
+      default:
+        break;
+    }
+  }
+
+  private emit() {
+    console.log("NavigationStore: emitting command", this._location);
     for (const l of this.listeners) l(this._location);
   }
 }
 
 export const navigationStore = new NavigationStore("/");
 
-export function attachBrowserAdapter() {
+export function attachBrowserAdapter(contextPath: string = "/") {
+
+  console.log("reseting the navigation store to account for current location: ", contextPath);
+
+  navigationStore.reset(contextPath); // need to see if we need to reset the listeners
+
+  const onPop = () => {
+    // navigationStore.navigate(window.location.pathname + window.location.search + window.location.hash);
+    bus.send({
+      type: "navigate",
+      target:
+        window.location.pathname +
+        window.location.search +
+        window.location.hash,
+    });
+  };
+
   // Sync from browser → store
-  window.addEventListener("popstate", () => {
-    navigationStore.navigate(window.location.pathname + window.location.search + window.location.hash);
-  });
+  window.addEventListener("popstate", onPop);
 
   // Sync from store → browser
-  const unsub = navigationStore.subscribe(loc => {
-    const url = loc.path +
-      (Object.keys(loc.query).length ? "?" + new URLSearchParams(loc.query).toString() : "") +
+  const unsub = navigationStore.subscribe((loc) => {
+    const url =
+      loc.path +
+      (Object.keys(loc.query).length
+        ? "?" + new URLSearchParams(loc.query).toString()
+        : "") +
       (loc.hash ? "#" + loc.hash : "");
     window.history.pushState({}, "", url);
   });
 
   return () => {
-    window.removeEventListener("popstate", () => {});
+    window.removeEventListener("popstate", onPop);
     unsub();
   };
 }
 
 export function attachMemoryAdapter(start: string = "/") {
-  navigationStore.navigate(start);
+  // navigationStore.navigate(start);
+  bus.send({ type: "replace", target: start });
   return () => {}; // no-op cleanup
 }
