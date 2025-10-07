@@ -2,9 +2,14 @@
 
 import { View } from "./View";
 
+export type CSSOptions = {
+  attach?: boolean;
+}
+
 export type RenderOptions = {
   rootId?: string;
   strictValidation?: boolean;
+  css?: CSSOptions;
 }
 
 export type AppNavLink = {

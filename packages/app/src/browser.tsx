@@ -7,25 +7,32 @@ import type {
   RenderOptions,
 } from "./@types/ApplicationConfiguration";
 import { attachBrowserAdapter } from "@pkvsinha/react-navigate";
+import { compatPlugin, createThemeBuilder } from "@pkvsinha/react-theme";
 import { compile } from "./utils/compile";
 import { routes } from "./utils/routes";
 import type { AppConfig } from "./@types/AppConfig";
 
-export function render(
-  app?: AppConfig,
-  options?: RenderOptions,
-) {
+function attachCss() {
+  const builder = createThemeBuilder({
+    tokens: { "color-primary-500": "#16a34a" },
+  });
+  builder.use(compatPlugin({ tailwind: true }));
+  builder.inject();
+}
+
+export function render(app?: AppConfig, options?: RenderOptions) {
   const rootElement = getRootElement(options);
   const root = createRoot(rootElement);
   const { views, home, contextPath, init } = compile(app);
 
   root.render(
-    <ReactApplication
-      init={init}
-      routes={routes(views, contextPath, home)}
-    />,
+    <ReactApplication init={init} routes={routes(views, contextPath, home)} />,
   );
   attachBrowserAdapter(app?.contextPath);
+  if (options?.css?.attach) {
+    attachCss();
+  }
+
   // registerSW();
 }
 
