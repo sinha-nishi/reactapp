@@ -9,13 +9,16 @@ import { componentsPlugin } from "./components";
 import { utilitiesPlugin } from "./utilities";
 
 export function createThemeBuilder(opts?: StyleOptions) {
-  const builder = new CssBuilder({ prefix: "pkv" });
-  return builder
-    .use(settingsPlugin(opts))
-    .use(toolsPlugin(opts))
-    .use(genericPlugin(opts))
-    .use(elementsPlugin(opts))
-    .use(objectsPlugin(opts))
-    .use(componentsPlugin(opts))
-    .use(utilitiesPlugin(opts));
+  const builder = new CssBuilder({ prefix: opts?.prefix || "" });
+  opts?.layers?.settings === false ? null : builder.use(settingsPlugin(opts));
+  opts?.layers?.tools === false ? null : builder.use(toolsPlugin(opts));
+  opts?.layers?.generic === false ? null : builder.use(genericPlugin(opts));
+  opts?.layers?.elemets === false ? null : builder.use(elementsPlugin(opts));
+  opts?.layers?.objects === false ? null : builder.use(objectsPlugin(opts));
+  opts?.layers?.components === false
+    ? null
+    : builder.use(componentsPlugin(opts));
+  opts?.layers?.utilites === false ? null : builder.use(utilitiesPlugin(opts));
+
+  return builder;
 }

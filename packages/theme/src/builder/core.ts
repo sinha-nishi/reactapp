@@ -65,7 +65,7 @@ export class CssBuilder {
 
   constructor(options?: Options) {
     this.opts = {
-      prefix: options?.prefix ?? "pkv",
+      prefix: options?.prefix ?? "",
       layerOrder: options?.layerOrder ?? [
         "settings",
         "tools",
@@ -206,7 +206,10 @@ export class CssBuilder {
   }: { minify?: boolean; legacy?: boolean } = {}) {
     const lf = minify ? "" : "\n";
     const rootVars = Object.entries(this.tokens)
-      .map(([k, v]) => `--${this.opts.prefix}-${k}:${v};`)
+      .map(
+        ([k, v]) =>
+          `--${this.opts.prefix ? `${this.opts.prefix}-` : ""}${k}:${v};`,
+      )
       .join(minify ? "" : "\n ");
     const root = `:root{${minify ? rootVars : `\n ${rootVars}\n`}}`;
 
@@ -226,12 +229,12 @@ export class CssBuilder {
     }
 
     // Modern build with cascade layers
-    const layerDecl = `@layer ${this.opts.prefix}.${this.opts.layerOrder.join(`,${this.opts.prefix}.`)};`;
+    const layerDecl = `@layer ${this.opts.prefix ? `${this.opts.prefix}.` : ""}${this.opts.layerOrder.join(`,${this.opts.prefix ? `${this.opts.prefix}.` : ""}`)};`;
     const chunks = [layerDecl, root];
     for (const name of this.opts.layerOrder) {
       if (!byLayer[name].length) continue;
       chunks.push(
-        `@layer ${this.opts.prefix}.${name}{${byLayer[name].join(lf)}}`,
+        `@layer ${this.opts.prefix ? `${this.opts.prefix}.` : ""}${name}{${byLayer[name].join(lf)}}`,
       );
     }
     return chunks.join(lf);
@@ -244,7 +247,7 @@ export class CssBuilder {
       return this.styleEl;
     }
     const el = doc.createElement("style");
-    el.setAttribute("data-css-builder", this.opts.prefix);
+    el.setAttribute("data-css-builder", this.opts.prefix || "theme-builder");
     if (attrs) Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
     el.textContent = css;
     doc.head.prepend(el);
