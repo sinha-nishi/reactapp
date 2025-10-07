@@ -6,11 +6,14 @@ import fg from "fast-glob";
 
 // Import builder + plugins from your monorepo packages
 import { createThemeBuilder } from "../styles";
-import { compatPlugin } from "@/compat";
+import { compatPlugin } from "../compat";
 import { loadAndParse } from "../builder/parser/ingest";
-import { applyParsedToBuilder } from "@/builder/parser";
+import { applyParsedToBuilder } from "../builder/parser";
 import { formatCss } from "./format";
 import { lookupConfig } from "./config";
+import { scanClassNames } from "./scan";
+import { ClassEngine } from "../runtime/classEngine";
+import { stringify } from "../runtime/stringify";
 
 const program = new Command();
 
@@ -43,6 +46,7 @@ program
   .option("--compat <list>", "comma-separated: tailwind,bootstrap")
 
   .option("--strict", "treat validation warnings as errors (exit code 1)")
+  .option("--important", "force !important on generated utilities")
   .action(async (opts) => {
     const tokens: Record<string, string> = {};
 
@@ -71,9 +75,6 @@ program
     }
 
     // Helper to resolve option value with fallback to config
-    // const opt = (k: string, fallback?: any) =>
-    //   (opts as any)[k] ?? cfg[k] ?? fallback;
-
     const opt = (keys: string | string[], fallback?: any) => {
       const arr = Array.isArray(keys) ? keys : [keys];
       for (const k of arr) {
@@ -112,15 +113,33 @@ program
 
     let builder = createThemeBuilder({ tokens });
 
-    const compat = opt("compat");
-    if (compat) {
-      const list = String(compat)
-        .split(",")
-        .map((s: string) => s.trim());
+    // const compat = opt("compat");
+    // if (compat) {
+
+    // }
+    // compat sets can come from CLI ("tailwind,bootstrap") OR config: { compat: { sets: [...] } }
+    const compatCli =
+      typeof opts.compat === "string"
+        ? String(opts.compat)
+            .split(",")
+            .map((s: string) => s.trim().toLowerCase())
+            .filter(Boolean)
+        : [];
+    const compatCfgSets = Array.isArray(cfg?.compat?.sets)
+      ? cfg.compat.sets.map((s: string) => String(s).toLowerCase())
+      : [];
+    const compatSets = Array.from(new Set([...compatCfgSets, ...compatCli]));
+
+    const enableTailwind = compatSets.includes("tailwind");
+    const enableBootstrap = compatSets.includes("bootstrap");
+
+    if (compatSets.length) {
+      // keep your existing plugin registration
+      const list = compatSets;
       builder = builder.use(
         compatPlugin({
-          tailwind: list.includes("tailwind"),
-          bootstrap: list.includes("bootstrap"),
+          tailwind: enableTailwind,
+          bootstrap: enableBootstrap,
         }),
       );
     }
@@ -159,6 +178,33 @@ program
 
           if (strict && parsed.diagnostics.length) process.exitCode = 1;
         }
+      }
+
+      // --- Tailwind-compat CSS emission (only when enabled) ---
+      if (enableTailwind) {
+        const engine = new ClassEngine({
+          compat: [
+            [
+              "tailwind",
+              {
+                important: cfg.compat?.tailwind?.important ?? !!opts.important,
+                screens: cfg.compat?.tailwind?.screens,
+                theme: cfg.compat?.tailwind?.theme,
+                prefix: cfg.compat?.tailwind?.prefix,
+              },
+            ],
+          ],
+        });
+        const classes = await scanClassNames({
+          patterns,
+          safelist: cfg.compat?.tailwind?.safelist ?? [],
+        });
+        const cssObjects = engine.compile(classes);
+        const css = stringify(cssObjects);
+        const compatOut = cfg.outfile ?? "dist/compat.tailwind.css";
+        mkdirSync(dirname(compatOut), { recursive: true });
+        writeFileSync(compatOut, css, "utf8");
+        console.log(`✔ tailwind-compat CSS emitted: ${compatOut}`);
       }
     }
 
