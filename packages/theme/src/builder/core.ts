@@ -62,6 +62,7 @@ export class CssBuilder {
   private usedKeys = new Set<string>();
   private styleEl?: HTMLStyleElement;
   private opts: Required<Options>;
+  private _beforeSerialize: Array<() => void> = [];
 
   constructor(options?: Options) {
     this.opts = {
@@ -76,6 +77,11 @@ export class CssBuilder {
         "utilities",
       ],
     };
+  }
+
+  onBeforeSerialize(fn: () => void) {
+    this._beforeSerialize.push(fn);
+    return this;
   }
 
   setTokens(t: Tokens) {
@@ -204,6 +210,12 @@ export class CssBuilder {
     minify = true,
     legacy = false,
   }: { minify?: boolean; legacy?: boolean } = {}) {
+    // NEW: let plugins finalize work (e.g. inject compat CSS) just-in-time
+    for (const fn of this._beforeSerialize)
+      try {
+        fn();
+      } catch {}
+
     const lf = minify ? "" : "\n";
     const rootVars = Object.entries(this.tokens)
       .map(

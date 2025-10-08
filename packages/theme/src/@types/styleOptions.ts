@@ -1,3 +1,5 @@
+import { TailwindCompatOptions } from "../compat/tailwind";
+
 export type LayerOptions = {
   settings?: boolean | Partial<Record<string, string>>;
   tools?: boolean | Partial<Record<string, string>>;
@@ -13,4 +15,7 @@ export type StyleOptions = {
   layers?: LayerOptions;
   tokens?: Partial<Record<string, string>>;
   utilities?: { spacingScale?: number[] };
+  compat?: {
+    tailwind?: TailwindCompatOptions
+  }
 };

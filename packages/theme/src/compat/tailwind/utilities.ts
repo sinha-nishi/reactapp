@@ -126,10 +126,29 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
   propRaw("justify-center", "justify-content", { "": "center" });
   propRaw("justify-between", "justify-content", { "": "space-between" });
   propRaw("justify-end", "justify-content", { "": "flex-end" });
+
   // gap
   propScale("gap", "gap", theme.spacing);
   propScale("gap-x", "column-gap", theme.spacing);
   propScale("gap-y", "row-gap", theme.spacing);
+
+  // container
+  rules.push({
+    name: "container",
+    match: (cls) => (cls === "container" ? { raw: cls } : false),
+    apply: (m, meta, ctx) => {
+      const base = finalize({ width: "100%" }, ctx, meta);
+      const out = [base];
+      for (const [, min] of Object.entries(ctx.screens)) {
+        out.push({
+          selector: base.selector,
+          decls: { "max-width": min },
+          media: `@media (min-width: ${min})`,
+        });
+      }
+      return out;
+    },
+  });
 
   // grid template helpers (common)
   rules.push({
@@ -244,6 +263,94 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       style("box-shadow", theme.shadow.DEFAULT, ctx, meta),
   });
 
+  // ring
+  const ringShadow = (
+    w: string,
+    color: string,
+    offsetW: string,
+    offsetColor: string,
+  ) =>
+    `${offsetW} 0 0 0 ${offsetColor}, 0 0 0 calc(${w} + ${offsetW}) ${color}`;
+
+  rules.push({
+    name: "ring",
+    match: (cls) => (cls === "ring" ? { raw: cls } : false),
+    apply: (m, meta, ctx) => {
+      const w = theme.ringWidth?.DEFAULT ?? "3px";
+      const c = ctx.resolveColor("blue-500");
+      const ow = theme.ringOffsetWidth?.["0"] ?? "0px";
+      const oc = "transparent";
+      return style("box-shadow", ringShadow(w, c, ow, oc), ctx, meta);
+    },
+  });
+
+  // Filter composition (base + blur-md)
+  const FILTER_COMPOSE =
+    "var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)";
+
+  rules.push({
+    name: "filter",
+    match: (cls) =>
+      cls === "filter"
+        ? { raw: cls }
+        : cls === "filter-none"
+          ? { raw: cls, none: true }
+          : false,
+    apply: (m, meta, ctx) =>
+      finalize(
+        m.none
+          ? { filter: "none" }
+          : {
+              "--tw-blur": " ",
+              "--tw-brightness": " ",
+              "--tw-contrast": " ",
+              "--tw-grayscale": " ",
+              "--tw-hue-rotate": " ",
+              "--tw-invert": " ",
+              "--tw-saturate": " ",
+              "--tw-sepia": " ",
+              "--tw-drop-shadow": " ",
+              "--tw-filter": FILTER_COMPOSE,
+              filter: "var(--tw-filter)",
+            },
+        ctx,
+        meta,
+      ),
+  });
+
+  function applyFilterVar(
+    meta: any,
+    ctx: CompatContext,
+    vars: Record<string, string>,
+  ) {
+    return finalize(
+      { ...vars, "--tw-filter": FILTER_COMPOSE, filter: "var(--tw-filter)" },
+      ctx,
+      meta,
+    );
+  }
+
+  const blurMap = {
+    "0": "blur(0)",
+    sm: "blur(4px)",
+    "": "blur(8px)",
+    md: "blur(12px)",
+    lg: "blur(16px)",
+  };
+  rules.push({
+    name: "blur-<k>",
+    match: (cls) =>
+      cls.startsWith("blur")
+        ? { raw: cls, key: cls === "blur" ? "" : cls.slice(5) }
+        : false,
+    apply: (
+      m: { raw: string; key: keyof typeof blurMap },
+      meta,
+      ctx,
+    ) =>
+      applyFilterVar(meta, ctx, { "--tw-blur": blurMap[m.key] ?? "blur(8px)" }),
+  });
+
   // position & inset
   propRaw("static", "position", { "": "static" });
   propRaw("fixed", "position", { "": "fixed" });
@@ -322,6 +429,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
     match(className: string): MatchResult | false {
       const cls = stripPrefix(className, opts.prefix);
       // gather variant tokens (md:hover:...) => ["md","hover"]
+      console.log("matching prefix class :: ", cls);
       const tokens: string[] = [];
       let base = cls;
       while (re.variantToken.test(base)) {
@@ -336,8 +444,13 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
 
       for (const rule of rules) {
         const m = rule.match(base);
-        if (m) return { ...m, tokens, important, negative, raw: className };
+        if (m) {
+          console.log("matching rule base :: ", base, m);
+          (m as any).rule = rule;
+          return { ...m, tokens, important, negative, raw: className };
+        }
       }
+      console.log("no matching rule class :: ", className);
       return false;
     },
 

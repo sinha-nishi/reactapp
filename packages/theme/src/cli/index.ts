@@ -44,7 +44,10 @@ program
   .option("--min", "minify output")
   .option("--legacy", "emit legacy build (no @layer)")
   .option("--compat <list>", "comma-separated: tailwind,bootstrap")
-
+  .option(
+    "--classes <css>",
+    'space separated class names: "btn md:hover:bg-blue-600"',
+  )
   .option("--strict", "treat validation warnings as errors (exit code 1)")
   .option("--important", "force !important on generated utilities")
   .action(async (opts) => {
@@ -182,6 +185,10 @@ program
 
       // --- Tailwind-compat CSS emission (only when enabled) ---
       if (enableTailwind) {
+        const classesFromConfigOrCli = opt("classes", "")
+          .split(" ")
+          .map((s: string) => s.trim().toLowerCase());
+        console.log("ℹ️ including classes from config: ", classesFromConfigOrCli);
         const engine = new ClassEngine({
           compat: [
             [
@@ -199,7 +206,10 @@ program
           patterns,
           safelist: cfg.compat?.tailwind?.safelist ?? [],
         });
-        const cssObjects = engine.compile(classes);
+        const cssObjects = engine.compile([
+          ...classes,
+          ...classesFromConfigOrCli,
+        ]);
         const css = stringify(cssObjects);
         const compatOut = cfg.outfile ?? "dist/compat.tailwind.css";
         mkdirSync(dirname(compatOut), { recursive: true });

@@ -1,0 +1,22 @@
+@use "sass:meta";
+
+/// Emits a CSS custom property under :root with pkv prefix
+/// @example @include pkv-token('color-primary-500', #4f46e5);
+@mixin kitsy-token($name, $value) {
+  :root {
+    --ky-#{$name}: #{$value};
+  }
+}
+
+/// Emits multiple at once
+/// @example @include pkv-tokens((
+/// 'color-primary-500': #4f46e5,
+/// 'radius-md': 12px,
+/// ));
+@mixin kitsy-tokens($map) {
+  :root {
+    @each $k, $v in $map {
+      --pkv-#{$k}: #{$v};
+    }
+  }
+}

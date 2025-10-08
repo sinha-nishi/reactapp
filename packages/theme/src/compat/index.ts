@@ -1,4 +1,6 @@
 import { BuilderPlugin } from "../builder/core";
+import { ClassEngine } from "../runtime/classEngine";
+import { stringify } from "../runtime/stringify";
 
 type Opts = { tailwind?: boolean; bootstrap?: boolean };
 
@@ -315,3 +317,51 @@ export const compatPlugin =
     if (opts.tailwind) tw(b);
     if (opts.bootstrap) bs(b);
   };
+
+// Keep the options type light; pass through to TailwindCompat inside ClassEngine.
+export type TailwindCompatEngineOptions = {
+  prefix?: string;
+  important?: boolean | string;
+  screens?: Record<string, string>;
+  theme?: Record<string, any>;
+  safelist?: string[];
+  layerKey?: string; // optional stable key for de-dupe
+};
+
+export function compatTailwindPlugin(opts: TailwindCompatEngineOptions = {}) {
+  return (builder: any) => {
+    const queue = new Set<string>(opts.safelist ?? []);
+    const key = opts.layerKey ?? "__compat.tailwind__";
+    const engine = new ClassEngine({ compat: [["tailwind", opts]] });
+
+    // Programmatic API (available only when this plugin is installed)
+    // Typical usage (SSR/UMD):
+    //   builder.tw.add("text-sm md:hover:bg-blue-600");
+    //   builder.tw.add(["ring", "blur-md"]);
+    builder.tw = builder.tw || {};
+    builder.tw.add = (classes: string | string[]) => {
+      console.log("adding classes for building: ", classes);
+      (Array.isArray(classes) ? classes : String(classes).split(/\s+/))
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .forEach((c) => queue.add(c));
+      console.log("added classes for building: ", queue);
+      return builder;
+    };
+    builder.tw.clear = () => {
+      queue.clear();
+      return builder;
+    };
+    builder.tw.queue = () => Array.from(queue);
+
+    // Late injection into the "utilities" layer
+    builder.onBeforeSerialize(() => {
+      console.log("serialising the tailwind classes:: ", queue.size, queue);
+      if (queue.size === 0) return;
+      const cssObjects = engine.compile(Array.from(queue));
+      const css = stringify(cssObjects);
+      console.log("classes in css form: ", css);
+      if (css && css.trim()) builder.utilities(css, key);
+    });
+  };
+}
