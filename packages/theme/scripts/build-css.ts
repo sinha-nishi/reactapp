@@ -5,23 +5,23 @@ import { createThemeBuilder, compatPlugin, compatTailwindPlugin } from "../src";
 const outDir = resolve(process.cwd(), "dist");
 mkdirSync(outDir, { recursive: true });
 
-const builder = createThemeBuilder();
-// builder.use(compatPlugin({ tailwind: true }));
-builder.use(
-  compatTailwindPlugin({
-    prefix: "",
-    important: false,
-    screens: {
-      xs: "360px",
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-      "2xl": "1536px",
-    },
-    // safelist: ["container", "md:hover:bg-blue-600", "ring"],
-  }),
-);
+const builder = createThemeBuilder()
+  // .use(compatPlugin({ tailwind: true }))
+  .use(
+    compatTailwindPlugin({
+      prefix: "",
+      important: false,
+      screens: {
+        xs: "360px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
+      },
+      // safelist: ["container", "md:hover:bg-blue-600", "ring"],
+    }),
+  );
 
 // Server-side or UMD: programmatically add classes your view will render
 builder.tw.add([

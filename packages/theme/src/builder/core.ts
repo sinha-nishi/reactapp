@@ -10,7 +10,17 @@ export type LayerName =
   | "components"
   | "utilities";
 
-export type BuilderPlugin = (b: CssBuilder) => void;
+export type SideEffectPlugin<B extends CssBuilder> = (b: B) => void;
+export type TransformPlugin<
+  In extends CssBuilder,
+  Out extends CssBuilder = In,
+> = (b: In) => Out;
+
+// Optional: unify both for convenience at call sites
+export type BuilderPlugin<
+  In extends CssBuilder = CssBuilder,
+  Out extends CssBuilder = In,
+> = ((b: In) => void) | ((b: In) => Out);
 
 export type CSSBlock = `${string}{${string}}${string}`;
 
@@ -189,10 +199,25 @@ export class CssBuilder {
     return this._handleInput("utilities", input, valueOrKey, key);
   }
 
-  use(plugin: BuilderPlugin) {
-    plugin(this);
-    return this;
+  // ── Overload signatures ──────────────────────────────────
+  // use(plugin: SideEffectPlugin<this>): this;
+  // use<Out extends CssBuilder>(plugin: TransformPlugin<this, Out>): Out;
+  // ── Overload signatures END ──────────────────────────────
+  use<Out extends CssBuilder>(plugin: BuilderPlugin<this, Out>): Out {
+    const out = plugin(this);
+    return (out ?? this) as any;
   }
+
+  // extend<Out extends CssBuilder>(
+  //   plugin: TransformPlugin<CssBuilder, Out>,
+  // ): Out {
+  //   const out = plugin(this);
+  //   return (out ?? this) as Out;
+  // }
+
+  // clone<P extends TransformPlugin<this, any>>(plugin: P): ReturnType<P> {
+  //   return plugin(this);
+  // }
 
   compose(...builders: CssBuilder[]) {
     for (const b of builders) {
