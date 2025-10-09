@@ -11,6 +11,13 @@ export interface CompatContext {
   resolveColor(nameOrHex: string, alpha?: string): string;
 }
 
+export type UtilityRule = {
+  kind: "exact" | "prefix" | "pattern";
+  key?: string; // exact key or prefix
+  match: (body: string) => any | false;
+  apply: (m: any, meta: any, ctx: CompatContext) => CSSObject | CSSObject[];
+};
+
 export interface MatchResult {
   raw: string; // original class, e.g. "md:hover:bg-red-500"
   tokens?: string[]; // variants like ["md","hover"]
