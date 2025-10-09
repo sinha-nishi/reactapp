@@ -7,7 +7,7 @@ mkdirSync(outDir, { recursive: true });
 
 const builder = createThemeBuilder()
   // .use(compatPlugin({ tailwind: true }))
-  .tap(
+  .apply(
     compatTailwindPlugin({
       prefix: "",
       important: false,
