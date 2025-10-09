@@ -199,25 +199,18 @@ export class CssBuilder {
     return this._handleInput("utilities", input, valueOrKey, key);
   }
 
-  // ── Overload signatures ──────────────────────────────────
-  // use(plugin: SideEffectPlugin<this>): this;
-  // use<Out extends CssBuilder>(plugin: TransformPlugin<this, Out>): Out;
-  // ── Overload signatures END ──────────────────────────────
-  use<Out extends CssBuilder>(plugin: BuilderPlugin<this, Out>): Out {
+  apply<P extends (b: this) => any>(
+    plugin: P,
+  ): ReturnType<P> extends void ? this : ReturnType<P> {
     const out = plugin(this);
     return (out ?? this) as any;
   }
 
-  // extend<Out extends CssBuilder>(
-  //   plugin: TransformPlugin<CssBuilder, Out>,
-  // ): Out {
-  //   const out = plugin(this);
-  //   return (out ?? this) as Out;
-  // }
-
-  // clone<P extends TransformPlugin<this, any>>(plugin: P): ReturnType<P> {
-  //   return plugin(this);
-  // }
+  // new tap: side-effect only (or ignore any return)
+  use(plugin: (b: this) => any): this {
+    plugin(this);
+    return this;
+  }
 
   compose(...builders: CssBuilder[]) {
     for (const b of builders) {

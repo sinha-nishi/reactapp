@@ -320,8 +320,6 @@ export const compatPlugin =
   (b) => {
     if (opts.tailwind) tw(b);
     if (opts.bootstrap) bs(b);
-
-    return b;
   };
 
 // Keep the options type light; pass through to TailwindCompat inside ClassEngine.
@@ -370,7 +368,7 @@ export function withTailwind<B extends CssBuilder>(
 
 export function compatTailwindPlugin<B extends CssBuilder>(
   opts: TailwindCompatEngineOptions = {},
-): TransformPlugin<B, TailwindAugmented<B>> {
+) {
   return (builder: B): TailwindAugmented<B> => {
     const queue = new Set<string>(opts.safelist ?? []);
     const key = opts.layerKey ?? "__compat.tailwind__";
