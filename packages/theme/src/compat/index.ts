@@ -344,8 +344,11 @@ export type TailwindAugmented<B extends CssBuilder> = B & {
 
 export function withTailwind<B extends CssBuilder>(
   builder: B,
+  opts: TailwindCompatEngineOptions,
 ): TailwindAugmented<B> {
-  const queue = new Set<string>();
+  const queue = new Set<string>(opts.safelist ?? []);
+  const key = opts.layerKey ?? "__compat.tailwind__";
+  const engine = new ClassEngine({ compat: [["tailwind", opts]] });
   const b = builder as TailwindAugmented<B>;
 
   b.tw = {
@@ -354,6 +357,7 @@ export function withTailwind<B extends CssBuilder>(
         .map((s) => s.trim())
         .filter(Boolean)
         .forEach((c) => queue.add(c));
+      console.log("added classes to the tailwind queue: ", queue);
       return b;
     },
     clear: () => {
@@ -363,33 +367,32 @@ export function withTailwind<B extends CssBuilder>(
     queue: () => Array.from(queue),
   };
 
+  // Late injection into the "utilities" layer
+  builder.onBeforeSerialize(() => {
+    console.log("serialising the tailwind classes:: ", queue.size, queue);
+    if (queue.size === 0) return;
+    const cssObjects = engine.compile(Array.from(queue));
+    const css = stringify(cssObjects);
+    console.log("classes in css form: ", css);
+    if (css && css.trim()) builder.utilities(css, key);
+  });
+
   return b;
 }
 
+/**
+ * Programmatic API (available only when this plugin is installed).
+ * Typical usage (SSR/UMD):
+ * ```
+ *    builder.tw.add("text-sm md:hover:bg-blue-600");
+ *    builder.tw.add(["ring", "blur-md"]);
+ * ```
+ *
+ * @param opts TailwindCompatEngineOptions
+ * @returns TailwindAugmented
+ */
 export function compatTailwindPlugin<B extends CssBuilder>(
   opts: TailwindCompatEngineOptions = {},
 ) {
-  return (builder: B): TailwindAugmented<B> => {
-    const queue = new Set<string>(opts.safelist ?? []);
-    const key = opts.layerKey ?? "__compat.tailwind__";
-    const engine = new ClassEngine({ compat: [["tailwind", opts]] });
-
-    // Programmatic API (available only when this plugin is installed)
-    // Typical usage (SSR/UMD):
-    //   builder.tw.add("text-sm md:hover:bg-blue-600");
-    //   builder.tw.add(["ring", "blur-md"]);
-    const b = withTailwind(builder);
-
-    // Late injection into the "utilities" layer
-    builder.onBeforeSerialize(() => {
-      console.log("serialising the tailwind classes:: ", queue.size, queue);
-      if (queue.size === 0) return;
-      const cssObjects = engine.compile(Array.from(queue));
-      const css = stringify(cssObjects);
-      console.log("classes in css form: ", css);
-      if (css && css.trim()) builder.utilities(css, key);
-    });
-
-    return b;
-  };
+  return (builder: B) => withTailwind(builder, opts);
 }
