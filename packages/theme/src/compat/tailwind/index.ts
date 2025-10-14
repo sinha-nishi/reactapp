@@ -1,8 +1,9 @@
 // Tailwind-compat entrypoint: registers utilities, variants, and resolver
 import { buildUtilities } from "./utilities";
-import { defaultScales } from "./scales";
-import { variants } from "./variants";
-import type { CSSObject, CompatContext, CompatPlugin } from "../../@types";
+import { variants } from "../../utils/variants";
+import type { CSSObject, CompatPlugin } from "../../@types";
+import { defaultScales } from "../../tokens";
+import { UtilityContext } from "../../styles/utilities/types";
 
 export interface TailwindCompatOptions {
   // allow custom user overrides from pkv.config.ts
@@ -31,7 +32,7 @@ export const TailwindCompat = (
     prefix: opts.prefix ?? "",
   });
 
-  const ctx: CompatContext = {
+  const ctx: UtilityContext = {
     theme,
     screens,
     important: opts.important ?? false,

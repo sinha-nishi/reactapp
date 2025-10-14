@@ -1,11 +1,10 @@
+import type { CSSObject, MatchResult, Theme } from "../../@types";
 import type {
-  CSSObject,
-  CompatContext,
-  MatchResult,
+  UtilityContext,
   UtilityEngine,
-} from "../../@types";
+} from "../../styles/utilities/types";
 
-type Theme = Record<string, any>;
+
 type Options = { enableArbitraryValues: boolean; prefix: string };
 
 const re = {
@@ -20,7 +19,7 @@ function styleFromScale(
   m: any,
   prop: string | string[],
   scale: Record<string, string>,
-  ctx: CompatContext,
+  ctx: UtilityContext,
   meta: any,
 ): CSSObject {
   let val = scale[m.key];
@@ -320,7 +319,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
 
   function applyFilterVar(
     meta: any,
-    ctx: CompatContext,
+    ctx: UtilityContext,
     vars: Record<string, string>,
   ) {
     return finalize(
@@ -343,11 +342,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       cls.startsWith("blur")
         ? { raw: cls, key: cls === "blur" ? "" : cls.slice(5) }
         : false,
-    apply: (
-      m: { raw: string; key: keyof typeof blurMap },
-      meta,
-      ctx,
-    ) =>
+    apply: (m: { raw: string; key: keyof typeof blurMap }, meta, ctx) =>
       applyFilterVar(meta, ctx, { "--tw-blur": blurMap[m.key] ?? "blur(8px)" }),
   });
 
@@ -454,7 +449,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       return false;
     },
 
-    render(m: any, meta, ctx: CompatContext): CSSObject[] {
+    render(m: any, meta, ctx: UtilityContext): CSSObject[] {
       // each rule apply() yields CSSObject(s) with {selector, decls, media?}
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];
@@ -466,7 +461,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
 interface UtilityRule {
   name: string;
   match: (cls: string) => any | false;
-  apply: (m: any, meta: any, ctx: CompatContext) => CSSObject | CSSObject[];
+  apply: (m: any, meta: any, ctx: UtilityContext) => CSSObject | CSSObject[];
 }
 
 function stripPrefix(cls: string, prefix: string) {
@@ -503,7 +498,7 @@ function withInt(cls: string, prefix: string) {
 function style(
   prop: string | string[],
   value: string,
-  ctx: CompatContext,
+  ctx: UtilityContext,
   meta: any,
 ): CSSObject {
   const decls = Array.isArray(prop)
@@ -513,14 +508,14 @@ function style(
 }
 function styleMany(
   obj: Record<string, string>,
-  ctx: CompatContext,
+  ctx: UtilityContext,
   meta: any,
 ): CSSObject {
   return finalize(obj, ctx, meta);
 }
 function finalize(
   decls: Record<string, string>,
-  ctx: CompatContext,
+  ctx: UtilityContext,
   meta: any,
 ): CSSObject {
   // handle important override + negative value

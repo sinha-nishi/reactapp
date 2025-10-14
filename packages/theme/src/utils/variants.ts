@@ -1,4 +1,4 @@
-import type { VariantBuilder } from "../../@types";
+import type { VariantBuilder } from "../@types";
 
 // builds responsive + state variant wrappers
 export const variants = (screens: Record<string, string>): VariantBuilder => {

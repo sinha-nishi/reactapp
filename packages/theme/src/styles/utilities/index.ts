@@ -1,18 +1,20 @@
 import { CssBuilder, BuilderPlugin } from "../../builder/core";
 import type { StyleOptions } from "../../@types/styleOptions";
 import { defaultScales } from "../../tokens";
+import { hexToRgb } from "../../utils/colors";
+import { buildUtilities } from "./build";
+import type { UtilityContext } from "./types";
+import { Scanner } from "../../runtime/Scanner";
 
-// export const utilitiesPlugin =
-//   (opts: StyleOptions = {}): BuilderPlugin =>
-//   (b: CssBuilder) => {
-//     // 07-utilities: spacing
-//     // const scale = opts.utilities?.spacingScale ?? [0, 4, 8, 12, 16, 24, 32];
-//     // scale.forEach((px, i) => {
-//     //   const rem = `${px / 16}rem`;
-//     //   b.rule("utilities", `.u-m-${i}`, `margin:${rem}`, `u-m-${i}`);
-//     //   b.rule("utilities", `.u-p-${i}`, `padding:${rem}`, `u-p-${i}`);
-//     // });
-//   };
+const old = (b: CssBuilder, opts: StyleOptions = {}) => {
+  // 07-utilities: spacing
+  const scale = opts.utilities?.spacingScale ?? [0, 4, 8, 12, 16, 24, 32];
+  scale.forEach((px, i) => {
+    const rem = `${px / 16}rem`;
+    b.rule("utilities", `.u-m-${i}`, `margin:${rem}`, `u-m-${i}`);
+    b.rule("utilities", `.u-p-${i}`, `padding:${rem}`, `u-p-${i}`);
+  });
+};
 
 export interface ThemeNamespace<B> {
   add: (classes: string | string[]) => B;
@@ -41,6 +43,9 @@ export function withTheme<B extends CssBuilder>(
   // const key = opts.layerKey ?? "__compat.tailwind__";
   // const engine = new ClassEngine({ compat: [["tailwind", opts]] });
   const b = builder as ThemeAugmented<B>;
+  const scanner = new Scanner();
+
+  scanner.use();
 
   b.theme = {
     add: (classes) => {
@@ -68,6 +73,34 @@ export function withTheme<B extends CssBuilder>(
     "2xl": "1536px",
   };
 
+  const util = buildUtilities(theme, {
+    enableArbitraryValues: opts.enableArbitraryValues !== false,
+    prefix: opts.prefix ?? "",
+  });
+
+  const ctx: UtilityContext = {
+    theme,
+    screens,
+    important: opts.important ?? false,
+    resolveColor(nameOrHex: string, alpha?: string) {
+      // accepts palette key "red-500" or hex/rgb; supports "/<alpha>" notation
+      const [base, a] = (alpha ? [nameOrHex, alpha] : nameOrHex.split("/")) as [
+        string,
+        string?,
+      ];
+      const hex = (theme.colors as Record<string, string>)[base] ?? base;
+      if (!a) return hex;
+      // convert hex to rgba with alpha percentage (00..100 or 0..1)
+      const alphaVal = a.includes("%")
+        ? parseFloat(a) / 100
+        : parseFloat(a) > 1
+          ? parseFloat(a) / 100
+          : parseFloat(a);
+      const { r, g, b } = hexToRgb(hex);
+      return `rgba(${r}, ${g}, ${b}, ${Number.isFinite(alphaVal) ? alphaVal : 1})`;
+    },
+  };
+
   // Late injection into the "utilities" layer
   builder.onBeforeSerialize(() => {
     console.log("serialising the tailwind classes:: ", queue.size, queue);
@@ -84,4 +117,5 @@ export function withTheme<B extends CssBuilder>(
 export const utilitiesPlugin =
   (opts: UtilitiesOptions = {}): BuilderPlugin =>
   (b: CssBuilder) =>
-    withTheme(b, opts);
+    // withTheme(b, opts);
+    old(b, opts);
