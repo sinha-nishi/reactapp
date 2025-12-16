@@ -637,6 +637,9 @@ importers:
       less:
         specifier: ^4.4.1
         version: 4.4.1
+      prettier:
+        specifier: ^3.6.2
+        version: 3.6.2
       react:
         specifier: '>=18.2.0 <20'
         version: 19.1.1

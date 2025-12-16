@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Button, NavBar, AppBar } from "@pkvsinha/react-components";
-import { Container, Section } from "@pkvsinha/react-base";
+import { NavBar, AppBar } from "@pkvsinha/react-components";
+import { FluidContainer } from "@pkvsinha/react-base";
 import { useApplicationContext } from "@pkvsinha/react-hooks";
 import { View } from "@/@types/View";
 import { useRouteParams } from "@pkvsinha/react-navigate";
@@ -72,15 +72,7 @@ export function DefaultComponentView({
       {view.appBar?.display === false ? null : (
         <AppBar text={view.appBar?.title || ""} />
       )}
-      <div className="flex flex-col h-screen justify-center">
-        <Container>
-          <Section
-            style={{ height: "calc(100vh - 200px)", marginBottom: "100px" }}
-          >
-            {child}
-          </Section>
-        </Container>
-      </div>
+      <FluidContainer>{child}</FluidContainer>
     </>
   );
 }
