@@ -72,6 +72,7 @@ export function DefaultComponentView({
       {view.appBar?.display === false ? null : (
         <AppBar text={view.appBar?.title || ""} />
       )}
+      {/* TODO: to account for AppBar height if shown and NavBar height and position.*/}
       <FluidContainer>{child}</FluidContainer>
     </>
   );

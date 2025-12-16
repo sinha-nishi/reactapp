@@ -18,10 +18,10 @@ export function Container(props: ContainerAttributes) {
 export function FluidContainer(props: ContainerAttributes) {
   const { children, className } = props;
   
-  return <div className={`px-2 md:px-8 w-screen min-h-screen ${className}`}>{children}</div>;
+  return <div className={`px-2 md:px-8 w-screen max-w-full min-h-screen ${className}`}>{children}</div>;
 }
 
 export function FullScreenContainer(props: ContainerAttributes) {
   const { children, className } = props;
-  return <div className={`w-screen h-screen ${className}`}>{children}</div>;
+  return <div className={`w-screen max-w-full h-screen ${className}`}>{children}</div>;
 }
