@@ -1,7 +1,7 @@
 @use "sass:meta";
 
 /// Emits a CSS custom property under :root with pkv prefix
-/// @example @include pkv-token('color-primary-500', #4f46e5);
+/// @example @include ky-token('color-primary-500', #4f46e5);
 @mixin kitsy-token($name, $value) {
   :root {
     --ky-#{$name}: #{$value};

@@ -75,7 +75,7 @@ function escapeClass(cls: string) {
 export function util(reg: RuleRegistry, theme: Theme) {
   const S = theme.spacing;
   const propScale = (prefix: string, prop: string | string[]) =>
-    reg.addPrefix(prefix, {
+    reg.addPrefixRule(prefix, {
       match: (cls) => withKey(cls, prefix, S),
       apply: (m, meta, ctx) => styleFromScale(m, prop, S, ctx, meta),
     });
@@ -86,7 +86,7 @@ export function util(reg: RuleRegistry, theme: Theme) {
     prop: string | string[],
     scale: Record<string, string> = {},
   ) {
-    reg.addPrefix(prefix, {
+    reg.addPrefixRule(prefix, {
       match: (cls) => withKey(cls, prefix, scale),
       apply: (m, meta, ctx) => styleFromScale(m, prop, scale, ctx, meta),
     });
@@ -97,7 +97,7 @@ export function util(reg: RuleRegistry, theme: Theme) {
     prop: string,
     value: string,
   ) {
-    reg.addExact(name, {
+    reg.addExactRule(name, {
       match: (cls) => (cls === name ? { raw: cls } : false),
       apply: (m, meta, ctx) => style(prop, value, ctx, meta),
     });

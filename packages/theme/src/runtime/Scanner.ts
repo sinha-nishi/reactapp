@@ -8,7 +8,7 @@ export class RuleRegistry {
   patterns: UtilityRule[] = [];
   finalized = false;
 
-  addExact(key: string, rule: UtilityRuleWithoutKind) {
+  addExactRule(key: string, rule: UtilityRuleWithoutKind) {
     this.exact.set(key, {
       ...rule,
       kind: "exact",
@@ -16,11 +16,11 @@ export class RuleRegistry {
     });
   }
 
-  addPrefix(key: string, rule: UtilityRuleWithoutKind) {
+  addPrefixRule(key: string, rule: UtilityRuleWithoutKind) {
     this.prefixes.push({ key, rule: { ...rule, kind: "prefix", key: key } });
   }
 
-  addPattern(rule: UtilityRuleWithoutKind) {
+  addPatternRule(rule: UtilityRuleWithoutKind) {
     this.patterns.push({
       ...rule,
       kind: "pattern",
