@@ -2,18 +2,22 @@ import { CSSObject, Theme } from "@/@types";
 import { RuleRegistry } from "@/runtime/Scanner";
 import { UtilityContext } from "./types";
 
-function stripPrefix(cls: string, prefix: string) {
+export function stripPrefix(cls: string, prefix: string) {
   return prefix && cls.startsWith(prefix) ? cls.slice(prefix.length) : cls;
 }
 
-function withKey(cls: string, prefix: string, scale?: Record<string, any>) {
+export function withKey(
+  cls: string,
+  prefix: string,
+  scale?: Record<string, any>,
+) {
   if (!cls.startsWith(prefix)) return false;
   const key = cls.slice(prefix.length);
   if (key in (scale ?? {})) return { key, body: key, raw: cls };
   return false;
 }
 
-function withColorKey(
+export function withColorKey(
   cls: string,
   prefix: string,
   scale: Record<string, string>,
@@ -23,7 +27,7 @@ function withColorKey(
   return { key, raw: cls };
 }
 
-function style(
+export function style(
   prop: string | string[],
   value: string,
   ctx: UtilityContext,
@@ -35,7 +39,7 @@ function style(
   return finalize(decls, ctx, meta);
 }
 
-function styleMany(
+export function styleMany(
   obj: Record<string, string>,
   ctx: UtilityContext,
   meta: any,
@@ -126,5 +130,7 @@ export function util(reg: RuleRegistry, theme: Theme) {
 
   return {
     propScale,
+    addScale,
+    addExactDecl,
   };
 }

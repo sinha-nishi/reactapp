@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`text-sm & bg-slate-100/80 1`] = `
+[
+  {
+    "decls": {
+      "font-size": "0.875rem",
+      "lineHeight": "1.25rem",
+    },
+    "selector": ".text-sm",
+  },
+  {
+    "decls": {
+      "background-color": "slate-100/80",
+    },
+    "selector": ".bg-slate-100\\/80",
+  },
+]
+`;

@@ -14,36 +14,36 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./server": {
+      "types": "./dist/server.d.ts",
       "import": "./dist/esm/server.js",
-      "require": "./dist/cjs/server.js",
-      "types": "./dist/server.d.ts"
+      "require": "./dist/cjs/server.js"
     },
     "./adapters/browser": {
+      "types": "./dist/browser.d.ts",
       "import": "./dist/esm/adapters/browser.js",
-      "require": "./dist/cjs/adapters/browser.js",
-      "types": "./dist/browser.d.ts"
+      "require": "./dist/cjs/adapters/browser.js"
     },
     "./material": {
-      "default": "./dist/pkv.material.min.css",
-      "types": "./types/css.d.ts"
+      "types": "./types/css.d.ts",
+      "default": "./dist/pkv.material.min.css"
     },
     "./material/legacy": {
-      "default": "./dist/pkv.material.legacy.min.css",
-      "types": "./types/css.d.ts"
+      "types": "./types/css.d.ts",
+      "default": "./dist/pkv.material.legacy.min.css"
     },
     "./material-css": {
       "types": "./types/css.d.ts",
       "default": "./dist/pkv.material.css"
     },
     "./builder/css": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/esm/theme/css.js",
-      "require": "./dist/cjs/theme/css.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/theme/css.js"
     }
   },
   "files": [
@@ -80,7 +80,7 @@
     "@pkvsinha/react-widgets": "workspace:*"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "clean": "rimraf dist",
     "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css && prettier --write dist/pkv.material.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.material.min.css -o dist/pkv.material.min.css",

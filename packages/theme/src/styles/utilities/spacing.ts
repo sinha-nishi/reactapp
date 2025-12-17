@@ -1,6 +1,6 @@
 import { RuleRegistry } from "@/runtime/Scanner";
 import type { Theme } from "../../@types";
-import { util } from "./utils";
+import { util } from "./helper";
 
 export function register(reg: RuleRegistry, theme: Theme) {
   //   reg.addPrefix("p-" /* UtilityRule */, "");

@@ -13,16 +13,16 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./css": {
       "default": "./dist/pkv.components.min.css"
     },
     "./builder": {
-      "import": "./dist/esm/builder/index.js",
-      "types": "./dist/esm/builder/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/esm/builder/index.js"
     }
   },
   "files": [
@@ -55,7 +55,7 @@
     "@pkvsinha/react-theme": "workspace:*"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "clean": "rimraf dist",
     "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.components.css -o dist/pkv.components.css && prettier --write dist/pkv.components.css",
     "minify": "cross-env MINIFY=1 postcss dist/pkv.components.min.css -o dist/pkv.components.min.css",

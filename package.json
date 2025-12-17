@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test": "vitest run",
     "build": "turbo run build",
     "build:css": "pnpm -r --filter ./packages/* run prebuild",
     "dev": "turbo run dev --parallel",
@@ -24,6 +25,7 @@
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.0",
     "autoprefixer": "^10.4.21",
+    "baseline-browser-mapping": "^2.9.8",
     "cross-env": "^10.1.0",
     "cssnano": "^7.1.1",
     "js-yaml": "^4.1.0",
@@ -40,7 +42,8 @@
     "rollup-plugin-postcss": "^4.0.2",
     "tsx": "^4.20.6",
     "turbo": "^2.5.5",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.16"
   },
   "peerDependencies": {
     "react": ">=18.2.0 <20",
