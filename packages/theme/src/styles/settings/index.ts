@@ -1,4 +1,4 @@
-import { CssBuilder, BuilderPlugin } from "../../core/builder/core";
+import { CssBuilder, BuilderPlugin } from "../../core/builder";
 import type { StyleOptions } from "../../@types/styleOptions";
 
 export const settingsPlugin =

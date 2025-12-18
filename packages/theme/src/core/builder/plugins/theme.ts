@@ -1,4 +1,4 @@
-import { CssBuilder, BuilderPlugin } from "../builder";
+import { CssBuilder, BuilderPlugin } from "..";
 
 export type ThemeOptions = {
   tokens?: Partial<Record<string, string>>;

@@ -4,7 +4,7 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*", "tests/*"]
     }
   },
   "include": ["src", "scripts", "stories", "pkv.config.js"],

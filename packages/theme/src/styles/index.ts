@@ -1,4 +1,4 @@
-import { CssBuilder } from "../core/builder/core";
+import { CssBuilder } from "../core/builder";
 import type { StyleOptions } from "../@types/styleOptions";
 import { settingsPlugin } from "./settings";
 import { toolsPlugin } from "./tools";

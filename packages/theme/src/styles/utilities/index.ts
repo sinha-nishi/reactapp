@@ -1,20 +1,11 @@
-import { CssBuilder, BuilderPlugin } from "../../core/builder/core";
+import { CssBuilder, BuilderPlugin } from "../../core/builder";
 import type { StyleOptions } from "../../@types/styleOptions";
 import { defaultScales } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 import { buildUtilities } from "./build";
 import { Scanner } from "../../core/runtime/Scanner";
-import { UtilityContext } from "@/@types";
-
-const old = (b: CssBuilder, opts: StyleOptions = {}) => {
-  // 07-utilities: spacing
-  const scale = opts.utilities?.spacingScale ?? [0, 4, 8, 12, 16, 24, 32];
-  scale.forEach((px, i) => {
-    const rem = `${px / 16}rem`;
-    b.rule("utilities", `.u-m-${i}`, `margin:${rem}`, `u-m-${i}`);
-    b.rule("utilities", `.u-p-${i}`, `padding:${rem}`, `u-p-${i}`);
-  });
-};
+import { ClassEnginePlugin, CSSObject, UtilityContext } from "@/@types";
+import { variants } from "../../utils/variants";
 
 export interface ThemeNamespace<B> {
   add: (classes: string | string[]) => B;
@@ -114,8 +105,60 @@ export function withTheme<B extends CssBuilder>(
   return b;
 }
 
+export const utilitiesEngine = (opts: UtilitiesOptions): ClassEnginePlugin => {
+  const theme = { ...defaultScales, ...(opts.theme ?? {}) };
+
+  const screens = opts.screens ?? {
+    xs: "360px",
+    sm: "640px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1280px",
+    "2xl": "1536px",
+  };
+
+  const ctx: UtilityContext = {
+    theme,
+    screens,
+    important: opts.important ?? false,
+    resolveColor(nameOrHex: string, alpha?: string) {
+      // accepts palette key "red-500" or hex/rgb; supports "/<alpha>" notation
+      const [base, a] = (alpha ? [nameOrHex, alpha] : nameOrHex.split("/")) as [
+        string,
+        string?,
+      ];
+      const hex = (theme.colors as Record<string, string>)[base] ?? base;
+      if (!a) return hex;
+      // convert hex to rgba with alpha percentage (00..100 or 0..1)
+      const alphaVal = a.includes("%")
+        ? parseFloat(a) / 100
+        : parseFloat(a) > 1
+          ? parseFloat(a) / 100
+          : parseFloat(a);
+      const { r, g, b } = hexToRgb(hex);
+      return `rgba(${r}, ${g}, ${b}, ${Number.isFinite(alphaVal) ? alphaVal : 1})`;
+    },
+  };
+
+  const util = buildUtilities(theme, {
+    enableArbitraryValues: opts.enableArbitraryValues !== false,
+    prefix: opts.prefix ?? "",
+  });
+
+  return {
+    name: "utilities-engine",
+    variants: variants(screens),
+    match(className: string) {
+      return util.match(className);
+    },
+    render(match, meta): CSSObject[] {
+      return util.render(match, meta, ctx);
+    },
+    enumerate: (ctx, o) => util.enumerate(ctx, o),
+  };
+};
+
 export const utilitiesPlugin =
   (opts: UtilitiesOptions = {}): BuilderPlugin =>
   (b: CssBuilder) =>
-    // withTheme(b, opts);
-    old(b, opts);
+    withTheme(b, opts);

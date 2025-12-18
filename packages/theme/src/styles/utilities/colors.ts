@@ -1,7 +1,7 @@
 import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 import type { Theme } from "../../@types";
 import { style, util, withColorKey } from "./helper";
-import { getSemanticColorKeys, semanticToColorKey } from "@/tokens/semantic";
+import { getSemanticColorKeys, semanticToColorKey } from "../../tokens/semantic";
 
 export function register(reg: RuleRegistry, theme: Theme) {
   const semanticKeys = getSemanticColorKeys(theme).map(semanticToColorKey);
