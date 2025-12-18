@@ -1,4 +1,4 @@
-import { CssBuilder, BuilderPlugin } from "../../builder/core";
+import { CssBuilder, BuilderPlugin } from "../../core/builder/core";
 import type { StyleOptions } from "../../@types/styleOptions";
 
 export const genericPlugin =

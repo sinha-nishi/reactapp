@@ -1,4 +1,4 @@
-import type { CssBuilder } from "../core";
+import type { CssBuilder } from "../builder/core";
 import type { Extracted } from "./postcss";
 
 export function applyParsedToBuilder(b: CssBuilder, parsed: Extracted) {

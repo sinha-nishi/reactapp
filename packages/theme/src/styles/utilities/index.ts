@@ -1,10 +1,10 @@
-import { CssBuilder, BuilderPlugin } from "../../builder/core";
+import { CssBuilder, BuilderPlugin } from "../../core/builder/core";
 import type { StyleOptions } from "../../@types/styleOptions";
 import { defaultScales } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 import { buildUtilities } from "./build";
-import type { UtilityContext } from "./types";
-import { Scanner } from "../../runtime/Scanner";
+import { Scanner } from "../../core/runtime/Scanner";
+import { UtilityContext } from "@/@types";
 
 const old = (b: CssBuilder, opts: StyleOptions = {}) => {
   // 07-utilities: spacing

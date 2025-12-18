@@ -1,6 +1,11 @@
+import { UtilityContext } from "@/@types";
 import { UtilityRule } from "@/styles/utilities/types";
 
 type UtilityRuleWithoutKind = Omit<UtilityRule, "kind">;
+
+export type EnumerateOptions = {
+  families?: string[];
+};
 
 export class RuleRegistry {
   exact = new Map<string, UtilityRule>();
@@ -32,17 +37,21 @@ export class RuleRegistry {
     this.prefixes.sort((a, b) => b.key.length - a.key.length);
     this.finalized = true;
   }
-}
 
-export class Scanner {
-  private _registy;
-  constructor() {
-    this._registy = new RuleRegistry();
+  enumerateAll(ctx: UtilityContext, opts: EnumerateOptions = {}): string[] {
+    const allow = opts.families?.length ? new Set(opts.families) : null;
+    const out: string[] = [];
+
+    const push = (r: UtilityRule) => {
+      if (allow && (!r.family || !allow.has(r.family))) return;
+      if (r.enumerate) out.push(...r.enumerate(ctx));
+    };
+
+    for (const [, r] of this.exact) push(r);
+    for (const { rule: r } of this.prefixes) push(r);
+    for (const r of this.patterns) push(r);
+
+    // unique + stable
+    return Array.from(new Set(out));
   }
-
-  private _match() {}
-
-  use() {}
-
-  compile() {}
 }

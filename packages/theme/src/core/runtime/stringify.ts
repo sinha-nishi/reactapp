@@ -1,4 +1,4 @@
-import type { CSSObject } from "../@types";
+import type { CSSObject } from "@/@types";
 
 export function stringify(rules: CSSObject[]): string {
   const byMedia = new Map<string, CSSObject[]>();

@@ -1,9 +1,10 @@
-import type { CSSObject, MatchResult, Theme } from "../../@types";
 import type {
+  CSSObject,
+  MatchResult,
+  Theme,
   UtilityContext,
-  UtilityEngine,
-} from "../../styles/utilities/types";
-
+} from "../../@types";
+import type { UtilityEngine } from "../../styles/utilities/types";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
 
@@ -141,8 +142,8 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       for (const [, min] of Object.entries(ctx.screens)) {
         out.push({
           selector: base.selector,
-          decls: { "max-width": min },
-          media: `@media (min-width: ${min})`,
+          decls: { "max-width": min as string },
+          media: `@media (min-width: ${min as string})`,
         });
       }
       return out;
@@ -454,6 +455,8 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];
     },
+
+    enumerate: (ctx, o) => [],
   };
 }
 

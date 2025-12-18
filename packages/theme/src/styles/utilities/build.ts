@@ -1,6 +1,6 @@
-import { RuleRegistry } from "../../runtime/Scanner";
-import { CSSObject, MatchResult } from "../../@types";
-import type { UtilityEngine, UtilityContext } from "./types";
+import { RuleRegistry } from "../../core/runtime/RuleRegistry";
+import { CSSObject, MatchResult, UtilityContext } from "../../@types";
+import type { UtilityEngine } from "./types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";
@@ -107,5 +107,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];
     },
+
+    enumerate: (ctx, o) => reg.enumerateAll(ctx, { families: o?.families }),
   };
 }

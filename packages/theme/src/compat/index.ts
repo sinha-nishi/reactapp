@@ -1,6 +1,7 @@
-import { BuilderPlugin, type CssBuilder } from "../builder/core";
-import { ClassEngine } from "../runtime/classEngine";
-import { stringify } from "../runtime/stringify";
+import { BuilderPlugin, type CssBuilder } from "../core/builder/core";
+import { ClassEngine } from "../core/runtime/ClassEngine";
+import { stringify } from "../core/runtime/stringify";
+import { TailwindCompat } from "./tailwind";
 
 type Opts = { tailwind?: boolean; bootstrap?: boolean };
 
@@ -344,7 +345,7 @@ export function withTailwind<B extends CssBuilder>(
 ): TailwindAugmented<B> {
   const queue = new Set<string>(opts.safelist ?? []);
   const key = opts.layerKey ?? "__compat.tailwind__";
-  const engine = new ClassEngine({ compat: [["tailwind", opts]] });
+  const engine = new ClassEngine({ plugins: [TailwindCompat(opts)] });
   const b = builder as TailwindAugmented<B>;
 
   b.tw = {

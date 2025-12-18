@@ -1,6 +1,5 @@
-import { CSSObject, Theme } from "@/@types";
-import { RuleRegistry } from "@/runtime/Scanner";
-import { UtilityContext } from "./types";
+import { CSSObject, Theme, UtilityContext } from "@/@types";
+import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 
 export function stripPrefix(cls: string, prefix: string) {
   return prefix && cls.startsWith(prefix) ? cls.slice(prefix.length) : cls;
@@ -80,19 +79,24 @@ export function util(reg: RuleRegistry, theme: Theme) {
   const S = theme.spacing;
   const propScale = (prefix: string, prop: string | string[]) =>
     reg.addPrefixRule(prefix, {
+      family: "spacing",
       match: (cls) => withKey(cls, prefix, S),
       apply: (m, meta, ctx) => styleFromScale(m, prop, S, ctx, meta),
+      enumerate: () => Object.keys(S).map((k) => `${prefix}${k}`),
     });
 
   function addScale(
     reg: RuleRegistry,
+    family: string,
     prefix: string,
     prop: string | string[],
     scale: Record<string, string> = {},
   ) {
     reg.addPrefixRule(prefix, {
+      family,
       match: (cls) => withKey(cls, prefix, scale),
       apply: (m, meta, ctx) => styleFromScale(m, prop, scale, ctx, meta),
+      enumerate: () => Object.keys(scale).map((k) => `${prefix}${k}`),
     });
   }
   function addExactDecl(

@@ -1,24 +1,25 @@
-import { TailwindCompat } from "../compat/tailwind";
-import type { CSSObject, CompatPlugin } from "../@types";
-import { mergeRules } from "../utils/rules";
+import type { CSSObject, ClassEnginePlugin, UtilityContext } from "@/@types";
+import { mergeRules } from "../../utils/rules";
 
 export interface ClassEngineOptions {
-  compat?: Array<
-    CompatPlugin | ["tailwind", Parameters<typeof TailwindCompat>[0]?]
-  >;
+  plugins?: Array<ClassEnginePlugin>;
 }
 
 export class ClassEngine {
-  private plugins: CompatPlugin[] = [];
+  private plugins: ClassEnginePlugin[] = [];
 
   constructor(opts: ClassEngineOptions = {}) {
-    for (const item of opts.compat ?? []) {
-      if (Array.isArray(item) && item[0] === "tailwind") {
-        this.plugins.push(TailwindCompat(item[1] ?? {}));
-      } else if (!Array.isArray(item)) {
-        this.plugins.push(item);
-      }
+    for (const item of opts.plugins ?? []) {
+      this.plugins.push(item);
     }
+  }
+
+  enumerate(ctx: UtilityContext, opts?: { families?: string[] }): string[] {
+    const out: string[] = [];
+    for (const p of this.plugins) {
+      out.push(...p.enumerate(ctx, opts));
+    }
+    return Array.from(new Set(out));
   }
 
   compile(classes: string[]): CSSObject[] {

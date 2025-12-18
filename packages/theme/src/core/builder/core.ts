@@ -1,4 +1,4 @@
-import { CSSProperties } from "../@types/CSSProperties";
+import { CSSProperties } from "../../@types/CSSProperties";
 
 export type Tokens = Record<string, string>;
 export type LayerName =

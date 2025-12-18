@@ -7,13 +7,14 @@ import fg from "fast-glob";
 // Import builder + plugins from your monorepo packages
 import { createThemeBuilder } from "../styles";
 import { compatPlugin } from "../compat";
-import { loadAndParse } from "../builder/parser/ingest";
-import { applyParsedToBuilder } from "../builder/parser";
+import { loadAndParse } from "../core/parser/ingest";
+import { applyParsedToBuilder } from "../core/parser";
 import { formatCss } from "./format";
 import { lookupConfig } from "./config";
 import { scanClassNames } from "./scan";
-import { ClassEngine } from "../runtime/classEngine";
-import { stringify } from "../runtime/stringify";
+import { ClassEngine } from "../core/runtime/ClassEngine";
+import { stringify } from "../core/runtime/stringify";
+import { TailwindCompat } from "@/compat/tailwind";
 
 const program = new Command();
 
@@ -188,18 +189,18 @@ program
         const classesFromConfigOrCli = opt("classes", "")
           .split(" ")
           .map((s: string) => s.trim().toLowerCase());
-        console.log("ℹ️ including classes from config: ", classesFromConfigOrCli);
+        console.log(
+          "ℹ️ including classes from config: ",
+          classesFromConfigOrCli,
+        );
         const engine = new ClassEngine({
-          compat: [
-            [
-              "tailwind",
-              {
-                important: cfg.compat?.tailwind?.important ?? !!opts.important,
-                screens: cfg.compat?.tailwind?.screens,
-                theme: cfg.compat?.tailwind?.theme,
-                prefix: cfg.compat?.tailwind?.prefix,
-              },
-            ],
+          plugins: [
+            TailwindCompat({
+              important: cfg.compat?.tailwind?.important ?? !!opts.important,
+              screens: cfg.compat?.tailwind?.screens,
+              theme: cfg.compat?.tailwind?.theme,
+              prefix: cfg.compat?.tailwind?.prefix,
+            }),
           ],
         });
         const classes = await scanClassNames({

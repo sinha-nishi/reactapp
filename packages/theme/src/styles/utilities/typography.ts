@@ -1,4 +1,4 @@
-import { RuleRegistry } from "@/runtime/Scanner";
+import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 import type { Theme } from "../../@types";
 import { style, styleMany, util } from "./helper";
 
@@ -37,7 +37,7 @@ export function register(reg: RuleRegistry, theme: Theme) {
     ["font-black", fw.black],
   ] as const;
 
-  const { addScale, addExactDecl  } = util(reg, theme);
+  const { addScale, addExactDecl } = util(reg, theme);
 
   for (const [name, val] of FW) {
     if (!val) continue;

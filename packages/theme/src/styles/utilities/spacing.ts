@@ -1,4 +1,4 @@
-import { RuleRegistry } from "@/runtime/Scanner";
+import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 import type { Theme } from "../../@types";
 import { util } from "./helper";
 

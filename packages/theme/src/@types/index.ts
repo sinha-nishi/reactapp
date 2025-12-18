@@ -19,9 +19,17 @@ export type VariantBuilder = (
   decls: CSSObject[],
 ) => CSSObject[];
 
-export interface CompatPlugin {
+export interface UtilityContext {
+  theme: Record<string, any>;
+  screens: Record<string, string>;
+  important: boolean | string;
+  resolveColor(nameOrHex: string, alpha?: string): string;
+}
+
+export interface ClassEnginePlugin {
   name: string;
   variants: VariantBuilder;
   match: (className: string) => MatchResult | false;
   render: (match: MatchResult, meta: any) => CSSObject[];
+  enumerate: (ctx: UtilityContext, opts?: { families?: string[] }) => string[];
 }
