@@ -1,5 +1,5 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
-import type { StyleOptions } from "../../@types/styleOptions";
+import type { BuilderOptions } from "../../@types/styleOptions";
 import { defaultScales } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 import { buildUtilities } from "./build";

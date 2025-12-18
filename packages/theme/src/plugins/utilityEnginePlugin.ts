@@ -1,4 +1,4 @@
-import { stringify } from "../runtime/stringify";
+import { stringify } from "../core/runtime/stringify";
 
 type CompileEngine = {
   compile: (classes: string[]) => any[]; // CSSObject[]

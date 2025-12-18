@@ -1,8 +1,8 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
-import type { StyleOptions } from "../../@types/styleOptions";
+import type { BuilderOptions } from "../../@types/styleOptions";
 
 export const genericPlugin =
-  (opts: StyleOptions = {}): BuilderPlugin =>
+  (opts: BuilderOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
     // 03-generic: reset/normalize (minimal)
     b.generic(

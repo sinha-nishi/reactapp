@@ -1,6 +1,5 @@
 import { CSSProperties } from "../../@types/CSSProperties";
-
-export type Tokens = Record<string, string>;
+import { Tokens } from "../../@types/styleOptions";
 export type LayerName =
   | "settings"
   | "tools"
@@ -94,7 +93,8 @@ export class CssBuilder {
     return this;
   }
 
-  setTokens(t: Tokens) {
+  setTokens(t?: Tokens) {
+    if (!t) return this;
     this.tokens = { ...this.tokens, ...t };
     return this;
   }

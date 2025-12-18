@@ -1,8 +1,8 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
-import type { StyleOptions } from "../../@types/styleOptions";
+import type { BuilderOptions } from "../../@types/styleOptions";
 
 export const settingsPlugin =
-  (opts: StyleOptions = {}): BuilderPlugin =>
+  (opts: BuilderOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
     // 01-settings: tokens
     const defaults = {

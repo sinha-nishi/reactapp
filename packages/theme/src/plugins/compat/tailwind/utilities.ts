@@ -3,8 +3,8 @@ import type {
   MatchResult,
   Theme,
   UtilityContext,
-} from "../../@types";
-import type { UtilityEngine } from "../../styles/utilities/types";
+} from "../../../@types";
+import type { UtilityEngine } from "../../../styles/utilities/types";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
 

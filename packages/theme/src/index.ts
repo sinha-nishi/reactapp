@@ -1,3 +1,3 @@
-export * from "./core/builder";
-export * from "./styles";
-export * from "./compat";
+export * from "./core";
+export * from "./builders";
+export * from "./plugins/compat";

@@ -5,8 +5,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import fg from "fast-glob";
 
 // Import builder + plugins from your monorepo packages
-import { createThemeBuilder } from "../styles";
-import { compatPlugin } from "../compat";
+import { createThemeBuilder } from "../builders";
+import { compatPlugin } from "../plugins/compat";
 import { loadAndParse } from "../core/parser/ingest";
 import { applyParsedToBuilder } from "../core/parser";
 import { formatCss } from "./format";
@@ -14,7 +14,7 @@ import { lookupConfig } from "./config";
 import { scanClassNames } from "./scan";
 import { ClassEngine } from "../core/runtime/ClassEngine";
 import { stringify } from "../core/runtime/stringify";
-import { TailwindCompat } from "@/compat/tailwind";
+import { TailwindCompat } from "@/plugins/compat/tailwind";
 
 const program = new Command();
 

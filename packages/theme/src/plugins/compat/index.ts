@@ -1,6 +1,6 @@
-import { BuilderPlugin, type CssBuilder } from "../core/builder";
-import { ClassEngine } from "../core/runtime/ClassEngine";
-import { stringify } from "../core/runtime/stringify";
+import { BuilderPlugin, type CssBuilder } from "../../core/builder";
+import { ClassEngine } from "../../core/runtime/ClassEngine";
+import { stringify } from "../../core/runtime/stringify";
 import { TailwindCompat } from "./tailwind";
 
 type Opts = { tailwind?: boolean; bootstrap?: boolean };

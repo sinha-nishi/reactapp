@@ -1,12 +1,12 @@
 // Tailwind-compat entrypoint: registers utilities, variants, and resolver
 import { buildUtilities } from "./utilities";
-import { variants } from "../../utils/variants";
+import { variants } from "../../../utils/variants";
 import type {
   CSSObject,
   ClassEnginePlugin,
   UtilityContext,
-} from "../../@types";
-import { defaultScales } from "../../tokens";
+} from "../../../@types";
+import { defaultScales } from "../../../tokens";
 
 export interface TailwindCompatOptions {
   // allow custom user overrides from pkv.config.ts

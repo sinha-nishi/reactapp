@@ -1,8 +1,8 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
-import type { StyleOptions } from "../../@types/styleOptions";
+import type { BuilderOptions } from "../../@types/styleOptions";
 
 export const toolsPlugin =
-  (opts: StyleOptions = {}): BuilderPlugin =>
+  (opts: BuilderOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
     b.layer("tools", "/* settings */", "settings-header");
   };

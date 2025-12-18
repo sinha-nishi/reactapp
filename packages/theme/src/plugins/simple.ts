@@ -5,7 +5,7 @@ export type ThemeOptions = {
   utilities?: { spacingScale?: number[] };
 };
 
-export const themePlugin =
+export const simplePlugin =
   (opts: ThemeOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
     // 01-settings: tokens
