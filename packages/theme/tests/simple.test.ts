@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { buildUtilities } from "../src/compat/tailwind/utilities";
+import { buildUtilities } from "../src/plugins/compat/tailwind/utilities";
 import { defaultScales } from "../src/tokens/scales";
 
 function compile(classes: string[]) {

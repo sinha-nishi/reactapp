@@ -6,6 +6,9 @@ describe("ClassEngine enumerate", () => {
   test("engine.enumerate returns finite classes for spacing", () => {
     const engine = new ClassEngine({ plugins: [utilitiesEngine({})] });
     const classes = engine.enumerate({}, { families: ["spacing"] });
+    const cssObjects = engine.compile(classes);
     expect(classes).toMatchSnapshot();
+    expect(cssObjects).toMatchSnapshot();
+    expect(ClassEngine.toCss(cssObjects)).toMatchSnapshot();
   });
 });

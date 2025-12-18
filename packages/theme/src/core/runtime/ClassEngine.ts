@@ -1,5 +1,6 @@
 import type { CSSObject, ClassEnginePlugin, UtilityContext } from "@/@types";
 import { mergeRules } from "../../utils/rules";
+import { stringify } from "./stringify";
 
 export interface ClassEngineOptions {
   plugins?: Array<ClassEnginePlugin>;
@@ -35,5 +36,9 @@ export class ClassEngine {
       }
     }
     return mergeRules(out);
+  }
+
+  static toCss(cssObjects: CSSObject[]) {
+    return stringify(cssObjects);
   }
 }
