@@ -3,6 +3,15 @@ import { TailwindCompatOptions } from "../plugins/compat/tailwind";
 export type TokenValue = string | number;
 export type Tokens = Record<string, TokenValue>;
 export type ThemeName = string;
+export type CssVarMap = Record<`--${string}`, string | number>;
+export type LayerName =
+  | "settings"
+  | "tools"
+  | "generic"
+  | "elements"
+  | "layout"
+  | "components"
+  | "utilities";
 
 export type TokenNode = TokenValue | TokenTree;
 
@@ -104,6 +113,16 @@ export type LoadedTheme = {
   varNamePublic: (publicPath: string) => `--${string}`;
   varRefPublic: (publicPath: string) => string;
   view: (themeName: ThemeName) => ThemeVariables;
+
+  isAbstractTheme: (t: string) => boolean;
+  runtimeThemes: () => ThemeName[];
+  selector: (theme: ThemeName) => string;
+  cssVars: (theme: ThemeName) => Record<`--${string}`, TokenValue>;
+  cssVarsDiff: (
+    theme: ThemeName,
+    baseTheme?: ThemeName,
+  ) => Record<`--${string}`, TokenValue>;
+  emitVars: (b: any, t: ThemeName, vars: CssVarMap, layer: LayerName) => void;
 };
 
 export type UtilitiesOptions = {

@@ -4,6 +4,8 @@ import {
   TokenPack,
   TokenTree,
   TokenValue,
+  CssVarMap,
+  LayerName,
 } from "@/@types";
 import { defaultTokens } from "./defaultTokens";
 
@@ -29,6 +31,21 @@ type TokenPackLike = Omit<TokenPack, "themes"> & {
   themes: Record<string, ThemeDef>;
 };
 
+// Runtime helper types
+
+function isAtMedia(selector: string) {
+  return selector.trim().startsWith("@media");
+}
+
+function diffVars(next: CssVarMap, base: CssVarMap): CssVarMap {
+  const out: CssVarMap = {} as any;
+  for (const [k, v] of Object.entries(next)) {
+    if (!(k in base) || base[k as `--${string}`] !== v)
+      out[k as `--${string}`] = v as any;
+  }
+  return out;
+}
+
 export function loadTheme(
   packIn: TokenPack,
   options?: LoadThemeOptions,
@@ -36,9 +53,8 @@ export function loadTheme(
   const pack = packIn as unknown as TokenPackLike;
 
   const themeNames = Object.keys(pack.themes ?? {});
-  if (!themeNames.length) {
+  if (!themeNames.length)
     throw new Error("TokenPack.themes must contain at least one theme.");
-  }
 
   const metaIn: any = pack.meta ?? {};
 
@@ -47,7 +63,7 @@ export function loadTheme(
     metaIn.defaultTheme ??
     (themeNames.includes("light") ? "light" : themeNames[0]);
 
-  // var naming defaults (fallback -> meta -> options)
+  // var naming defaults
   const varNamingFallback: VarNaming = {
     stripPrefixes: ["tokens", "primitive", "semantic", "custom"],
     rewrite: [],
@@ -68,44 +84,43 @@ export function loadTheme(
   const selectors: Record<string, string> = { ...(metaIn.selectors ?? {}) };
   if (!selectors.light) selectors.light = ":root";
   for (const t of themeNames) {
-    if (!selectors[t]) {
+    if (!selectors[t])
       selectors[t] = t === "light" ? ":root" : `:root[data-theme="${t}"]`;
-    }
   }
 
   const allThemes = new Set(themeNames);
 
   /**
-   * Inheritance can be specified in either place:
+   * Inheritance sources (both supported):
    * 1) meta.extends: { dark: ["base"], light: ["base"] }
    * 2) per-theme: themes.dark.extends = ["base"]
-   * Both are supported; we merge them.
    */
   const metaExtends: Record<string, string[]> = metaIn.extends ?? {};
-
   const getParents = (theme: string): string[] => {
     const fromMeta = metaExtends[theme] ?? [];
     const fromTheme = (pack.themes?.[theme]?.extends ?? []) as string[];
-    // merge unique, stable order: meta first then theme-level
     const out: string[] = [];
-    for (const p of [...fromMeta, ...fromTheme]) {
+    for (const p of [...fromMeta, ...fromTheme])
       if (!out.includes(p)) out.push(p);
-    }
     return out;
   };
 
   /**
    * Defaults precedence (lowest -> highest):
-   *   defaultTokens (library) -> meta.defaults -> options.defaults (load args)
+   *   defaultTokens (library) -> meta.defaults -> options.defaults (runtime)
    */
   const defaultsTree: TokenTree = deepMerge(
-    defaultTokens as any,
+    (defaultTokens as any) ?? {},
     (metaIn.defaults ?? {}) as any,
     (options?.defaults ?? {}) as any,
   );
 
-  // Flattened path maps per theme (after inheritance+defaults)
+  // Flattened path maps per theme (after defaults + inheritance)
   const flatPathByTheme: Record<string, Record<string, TokenValue>> = {};
+
+  // Also compute "resolved vars per theme"
+  const tokensByTheme: Record<string, Record<string, TokenValue>> = {};
+  const cssVarsByTheme: Record<string, Record<`--${string}`, TokenValue>> = {};
 
   for (const theme of themeNames) {
     const order = resolveThemeOrder(theme, allThemes, getParents);
@@ -115,17 +130,10 @@ export function loadTheme(
       ...order.map((t) => (pack.themes?.[t]?.tokens ?? {}) as TokenTree),
     );
 
-    flatPathByTheme[theme] = flattenToPathMap(mergedTokens);
-  }
+    const flatPath = flattenToPathMap(mergedTokens);
+    flatPathByTheme[theme] = flatPath;
 
-  // Final outputs
-  const tokensByTheme: Record<string, Record<string, TokenValue>> = {};
-  const cssVarsByTheme: Record<string, Record<`--${string}`, TokenValue>> = {};
-
-  for (const theme of themeNames) {
-    const flatPath = flatPathByTheme[theme];
-
-    // resolve {a.b.c} -> var(--a-b-c) (with naming rules)
+    // resolve {a.b.c} -> var(--a-b-c)
     const resolvedPath: Record<string, TokenValue> = {};
     for (const [pathKey, raw] of Object.entries(flatPath)) {
       if (typeof raw === "string") {
@@ -141,10 +149,9 @@ export function loadTheme(
 
     const tokenMap: Record<string, TokenValue> = {};
     const cssMap: Record<`--${string}`, TokenValue> = {} as any;
-
     for (const [pathKey, val] of Object.entries(resolvedPath)) {
       const cssVar = pathToCssVar(pathKey, varNaming);
-      const tokenKey = cssVar.slice(2); // "--x-y" -> "x-y"
+      const tokenKey = cssVar.slice(2);
       tokenMap[tokenKey] = val;
       cssMap[cssVar] = val;
     }
@@ -153,7 +160,7 @@ export function loadTheme(
     cssVarsByTheme[theme] = cssMap;
   }
 
-  // Internal getters (raw + resolved)
+  // -------- internal getters ----------
   function get(theme: ThemeName, path: string): TokenValue | undefined {
     const order = resolveThemeOrder(theme, allThemes, getParents);
     const mergedTokens = deepMerge(
@@ -218,6 +225,8 @@ export function loadTheme(
    *
    * Returns an internal path (dot-path) which you can feed to varName()/varRef()
    */
+
+  // -------- public DX resolver ----------
   function resolvePublicPath(publicPath: string) {
     const p = publicPath.replace(/^\./, "").trim();
     if (!p) return p;
@@ -258,33 +267,104 @@ export function loadTheme(
         return rest ? `primitive.z.${rest}` : `primitive.z`;
 
       default:
-        // allow internal paths directly
+        // allow internal paths too
         return p;
     }
   }
 
-  function pickExistingPath(
-    theme: string,
-    candidate: string,
-    flatMap: Record<string, Record<string, any>>,
-  ) {
+  function pickExistingPath(theme: string, candidate: string) {
     const candidates = candidate.split("||").map((s) => s.trim());
-    const flat = flatMap[theme] ?? {};
+    const flat = flatPathByTheme[theme] ?? {};
     for (const c of candidates) if (c in flat) return c;
-    return candidates[0]; // fallback
+    return candidates[0];
   }
 
-  function varNamePublic(publicPath: string): `--${string}` {
+  function varNamePublic(
+    publicPath: string,
+    theme: ThemeName = defaultTheme,
+  ): `--${string}` {
     const candidate = resolvePublicPath(publicPath);
-    const internal = pickExistingPath(defaultTheme, candidate, flatPathByTheme);
+    const internal = pickExistingPath(theme, candidate);
     return pathToCssVar(internal, varNaming);
   }
 
-  function varRefPublic(publicPath: string) {
-    return `var(${varNamePublic(publicPath)})`;
+  function varRefPublic(publicPath: string, theme: ThemeName = defaultTheme) {
+    return `var(${varNamePublic(publicPath, theme)})`;
   }
 
-  return {
+  // -------- runtime helpers baked into theme ----------
+  // abstract themes: parents in inheritance graph, unless explicitly selectable (selector provided)
+  const abstractThemes = (() => {
+    const declared = new Set(
+      Object.keys((packIn as any)?.meta?.selectors ?? {}),
+    );
+    const parentSet = new Set<string>();
+
+    const metaE: Record<string, string[]> =
+      (packIn as any)?.meta?.extends ?? {};
+    for (const parents of Object.values(metaE))
+      for (const p of parents ?? []) parentSet.add(p);
+
+    const themesObj: Record<string, any> = (pack as any)?.themes ?? {};
+    for (const t of Object.keys(themesObj)) {
+      for (const p of themesObj[t]?.extends ?? []) parentSet.add(p);
+    }
+
+    const abs = new Set<string>();
+    for (const t of themeNames) {
+      if (t === defaultTheme) continue;
+      if (parentSet.has(t) && !declared.has(t)) abs.add(t);
+    }
+    return abs;
+  })();
+
+  function isAbstractTheme(t: string) {
+    return abstractThemes.has(t);
+  }
+
+  function runtimeThemes(): ThemeName[] {
+    // themes usable at runtime (exclude abstract like "base")
+    return themeNames.filter((t) => !isAbstractTheme(t)) as any;
+  }
+
+  function selector(t: ThemeName) {
+    return (
+      selectors[t] ?? (t === "light" ? ":root" : `:root[data-theme="${t}"]`)
+    );
+  }
+
+  function cssVars(t: ThemeName): CssVarMap {
+    return (cssVarsByTheme[t] ?? {}) as any;
+  }
+
+  function cssVarsDiff(
+    t: ThemeName,
+    against: ThemeName = defaultTheme,
+  ): CssVarMap {
+    return diffVars(cssVars(t), cssVars(against));
+  }
+
+  function emitVars(
+    b: any,
+    t: ThemeName,
+    vars: CssVarMap,
+    layer: LayerName = "settings",
+  ) {
+    if (!vars || !Object.keys(vars).length) return;
+
+    const sel = selector(t);
+    if (isAtMedia(sel)) {
+      const inner = `:root{${Object.entries(vars)
+        .map(([k, v]) => `${k}:${v};`)
+        .join("")}}`;
+      b[layer](`${sel}{${inner}}`);
+    } else {
+      b[layer](sel, vars);
+    }
+  }
+
+  // Return object + attach helpers
+  const loaded: any = {
     meta: {
       name: metaIn.name ?? "theme",
       version: metaIn.version ?? "0.0.0",
@@ -296,17 +376,31 @@ export function loadTheme(
     raw: packIn,
     tokensByTheme: tokensByTheme as any,
     cssVarsByTheme: cssVarsByTheme as any,
+
+    // core accessors
     get,
     getResolved,
     varName,
     varRef,
     group,
     flatGroup,
+
+    // public DX
     resolvePublicPath,
     varNamePublic,
     varRefPublic,
     view,
-  };
+
+    // runtime helpers
+    isAbstractTheme,
+    runtimeThemes,
+    selector,
+    cssVars,
+    cssVarsDiff,
+    emitVars,
+  } satisfies LoadedTheme;
+
+  return loaded;
 }
 
 /* ---------------- helpers ---------------- */
@@ -329,8 +423,7 @@ function deepMerge<T extends Record<string, any>>(...objs: T[]): T {
 }
 
 /**
- * Resolves theme inheritance order:
- * returns array with parents first, then the theme itself.
+ * Resolve theme order (parents first, theme last), cycle-protected.
  */
 function resolveThemeOrder(
   theme: string,
@@ -349,9 +442,8 @@ function resolveThemeOrder(
 
     const parents = getParents(t) ?? [];
     for (const p of parents) {
-      if (!allThemes.has(p)) {
+      if (!allThemes.has(p))
         throw new Error(`Theme "${t}" extends unknown theme "${p}".`);
-      }
       dfs(p);
     }
 
@@ -387,7 +479,7 @@ function resolveRefs(
 ): string {
   const re = /\{([a-zA-Z0-9_.-]+)\}/g;
   return value.replace(re, (m, refPath) => {
-    if (!(refPath in flatPath)) return m; // leave unresolved
+    if (!(refPath in flatPath)) return m;
     return refToVar(refPath);
   });
 }
@@ -395,22 +487,18 @@ function resolveRefs(
 function pathToCssVar(pathKey: string, naming: VarNaming): `--${string}` {
   let path = pathKey;
 
-  // strip prefixes
   for (const p of naming.stripPrefixes) {
     if (path === p) path = "";
     else if (path.startsWith(p + ".")) path = path.slice(p.length + 1);
   }
 
-  // rewrite on dot-path
   for (const r of naming.rewrite) {
     const re = new RegExp(r.from);
     path = path.replace(re, r.to);
   }
 
   const chunks = path.split(".").filter(Boolean).map(kebab);
-  const name = chunks.join("-");
-
-  return `--${name}` as any;
+  return `--${chunks.join("-")}` as any;
 }
 
 function kebab(s: string) {
