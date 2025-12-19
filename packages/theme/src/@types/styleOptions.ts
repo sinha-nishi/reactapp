@@ -123,6 +123,16 @@ export type LoadedTheme = {
     baseTheme?: ThemeName,
   ) => Record<`--${string}`, TokenValue>;
   emitVars: (b: any, t: ThemeName, vars: CssVarMap, layer: LayerName) => void;
+  token: (
+    publicPath: string,
+    themeName?: ThemeName,
+  ) => {
+    publicPath: string;
+    path: string;
+    var: `--${string}`;
+    ref: string;
+  };
+  value: (publicPath: string, themeName?: ThemeName) => TokenValue | undefined;
 };
 
 export type UtilitiesOptions = {

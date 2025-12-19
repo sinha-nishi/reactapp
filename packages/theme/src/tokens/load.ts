@@ -292,6 +292,46 @@ export function loadTheme(
     return `var(${varNamePublic(publicPath, theme)})`;
   }
 
+  /**
+   * token(publicPath):
+   * Returns a small descriptor that plugin authors/components can use
+   * without caring about primitive/semantic/extends/diffs.
+   *
+   * Example:
+   *   theme.token("colors.primary")
+   *   -> { publicPath:"colors.primary", path:"semantic.color.primary", var:"--color-primary", ref:"var(--color-primary)" }
+   */
+  function tokenFn(publicPath: string, themeName: ThemeName = defaultTheme) {
+    const candidate = resolvePublicPath(publicPath);
+    const internal = pickExistingPath(themeName, candidate);
+
+    const v = pathToCssVar(internal, varNaming);
+    return {
+      publicPath,
+      path: internal,
+      var: v as `--${string}`,
+      ref: `var(${v})`,
+    };
+  }
+
+  /**
+   * value(publicPath):
+   * Returns the resolved token value for a theme.
+   * - If the token is a primitive (like a hex), returns the literal.
+   * - If the token references another token, returns "var(--...)" (already rewritten).
+   *
+   * Example:
+   *   semantic.color.bg = "{primitive.color.slate.1}"
+   *   theme.value("colors.bg") -> "var(--color-slate-1)"
+   */
+  function valueFn(
+    publicPath: string,
+    themeName: ThemeName = defaultTheme,
+  ): TokenValue | undefined {
+    const t = tokenFn(publicPath, themeName);
+    return getResolved(themeName, t.path);
+  }
+
   // -------- runtime helpers baked into theme ----------
   // abstract themes: parents in inheritance graph, unless explicitly selectable (selector provided)
   const abstractThemes = (() => {
@@ -390,6 +430,8 @@ export function loadTheme(
     varNamePublic,
     varRefPublic,
     view,
+    token: tokenFn,
+    value: valueFn,
 
     // runtime helpers
     isAbstractTheme,
