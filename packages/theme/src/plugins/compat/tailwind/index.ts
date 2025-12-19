@@ -20,7 +20,7 @@ export interface TailwindCompatOptions {
 export const TailwindCompat = (
   opts: TailwindCompatOptions = {},
 ): ClassEnginePlugin => {
-  const theme = { ...defaultTokens, ...(opts.theme ?? {}) };
+  const theme = { ...(defaultTokens.primitive as any), ...(opts.theme ?? {}) };
   const screens = opts.screens ?? {
     xs: "360px",
     sm: "640px",
@@ -45,7 +45,9 @@ export const TailwindCompat = (
         string,
         string?,
       ];
-      const hex = (theme.colors as Record<string, string>)[base] ?? base;
+      // TODO: fix reference to light view
+      // const hex = (theme.view("light").colors as Record<string, string>)[base] ?? base; 
+      const hex = "#FFFFFF"
       if (!a) return hex;
       // convert hex to rgba with alpha percentage (00..100 or 0..1)
       const alphaVal = a.includes("%")

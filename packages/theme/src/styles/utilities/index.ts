@@ -46,7 +46,9 @@ export const utilitiesEngine = (opts: UtilitiesOptions): ClassEnginePlugin => {
         string,
         string?,
       ];
-      const hex = (theme.colors as Record<string, string>)[base] ?? base;
+      // TODO: fix reference to light view
+      // const hex = (theme.view("light").colors as Record<string, string>)[base] ?? base; 
+      const hex = "#FFFFFF"
       if (!a) return hex;
       // convert hex to rgba with alpha percentage (00..100 or 0..1)
       const alphaVal = a.includes("%")
