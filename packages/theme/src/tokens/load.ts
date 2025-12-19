@@ -5,8 +5,12 @@ import {
   TokenTree,
   TokenValue,
 } from "@/@types";
+import { defaultTokens } from "./defaultTokens";
 
-export function loadTheme(pack: TokenPack): LoadedTheme {
+export function loadTheme(
+  pack: TokenPack,
+  options?: { defaults?: TokenTree },
+): LoadedTheme {
   const themeNames = Object.keys(pack.themes ?? {});
   if (!themeNames.length)
     throw new Error("TokenPack.themes must contain at least one theme.");
@@ -40,9 +44,24 @@ export function loadTheme(pack: TokenPack): LoadedTheme {
   // build per-theme flatten+resolve maps
   const flatPathByTheme: Record<string, Record<string, TokenValue>> = {};
 
+  const allThemes = new Set(themeNames);
+  const extendsMap = metaIn.extends ?? {};
+  const defaultsTree = deepMerge(
+    options?.defaults ?? {},
+    metaIn.defaults ?? {},
+    defaultTokens,
+  );
+
   for (const theme of themeNames) {
-    const tree = pack.themes[theme]?.tokens ?? {};
-    const flatPath = flattenToPathMap(tree);
+    const order = resolveThemeOrder(theme, extendsMap, allThemes);
+
+    // Merge: defaults -> parents -> theme
+    const mergedTokens = deepMerge(
+      defaultsTree,
+      ...order.map((t) => pack.themes[t]?.tokens ?? {}),
+    ) as TokenTree;
+
+    const flatPath = flattenToPathMap(mergedTokens);
     flatPathByTheme[theme] = flatPath;
   }
 
@@ -187,11 +206,7 @@ export function loadTheme(pack: TokenPack): LoadedTheme {
 
   function varNamePublic(publicPath: string): `--${string}` {
     const candidate = resolvePublicPath(publicPath);
-    const internal = pickExistingPath(
-      defaultTheme,
-      candidate,
-      flatPathByTheme,
-    );
+    const internal = pickExistingPath(defaultTheme, candidate, flatPathByTheme);
     return pathToCssVar(internal, varNaming);
   }
 
@@ -225,6 +240,54 @@ export function loadTheme(pack: TokenPack): LoadedTheme {
 }
 
 /* ---------------- helpers ---------------- */
+
+function isPlainObject(v: any) {
+  return v && typeof v === "object" && !Array.isArray(v);
+}
+
+function deepMerge<T extends any>(...objs: T[]): T {
+  const out: any = {};
+  for (const obj of objs) {
+    if (!isPlainObject(obj)) continue;
+    for (const [k, v] of Object.entries(obj as Record<string, any>)) {
+      if (isPlainObject(v) && isPlainObject(out[k]))
+        out[k] = deepMerge(out[k], v);
+      else out[k] = v;
+    }
+  }
+  return out;
+}
+
+function resolveThemeOrder(
+  theme: string,
+  extendsMap: Record<string, string[]>,
+  allThemes: Set<string>,
+) {
+  const visited = new Set<string>();
+  const stack = new Set<string>();
+  const order: string[] = [];
+
+  function dfs(t: string) {
+    if (visited.has(t)) return;
+    if (stack.has(t))
+      throw new Error(`Theme inheritance cycle detected at "${t}".`);
+    stack.add(t);
+
+    const parents = extendsMap[t] ?? [];
+    for (const p of parents) {
+      if (!allThemes.has(p))
+        throw new Error(`Theme "${t}" extends unknown theme "${p}".`);
+      dfs(p);
+    }
+
+    stack.delete(t);
+    visited.add(t);
+    order.push(t); // parents first, theme last
+  }
+
+  dfs(theme);
+  return order;
+}
 
 function flattenToPathMap(
   tree: TokenTree,

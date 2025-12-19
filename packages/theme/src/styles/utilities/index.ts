@@ -1,6 +1,6 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
 import type { BuilderOptions, UtilitiesOptions } from "../../@types";
-import { defaultScales } from "../../tokens";
+import { defaultTokens } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 import { buildUtilities } from "./build";
 import { ClassEngine } from "../../core/runtime/ClassEngine";
@@ -25,7 +25,7 @@ export function withTheme<B extends CssBuilder>(
 }
 
 export const utilitiesEngine = (opts: UtilitiesOptions): ClassEnginePlugin => {
-  const theme = { ...defaultScales, ...(opts.theme ?? {}) };
+  const theme = { ...defaultTokens, ...(opts.theme ?? {}) };
 
   const screens = opts.screens ?? {
     xs: "360px",
@@ -81,5 +81,3 @@ export const utilitiesPlugin =
   (opts: UtilitiesOptions = {}): BuilderPlugin =>
   (b: CssBuilder) =>
     withTheme(b, opts);
-
-  

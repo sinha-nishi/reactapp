@@ -50,6 +50,12 @@ export type TokenPack = {
       stripPrefixes?: string[]; // e.g. ["tokens","primitive","semantic","custom"]
       rewrite?: Array<{ from: string; to: string }>; // regex replacements on the flattened path
     };
+
+    // inheritance
+    extends?: Record<ThemeName, ThemeName[]>; // e.g. { light:["base"], dark:["base","light"] }
+
+    // global defaults (applies to all themes)
+    defaults?: TokenTree; // tokens merged into all themes first
   };
 
   themes: Record<

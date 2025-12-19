@@ -6,11 +6,11 @@ import type {
   ClassEnginePlugin,
   BuilderContext,
 } from "../../../@types";
-import { defaultScales } from "../../../tokens";
+import { defaultTokens } from "../../../tokens";
 
 export interface TailwindCompatOptions {
   // allow custom user overrides from pkv.config.ts
-  theme?: Partial<typeof defaultScales>;
+  theme?: Partial<typeof defaultTokens>;
   screens?: Record<string, string>; // e.g. { xs:"360px", sm:"640px", md:"768px", ... }
   important?: boolean | string; // true => global !important, or selector prefix like "#app"
   enableArbitraryValues?: boolean; // default true
@@ -20,7 +20,7 @@ export interface TailwindCompatOptions {
 export const TailwindCompat = (
   opts: TailwindCompatOptions = {},
 ): ClassEnginePlugin => {
-  const theme = { ...defaultScales, ...(opts.theme ?? {}) };
+  const theme = { ...defaultTokens, ...(opts.theme ?? {}) };
   const screens = opts.screens ?? {
     xs: "360px",
     sm: "640px",

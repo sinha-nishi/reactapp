@@ -1,4 +1,4 @@
-export * from "./scales";
+export * from "./defaultTokens";
 
 import radixPack from "./radix.json";
 import { loadTheme } from "./load";
