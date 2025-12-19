@@ -8,19 +8,33 @@ import { objectsPlugin } from "../styles/objects";
 import { componentsPlugin } from "../styles/components";
 import { utilitiesPlugin } from "../styles/utilities";
 import { compatTailwindPlugin } from "../plugins/compat";
-import { presetCollectorPlugin } from "@/plugins";
+import { presetCollectorPlugin } from "../plugins";
 
 export function createThemeBuilder(opts?: BuilderOptions) {
   const builder = new CssBuilder({ prefix: opts?.prefix || "" });
-  opts?.layers?.settings === false ? null : builder.use(settingsPlugin(opts));
+
+  // settings layer
+  opts?.layers?.settings !== false &&
+    builder.use(
+      settingsPlugin(
+        opts?.layers?.settings === true ? undefined : opts?.layers?.settings,
+      ),
+    );
   opts?.layers?.tools === false ? null : builder.use(toolsPlugin(opts));
   opts?.layers?.generic === false ? null : builder.use(genericPlugin(opts));
-  opts?.layers?.elemets === false ? null : builder.use(elementsPlugin(opts));
+  opts?.layers?.elements === false ? null : builder.use(elementsPlugin(opts));
   opts?.layers?.objects === false ? null : builder.use(objectsPlugin(opts));
-  opts?.layers?.components === false
-    ? null
-    : builder.use(componentsPlugin(opts));
-  opts?.layers?.utilites === false ? null : builder.use(utilitiesPlugin(opts));
+
+  // components layer
+  opts?.layers?.components !== false && builder.use(componentsPlugin(opts));
+
+  // utilities layer
+  opts?.layers?.utilities !== false &&
+    builder.use(
+      utilitiesPlugin(
+        opts?.layers?.utilities === true ? undefined : opts?.layers?.utilities,
+      ),
+    );
 
   if ((opts as any)?.compat?.tailwind) {
     console.log(

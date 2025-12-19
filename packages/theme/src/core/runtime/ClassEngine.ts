@@ -1,4 +1,4 @@
-import type { CSSObject, ClassEnginePlugin, UtilityContext } from "@/@types";
+import type { CSSObject, ClassEnginePlugin, BuilderContext } from "@/@types";
 import { mergeRules } from "../../utils/rules";
 import { stringify } from "./stringify";
 
@@ -15,7 +15,7 @@ export class ClassEngine {
     }
   }
 
-  enumerate(ctx: UtilityContext, opts?: { families?: string[] }): string[] {
+  enumerate(ctx: BuilderContext, opts?: { families?: string[] }): string[] {
     const out: string[] = [];
     for (const p of this.plugins) {
       out.push(...p.enumerate(ctx, opts));

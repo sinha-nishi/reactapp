@@ -1,4 +1,4 @@
-import { UtilityContext } from "@/@types";
+import { BuilderContext } from "@/@types";
 import { UtilityRule } from "@/styles/utilities/types";
 
 type UtilityRuleWithoutKind = Omit<UtilityRule, "kind">;
@@ -38,7 +38,7 @@ export class RuleRegistry {
     this.finalized = true;
   }
 
-  enumerateAll(ctx: UtilityContext, opts: EnumerateOptions = {}): string[] {
+  enumerateAll(ctx: BuilderContext, opts: EnumerateOptions = {}): string[] {
     const allow = opts.families?.length ? new Set(opts.families) : null;
     const out: string[] = [];
 

@@ -1,4 +1,8 @@
+export * from "./styleOptions";
+export * from "./CSSProperties";
+
 export type Theme = Record<string, any>;
+export type ScreenOptions = Record<string, string>;
 
 export type CSSObject = {
   selector: string; // ".md\\:hover\\:bg-red-500"
@@ -19,7 +23,7 @@ export type VariantBuilder = (
   decls: CSSObject[],
 ) => CSSObject[];
 
-export interface UtilityContext {
+export interface BuilderContext {
   theme: Record<string, any>;
   screens: Record<string, string>;
   important: boolean | string;
@@ -31,5 +35,5 @@ export interface ClassEnginePlugin {
   variants: VariantBuilder;
   match: (className: string) => MatchResult | false;
   render: (match: MatchResult, meta: any) => CSSObject[];
-  enumerate: (ctx: UtilityContext, opts?: { families?: string[] }) => string[];
+  enumerate: (ctx: BuilderContext, opts?: { families?: string[] }) => string[];
 }

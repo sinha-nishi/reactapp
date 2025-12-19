@@ -17,8 +17,12 @@ type CSSPropertiesBase = {
   // Add more properties as needed
 };
 
+type SemanticCSSProperties = {
+  [key: `--${string}`]: string | number;
+}
+
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
 };
 
-export type CSSProperties = Partial<CSSPropertiesBase>;
+export type CSSProperties = Partial<CSSPropertiesBase> & SemanticCSSProperties;

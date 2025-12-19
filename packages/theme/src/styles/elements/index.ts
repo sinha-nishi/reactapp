@@ -1,12 +1,8 @@
+import { BuilderOptions } from "@/@types";
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
 
-export type ThemeOptions = {
-  tokens?: Partial<Record<string, string>>;
-  utilities?: { spacingScale?: number[] };
-};
-
 export const elementsPlugin =
-  (opts: ThemeOptions = {}): BuilderPlugin =>
+  (opts?: BuilderOptions): BuilderPlugin =>
   (b: CssBuilder) => {
     // 03-generic: reset/normalize (minimal)
     b.elements(

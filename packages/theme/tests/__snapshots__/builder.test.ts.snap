@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`createThemeBuilder > create basic css 1`] = `
+"@layer settings,tools,generic,elements,layout,components,utilities;
+:root{
+ --color-primary-500:#4f46e5;
+ --color-border:#e5e7eb;
+ --radius-md:10px;
+ --space-2:0.5rem;
+ --space-3:0.75rem;
+ --font-sans:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+}
+@layer tools{/* settings */}
+@layer generic{*,*::before,*::after {
+      box-sizing:border-box
+    }
+html,body {
+      padding:0;margin:0
+    }}
+@layer elements{h1 {
+      box-sizing:border-box
+    }
+input,button,textarea,select {
+      box-sizing:border-box
+    }}
+@layer layout{grid,fieldset {
+      box-sizing:border-box
+    }}
+@layer components{card {
+      box-sizing:border-box
+    }}"
+`;

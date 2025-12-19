@@ -2,7 +2,7 @@ import type {
   CSSObject,
   MatchResult,
   Theme,
-  UtilityContext,
+  BuilderContext,
 } from "../../../@types";
 import type { UtilityEngine } from "../../../styles/utilities/types";
 
@@ -20,7 +20,7 @@ function styleFromScale(
   m: any,
   prop: string | string[],
   scale: Record<string, string>,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   let val = scale[m.key];
@@ -320,7 +320,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
 
   function applyFilterVar(
     meta: any,
-    ctx: UtilityContext,
+    ctx: BuilderContext,
     vars: Record<string, string>,
   ) {
     return finalize(
@@ -450,7 +450,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       return false;
     },
 
-    render(m: any, meta, ctx: UtilityContext): CSSObject[] {
+    render(m: any, meta, ctx: BuilderContext): CSSObject[] {
       // each rule apply() yields CSSObject(s) with {selector, decls, media?}
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];
@@ -464,7 +464,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
 interface UtilityRule {
   name: string;
   match: (cls: string) => any | false;
-  apply: (m: any, meta: any, ctx: UtilityContext) => CSSObject | CSSObject[];
+  apply: (m: any, meta: any, ctx: BuilderContext) => CSSObject | CSSObject[];
 }
 
 function stripPrefix(cls: string, prefix: string) {
@@ -501,7 +501,7 @@ function withInt(cls: string, prefix: string) {
 function style(
   prop: string | string[],
   value: string,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   const decls = Array.isArray(prop)
@@ -511,14 +511,14 @@ function style(
 }
 function styleMany(
   obj: Record<string, string>,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   return finalize(obj, ctx, meta);
 }
 function finalize(
   decls: Record<string, string>,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   // handle important override + negative value

@@ -1,11 +1,11 @@
 import { writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { createThemeBuilder, compatPlugin, compatTailwindPlugin } from "../src";
+import { createThemeBuilder, compatTailwindPlugin } from "../src";
 
 const outDir = resolve(process.cwd(), "dist");
 mkdirSync(outDir, { recursive: true });
 
-const builder = createThemeBuilder()
+const builder = createThemeBuilder({})
   // .use(compatPlugin({ tailwind: true }))
   .apply(
     compatTailwindPlugin({

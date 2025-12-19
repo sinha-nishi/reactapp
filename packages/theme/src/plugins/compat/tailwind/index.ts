@@ -4,7 +4,7 @@ import { variants } from "../../../utils/variants";
 import type {
   CSSObject,
   ClassEnginePlugin,
-  UtilityContext,
+  BuilderContext,
 } from "../../../@types";
 import { defaultScales } from "../../../tokens";
 
@@ -35,7 +35,7 @@ export const TailwindCompat = (
     prefix: opts.prefix ?? "",
   });
 
-  const ctx: UtilityContext = {
+  const ctx: BuilderContext = {
     theme,
     screens,
     important: opts.important ?? false,

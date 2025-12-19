@@ -1,5 +1,8 @@
+import { BuilderContext, ScreenOptions, Theme } from "../../@types";
 import { CSSProperties } from "../../@types/CSSProperties";
 import { Tokens } from "../../@types/styleOptions";
+import { packs } from "../../tokens";
+import { hexToRgb } from "../../utils/colors";
 export type LayerName =
   | "settings"
   | "tools"
@@ -60,12 +63,17 @@ function styleObjToString(style: CSSProperties): string {
 }
 
 type Rule = { selector?: string; css: string; layer: LayerName };
+
 interface Options {
   prefix?: string;
+  theme?: Theme;
+  screens?: ScreenOptions;
+  important?: boolean;
   layerOrder?: LayerName[];
 }
 
 export class CssBuilder {
+  readonly ctx: BuilderContext;
   private tokens: Tokens = {};
   private rules: Rule[] = [];
   private usedKeys = new Set<string>();
@@ -74,7 +82,43 @@ export class CssBuilder {
   private _beforeSerialize: Array<() => void> = [];
 
   constructor(options?: Options) {
+    // const theme = { ...defaultScales, ...(options?.theme ?? {}) };
+    const theme = packs.radix;
+    const screens = options?.screens ?? {
+      xs: "360px",
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    };
+    this.ctx = {
+      theme,
+      screens,
+      important: options?.important ?? false,
+      resolveColor(nameOrHex: string, alpha?: string) {
+        // accepts palette key "red-500" or hex/rgb; supports "/<alpha>" notation
+        const [base, a] = (
+          alpha ? [nameOrHex, alpha] : nameOrHex.split("/")
+        ) as [string, string?];
+        const hex =
+          (theme.view("light").colors as Record<string, string>)[base] ?? base;
+        if (!a) return hex;
+        // convert hex to rgba with alpha percentage (00..100 or 0..1)
+        const alphaVal = a.includes("%")
+          ? parseFloat(a) / 100
+          : parseFloat(a) > 1
+            ? parseFloat(a) / 100
+            : parseFloat(a);
+        const { r, g, b } = hexToRgb(hex);
+        return `rgba(${r}, ${g}, ${b}, ${Number.isFinite(alphaVal) ? alphaVal : 1})`;
+      },
+    };
+
     this.opts = {
+      theme,
+      screens,
+      important: options?.important ?? false,
       prefix: options?.prefix ?? "",
       layerOrder: options?.layerOrder ?? [
         "settings",

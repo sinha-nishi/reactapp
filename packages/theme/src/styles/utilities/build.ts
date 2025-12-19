@@ -1,5 +1,5 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
-import { CSSObject, MatchResult, UtilityContext } from "../../@types";
+import { CSSObject, MatchResult, BuilderContext } from "../../@types";
 import type { UtilityEngine } from "./types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
@@ -102,7 +102,7 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       return false;
     },
 
-    render(m: any, meta, ctx: UtilityContext): CSSObject[] {
+    render(m: any, meta, ctx: BuilderContext): CSSObject[] {
       if (!m || !m.rule || typeof m.rule.apply !== "function") return [];
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];

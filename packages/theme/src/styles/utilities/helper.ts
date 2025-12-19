@@ -1,4 +1,4 @@
-import { CSSObject, Theme, UtilityContext } from "@/@types";
+import { CSSObject, Theme, BuilderContext } from "@/@types";
 import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 
 export function stripPrefix(cls: string, prefix: string) {
@@ -29,7 +29,7 @@ export function withColorKey(
 export function style(
   prop: string | string[],
   value: string,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   const decls = Array.isArray(prop)
@@ -40,7 +40,7 @@ export function style(
 
 export function styleMany(
   obj: Record<string, string>,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   return finalize(obj, ctx, meta);
@@ -48,7 +48,7 @@ export function styleMany(
 
 function finalize(
   decls: Record<string, string>,
-  ctx: UtilityContext,
+  ctx: BuilderContext,
   meta: any,
 ): CSSObject {
   const negative = meta.negative;
@@ -115,7 +115,7 @@ export function util(reg: RuleRegistry, theme: Theme) {
     m: any,
     prop: string | string[],
     scale: Record<string, string>,
-    ctx: UtilityContext,
+    ctx: BuilderContext,
     meta: any,
   ): CSSObject {
     let val = scale[m.key];
