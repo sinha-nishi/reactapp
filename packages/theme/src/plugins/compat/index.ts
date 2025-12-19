@@ -354,7 +354,6 @@ export function withTailwind<B extends CssBuilder>(
         .map((s) => s.trim())
         .filter(Boolean)
         .forEach((c) => queue.add(c));
-      console.log("added classes to the tailwind queue: ", queue);
       return b;
     },
     clear: () => {
@@ -366,11 +365,9 @@ export function withTailwind<B extends CssBuilder>(
 
   // Late injection into the "utilities" layer
   builder.onBeforeSerialize(() => {
-    console.log("serialising the tailwind classes:: ", queue.size, queue);
     if (queue.size === 0) return;
     const cssObjects = engine.compile(Array.from(queue));
     const css = stringify(cssObjects);
-    console.log("classes in css form: ", css);
     if (css && css.trim()) builder.utilities(css, key);
   });
 

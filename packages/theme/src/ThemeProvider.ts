@@ -1,8 +1,12 @@
 import type { LoadedTheme, ThemeName } from "./@types";
+import { createThemeView } from "./tokens/createThemeView";
+
+type Listener = (theme: ThemeName) => void;
 
 export class ThemeProvider {
   private theme: LoadedTheme;
   private current: ThemeName;
+  private listeners = new Set<Listener>();
 
   constructor(theme: LoadedTheme, initial?: ThemeName) {
     this.theme = theme;
@@ -15,40 +19,73 @@ export class ThemeProvider {
 
   setThemeName(name: ThemeName) {
     if (!this.theme.themeNames.includes(name)) {
-      throw new Error(`Unknown theme "${name}". Known: ${this.theme.themeNames.join(", ")}`);
+      throw new Error(
+        `Unknown theme "${name}". Known: ${this.theme.themeNames.join(", ")}`,
+      );
     }
+    if (this.current === name) return;
     this.current = name;
+    for (const l of this.listeners) l(this.current);
   }
 
-  /** Apply theme to DOM via data-theme (works with our default selectors) */
+  subscribe(fn: Listener) {
+    this.listeners.add(fn);
+    return () => this.listeners.delete(fn);
+  }
+
   applyToDocument(doc: Document = document, attr: string = "data-theme") {
     doc.documentElement.setAttribute(attr, this.current);
   }
 
-  /** Read token from pack (raw) */
   get(path: string) {
     return this.theme.get(this.current, path);
   }
 
-  /** Read resolved token (references -> var(--...)) */
   getResolved(path: string) {
     return this.theme.getResolved(this.current, path);
   }
 
-  /** CSS variable name for a token path */
   varName(path: string) {
     return this.theme.varName(path);
   }
 
-  /** CSS var reference "var(--...)" */
   varRef(path: string) {
     return this.theme.varRef(path);
   }
 
-  /** Read the *computed* CSS value from DOM (runtime actual value) */
   computed(path: string, doc: Document = document) {
     const name = this.varName(path);
-    const styles = getComputedStyle(doc.documentElement);
-    return styles.getPropertyValue(name).trim();
+    return getComputedStyle(doc.documentElement).getPropertyValue(name).trim();
+  }
+
+  /** expose the loaded theme if needed */
+  getLoadedTheme() {
+    return this.theme;
+  }
+
+  /**
+   * usage: 
+   * 
+   * ```
+   * const view = themeProvider.getThemeView();
+   * view.vars.colors.primary      // Proxy -> stringify gives var(--color-primary)
+   * view.val.colors.primary       // computed actual value
+   * view.varsFn("colors.primary") // direct
+   * ```
+   * @param doc 
+   * @returns 
+   */
+  getThemeView(doc: Document = document) {
+    const loaded = this.getLoadedTheme();
+    return createThemeView({
+      loaded,
+      getThemeName: () => this.getThemeName(),
+      computed: (publicPath) => this.computedPublic(publicPath, doc),
+    });
+  }
+
+  computedPublic(publicPath: string, doc: Document = document) {
+    const name = this.theme.varNamePublic(publicPath);
+    return getComputedStyle(doc.documentElement).getPropertyValue(name).trim();
   }
 }

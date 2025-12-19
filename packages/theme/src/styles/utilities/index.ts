@@ -18,7 +18,6 @@ export function withTheme<B extends CssBuilder>(
     const presetClasses = engine.enumerate(builder.ctx, {});
     const cssObjects = engine.compile(presetClasses);
     const css = ClassEngine.toCss(cssObjects);
-    console.log("classes in css form: ", css);
     if (css && css.trim()) builder.utilities(css, "key");
   });
 

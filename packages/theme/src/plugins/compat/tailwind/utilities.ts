@@ -425,7 +425,6 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
     match(className: string): MatchResult | false {
       const cls = stripPrefix(className, opts.prefix);
       // gather variant tokens (md:hover:...) => ["md","hover"]
-      console.log("matching prefix class :: ", cls);
       const tokens: string[] = [];
       let base = cls;
       while (re.variantToken.test(base)) {
@@ -441,12 +440,10 @@ export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
       for (const rule of rules) {
         const m = rule.match(base);
         if (m) {
-          console.log("matching rule base :: ", base, m);
           (m as any).rule = rule;
           return { ...m, tokens, important, negative, raw: className };
         }
       }
-      console.log("no matching rule class :: ", className);
       return false;
     },
 

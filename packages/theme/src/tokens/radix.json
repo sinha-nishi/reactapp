@@ -63,6 +63,9 @@
             "50": "50"
           },
           "color": {
+            "black": "{primitive.color.slate.12}",
+            "white": "#ffffff",
+            "accent": "{primitive.color.blue.9}",
             "slate": {
               "1": "#fcfcfd",
               "2": "#f9f9fb",

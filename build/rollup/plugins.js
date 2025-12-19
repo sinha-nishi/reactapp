@@ -1,5 +1,6 @@
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
 import replace from "@rollup/plugin-replace";
 import typescript from "@rollup/plugin-typescript";
 import terser from "@rollup/plugin-terser";
@@ -17,6 +18,7 @@ export const basePlugins = (options = {}) => [
     exportConditions: ["browser", "module", "default"],
   }),
   commonjs(),
+  json(),
   postcss(
     options?.plugins?.postcss || {
       extract: false,
@@ -37,12 +39,15 @@ export const replacePlugin = () =>
 
 export const tscPlugin = ({ declaration = false, ...opts } = {}) =>
   typescript(
-    extend({
-      tsconfig: "./tsconfig.build.json",
-      // ensure declaration emit in your tsconfig, not here
-      declaration,
-      declarationDir: declaration ? "./dist/esm/types" : undefined,
-    }, opts),
+    extend(
+      {
+        tsconfig: "./tsconfig.build.json",
+        // ensure declaration emit in your tsconfig, not here
+        declaration,
+        declarationDir: declaration ? "./dist/esm/types" : undefined,
+      },
+      opts,
+    ),
   );
 
 // Minified variant
