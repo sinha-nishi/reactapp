@@ -66,6 +66,8 @@ type Rule = { selector?: string; css: string; layer: LayerName };
 
 interface Options {
   prefix?: string;
+  classPrefix?: string;
+  classPrefixLayers?: LayerName[];
   theme?: Theme;
   screens?: ScreenOptions;
   important?: boolean;
@@ -120,6 +122,10 @@ export class CssBuilder {
       screens,
       important: options?.important ?? false,
       prefix: options?.prefix ?? "",
+      classPrefix: options?.classPrefix ?? "",
+      classPrefixLayers:
+        options?.classPrefixLayers ??
+        (["layout", "components", "utilities"] as LayerName[]),
       layerOrder: options?.layerOrder ?? [
         "settings",
         "tools",
@@ -268,6 +274,22 @@ export class CssBuilder {
     return { ...this.tokens };
   }
 
+  private prefixClasses(css: string) {
+    const pref = this.opts.classPrefix;
+    if (!pref) return css;
+
+    // only apply to selected layers
+    // (we check layer outside before calling)
+    const escaped = pref.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // Prefix .class but do not double-prefix if already prefixed.
+    // Works for .stack, .grid--2, .media__body etc.
+    return css.replace(
+      new RegExp(`(^|[\\s>+~,(])\\.(?!${escaped})([A-Za-z_][\\w-]*)`, "g"),
+      `$1.${pref}$2`,
+    );
+  }
+
   toString({
     minify = true,
     legacy = false,
@@ -286,14 +308,23 @@ export class CssBuilder {
       )
       .join(minify ? "" : "\n ");
     const root = `:root{${minify ? rootVars : `\n ${rootVars}\n`}}`;
+    this.settings(root);
 
     const byLayer: Record<string, string[]> = {};
     for (const name of this.opts.layerOrder) byLayer[name] = [];
-    for (const r of this.rules) byLayer[r.layer].push(r.css);
+    for (const r of this.rules) {
+      const shouldPrefix =
+        !!this.opts.classPrefix &&
+        (this.opts.classPrefixLayers?.includes(r.layer) ?? false);
+
+      byLayer[r.layer].push(shouldPrefix ? this.prefixClasses(r.css) : r.css);
+    }
 
     if (legacy) {
       // Flatten in ITCSS order, no @layer
-      const chunks = [root];
+      const chunks = [
+        /*root*/
+      ];
       for (const name of this.opts.layerOrder) {
         if (!byLayer[name].length) continue;
         const header = minify ? "" : `/* ${name} */\n`;
@@ -304,7 +335,7 @@ export class CssBuilder {
 
     // Modern build with cascade layers
     const layerDecl = `@layer ${this.opts.prefix ? `${this.opts.prefix}.` : ""}${this.opts.layerOrder.join(`,${this.opts.prefix ? `${this.opts.prefix}.` : ""}`)};`;
-    const chunks = [layerDecl, root];
+    const chunks = [layerDecl /*root*/];
     for (const name of this.opts.layerOrder) {
       if (!byLayer[name].length) continue;
       chunks.push(
