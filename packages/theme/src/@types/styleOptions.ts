@@ -158,12 +158,37 @@ export type LayerOptions = {
   utilities?: boolean | UtilitiesOptions;
 };
 
+export type AlertStyleOptions = {
+  focusRing?: boolean;
+};
+
+export type BadgeStyleOptions = {
+  focusRing?: boolean;
+};
+
+export type ButtonStyleOptions = {
+  focusRing?: boolean;
+};
+
+export type CardStyleOptions = {};
+
+export type InputStyleOptions = {
+  focusRing?: boolean;
+};
+
 export type BuilderOptions = {
   prefix?: string;
   layers?: LayerOptions;
   theme?: string;
   tokens?: Tokens;
   utilities?: { spacingScale?: number[] };
+  components?: {
+    alert: boolean | AlertStyleOptions;
+    badge: boolean | BadgeStyleOptions;
+    button: boolean | ButtonStyleOptions;
+    card: boolean | CardStyleOptions;
+    input: boolean | InputStyleOptions;
+  };
   compat?: {
     tailwind?: TailwindCompatOptions;
   };
