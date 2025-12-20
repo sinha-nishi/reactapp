@@ -227,6 +227,7 @@ export function loadTheme(
    */
 
   // -------- public DX resolver ----------
+  // -------- public DX resolver ----------
   function resolvePublicPath(publicPath: string) {
     const p = publicPath.replace(/^\./, "").trim();
     if (!p) return p;
@@ -235,36 +236,133 @@ export function loadTheme(
     const rest = restParts.join(".");
     if (!ns) return p;
 
+    // helper: join candidates, pickExistingPath() will choose the first that exists
+    const or = (...c: string[]) => c.filter(Boolean).join("||");
+
     switch (ns) {
       case "colors":
-      case "color":
-        return rest
-          ? `semantic.color.${rest}||primitive.color.${rest}`
-          : `semantic.color||primitive.color`;
+      case "color": {
+        // Option A: canonical internal keys are semantic.color + primitive.color (Radix)
+        // Back-compat aliases used by older plugins:
+        // - colors.background -> colors.bg
+        // - colors.textMuted  -> colors.muted
+        // - colors.link       -> colors.primary
+        const alias: Record<string, string> = {
+          background: "bg",
+          textMuted: "muted",
+          link: "primary",
+        };
+        const key = rest ? (alias[rest] ?? rest) : "";
+
+        return key
+          ? or(`semantic.color.${key}`, `primitive.color.${key}`)
+          : or("semantic.color", "primitive.color");
+      }
 
       case "spacing":
       case "space":
-        return rest ? `primitive.space.${rest}` : `primitive.space`;
+        // Prefer semantic spacing scales (xs/sm/md) and fall back to primitive numeric scales
+        return rest
+          ? or(
+              `semantic.spacing.${rest}`,
+              `primitive.spacing.${rest}`,
+              `primitive.space.${rest}`,
+            )
+          : or("semantic.spacing", "primitive.spacing", "primitive.space");
 
       case "radius":
       case "radii":
-        return rest ? `primitive.radius.${rest}` : `primitive.radius`;
+        return rest
+          ? or(
+              `semantic.radii.${rest}`,
+              `primitive.radius.${rest}`,
+              `primitive.radii.${rest}`,
+            )
+          : or("semantic.radii", "primitive.radius", "primitive.radii");
 
       case "fonts":
       case "font":
-        return rest ? `primitive.font.${rest}` : `primitive.font`;
+        // Common alias: fonts.body should map to sans by default
+        if (rest === "body") {
+          return or(
+            "semantic.fonts.body",
+            "primitive.font.body",
+            "primitive.font.sans",
+            "semantic.font.body",
+          );
+        }
+        return rest
+          ? or(
+              `semantic.fonts.${rest}`,
+              `semantic.font.${rest}`,
+              `primitive.font.${rest}`,
+              `primitive.fonts.${rest}`,
+            )
+          : or("semantic.fonts", "primitive.font");
+
+      case "fontSizes":
+      case "fontSize":
+        return rest
+          ? or(
+              `semantic.fontSizes.${rest}`,
+              `semantic.fontSize.${rest}`,
+              `primitive.fontSize.${rest}`,
+              `primitive.fontSizes.${rest}`,
+            )
+          : or("semantic.fontSizes", "primitive.fontSize");
+
+      case "fontWeights":
+      case "fontWeight":
+        return rest
+          ? or(
+              `semantic.fontWeights.${rest}`,
+              `semantic.fontWeight.${rest}`,
+              `primitive.fontWeight.${rest}`,
+              `primitive.fontWeights.${rest}`,
+            )
+          : or("semantic.fontWeights", "primitive.fontWeight");
+
+      case "lineHeights":
+      case "lineHeight":
+        return rest
+          ? or(
+              `semantic.lineHeights.${rest}`,
+              `semantic.lineHeight.${rest}`,
+              `primitive.lineHeight.${rest}`,
+              `primitive.lineHeights.${rest}`,
+            )
+          : or("semantic.lineHeights", "primitive.lineHeight");
+
+      case "borders":
+      case "border":
+        // supports borders.width.sm, borders.color.subtle, etc.
+        return rest
+          ? or(
+              `semantic.borders.${rest}`,
+              `semantic.border.${rest}`,
+              `primitive.border.${rest}`,
+              `primitive.borders.${rest}`,
+              `primitive.borderWidth.${rest}`, // extra fallback if your defaults use borderWidth
+            )
+          : or("semantic.borders", "primitive.border");
 
       case "shadows":
       case "shadow":
-        return rest ? `primitive.shadow.${rest}` : `primitive.shadow`;
+        return rest
+          ? or(`primitive.shadow.${rest}`, `semantic.shadow.${rest}`)
+          : or("primitive.shadow", "semantic.shadow");
 
       case "motion":
       case "easing":
-        return rest ? `primitive.motion.${rest}` : `primitive.motion`;
+        return rest
+          ? or(`primitive.motion.${rest}`, `semantic.motion.${rest}`)
+          : or("primitive.motion", "semantic.motion");
 
       case "z":
       case "zIndex":
-        return rest ? `primitive.z.${rest}` : `primitive.z`;
+        return rest
+          ? or(`primitive.z.${rest}`, `semantic.z.${rest}`)
+          : or("primitive.z", "semantic.z");
 
       default:
         // allow internal paths too

@@ -37,6 +37,7 @@ export const defaultTokens: TokenTree = {
       80: "20rem",
       96: "24rem",
     },
+
     sizes: {
       auto: "auto",
       full: "100%",
@@ -45,11 +46,11 @@ export const defaultTokens: TokenTree = {
       max: "max-content",
       fit: "fit-content",
     },
-    colors: {
+
+    color: {
       transparent: "transparent",
       black: "#000000",
       white: "#ffffff",
-      // Minimal but representative palette (extend freely)
       "slate-50": "#f8fafc",
       "slate-100": "#f1f5f9",
       "slate-200": "#e2e8f0",
@@ -70,40 +71,27 @@ export const defaultTokens: TokenTree = {
       "gray-700": "#374151",
       "gray-800": "#1f2937",
       "gray-900": "#111827",
-      "red-50": "#fef2f2",
-      "red-100": "#fee2e2",
-      "red-200": "#fecaca",
-      "red-300": "#fca5a5",
-      "red-400": "#f87171",
       "red-500": "#ef4444",
-      "red-600": "#dc2626",
-      "red-700": "#b91c1c",
-      "red-800": "#991b1b",
-      "red-900": "#7f1d1d",
-      "yellow-400": "#facc15",
       "yellow-500": "#eab308",
-      "yellow-600": "#ca8a04",
-      "green-400": "#4ade80",
       "green-500": "#22c55e",
-      "green-600": "#16a34a",
-      "blue-400": "#60a5fa",
       "blue-500": "#3b82f6",
-      "blue-600": "#2563eb",
       "indigo-500": "#6366f1",
       "purple-500": "#a855f7",
       "pink-500": "#ec4899",
     },
+
     fontSize: {
-      xs: "0.75rem", // [, { lineHeight: "1rem" }],
-      sm: "0.875rem", // { lineHeight: "1.25rem" }],
-      base: "1rem", // { lineHeight: "1.5rem" }],
-      lg: "1.125rem", // { lineHeight: "1.75rem" }],
-      xl: "1.25rem", // { lineHeight: "1.75rem" }],
-      "2xl": "1.5rem", // { lineHeight: "2rem" }],
-      "3xl": "1.875rem", // { lineHeight: "2.25rem" }],
-      "4xl": "2.25rem", // { lineHeight: "2.5rem" }],
-      "5xl": "3rem", // { lineHeight: "1" }],
+      xs: "0.75rem",
+      sm: "0.875rem",
+      base: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+      "2xl": "1.5rem",
+      "3xl": "1.875rem",
+      "4xl": "2.25rem",
+      "5xl": "3rem",
     },
+
     fontWeight: {
       thin: "100",
       extralight: "200",
@@ -115,6 +103,7 @@ export const defaultTokens: TokenTree = {
       extrabold: "800",
       black: "900",
     },
+
     lineHeight: {
       none: "1",
       tight: "1.25",
@@ -123,6 +112,7 @@ export const defaultTokens: TokenTree = {
       relaxed: "1.625",
       loose: "2",
     },
+
     letterSpacing: {
       tighter: "-0.05em",
       tight: "-0.025em",
@@ -131,6 +121,7 @@ export const defaultTokens: TokenTree = {
       wider: "0.05em",
       widest: "0.1em",
     },
+
     radius: {
       none: "0px",
       sm: "0.125rem",
@@ -142,7 +133,9 @@ export const defaultTokens: TokenTree = {
       "3xl": "1.5rem",
       full: "9999px",
     },
+
     borderWidth: { DEFAULT: "1px", 0: "0px", 2: "2px", 4: "4px", 8: "8px" },
+
     opacity: {
       0: "0",
       5: "0.05",
@@ -160,6 +153,7 @@ export const defaultTokens: TokenTree = {
       95: "0.95",
       100: "1",
     },
+
     zIndex: {
       auto: "auto",
       0: "0",
@@ -169,6 +163,7 @@ export const defaultTokens: TokenTree = {
       40: "40",
       50: "50",
     },
+
     shadow: {
       sm: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
       DEFAULT: "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
@@ -176,6 +171,76 @@ export const defaultTokens: TokenTree = {
       lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
       xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.1)",
       none: "none",
+    },
+  },
+
+  // ✅ Public/Semantic tokens: these match what plugins will call: theme.token("spacing.md"), etc.
+  semantic: {
+    fonts: {
+      body: 'system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif',
+      mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    },
+
+    spacing: {
+      xs: "{primitive.spacing.2}",
+      sm: "{primitive.spacing.3}",
+      md: "{primitive.spacing.4}",
+      lg: "{primitive.spacing.6}",
+      xl: "{primitive.spacing.8}",
+      "2xl": "{primitive.spacing.12}",
+    },
+
+    fontSizes: {
+      xs: "{primitive.fontSize.xs}",
+      sm: "{primitive.fontSize.sm}",
+      md: "{primitive.fontSize.base}",
+      lg: "{primitive.fontSize.lg}",
+      xl: "{primitive.fontSize.xl}",
+      "2xl": "{primitive.fontSize.2xl}",
+      "3xl": "{primitive.fontSize.3xl}",
+      "4xl": "{primitive.fontSize.4xl}",
+      "5xl": "{primitive.fontSize.5xl}",
+    },
+
+    fontWeights: {
+      regular: "{primitive.fontWeight.normal}",
+      medium: "{primitive.fontWeight.medium}",
+      bold: "{primitive.fontWeight.bold}",
+    },
+
+    lineHeights: {
+      base: "{primitive.lineHeight.normal}",
+      tight: "{primitive.lineHeight.tight}",
+      relaxed: "{primitive.lineHeight.relaxed}",
+    },
+
+    radii: {
+      sm: "{primitive.radius.md}",
+      md: "{primitive.radius.lg}",
+      lg: "{primitive.radius.xl}",
+      full: "{primitive.radius.full}",
+    },
+
+    borders: {
+      width: {
+        sm: "{primitive.borderWidth.DEFAULT}",
+        md: "{primitive.borderWidth.2}",
+        lg: "{primitive.borderWidth.4}",
+      },
+      color: {
+        default: "{primitive.color.gray-300}",
+        subtle: "{primitive.color.gray-200}",
+      },
+    },
+
+    color: {
+      // these should be overridden per theme (light/dark), but defaults must exist
+      text: "{primitive.color.slate-900}",
+      textMuted: "{primitive.color.slate-600}",
+      background: "{primitive.color.white}",
+      surface: "{primitive.color.white}",
+      link: "{primitive.color.blue-500}",
+      focusRing: "{primitive.color.blue-500}",
     },
   },
 };

@@ -144,10 +144,14 @@ export type UtilitiesOptions = {
   prefix?: string; // optional utility prefix, e.g. "tw-"
 };
 
+export type GenericLayerOptions = {
+  selection?: boolean;
+};
+
 export type LayerOptions = {
   settings?: boolean | SettingsPluginOptions;
   tools?: boolean | Partial<Record<string, string>>;
-  generic?: boolean | Partial<Record<string, string>>;
+  generic?: boolean | GenericLayerOptions;
   elements?: boolean | Partial<Record<string, string>>;
   objects?: boolean | Partial<Record<string, string>>;
   components?: boolean | Partial<Record<string, string>>;
@@ -162,5 +166,10 @@ export type BuilderOptions = {
   utilities?: { spacingScale?: number[] };
   compat?: {
     tailwind?: TailwindCompatOptions;
+  };
+  a11y?: {
+    reducedMotion?: boolean;
+    smoothScroll?: boolean;
+    focusRing?: boolean;
   };
 };
