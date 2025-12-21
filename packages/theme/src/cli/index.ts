@@ -6,7 +6,7 @@ import fg from "fast-glob";
 
 // Import builder + plugins from your monorepo packages
 import { createThemeBuilder } from "../builders";
-import { compatPlugin } from "../plugins/compat";
+// import { compatPlugin } from "../plugins/compat";
 import { loadAndParse } from "../core/parser/ingest";
 import { applyParsedToBuilder } from "../core/parser";
 import { formatCss } from "./format";
@@ -140,12 +140,12 @@ program
     if (compatSets.length) {
       // keep your existing plugin registration
       const list = compatSets;
-      builder = builder.use(
-        compatPlugin({
-          tailwind: enableTailwind,
-          bootstrap: enableBootstrap,
-        }),
-      );
+      // builder = builder.use(
+      //   compatPlugin({
+      //     tailwind: enableTailwind,
+      //     bootstrap: enableBootstrap,
+      //   }),
+      // );
     }
 
     const strict = opt("strict", false) || !!opts.strict;

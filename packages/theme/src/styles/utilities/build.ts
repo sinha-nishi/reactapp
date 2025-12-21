@@ -1,12 +1,11 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
-import { CSSObject, MatchResult, BuilderContext } from "../../@types";
-import type { UtilityEngine } from "./types";
+import { CSSObject, MatchResult, BuilderContext, Theme } from "../../@types";
+import type { RuleEngine } from "./types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";
 import { stripPrefix, style } from "./helper";
 
-type Theme = Record<string, any>;
 type Options = { enableArbitraryValues: boolean; prefix: string };
 
 const re = {
@@ -16,7 +15,7 @@ const re = {
   arbitrary: /^\[(.+)\]$/,
 };
 
-export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
+export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
   const reg = new RuleRegistry();
 
   // ---- family registrations

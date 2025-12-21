@@ -1,6 +1,6 @@
 import { CSSObject, MatchResult, BuilderContext } from "../../@types";
 
-export type UtilityRule = {
+export type Rule = {
   kind: "exact" | "prefix" | "pattern";
   family?: string; // e.g. "spacing", "color", "typography", etc.
   key?: string; // exact key or prefix
@@ -9,7 +9,7 @@ export type UtilityRule = {
   enumerate?: (ctx: BuilderContext) => string[];
 };
 
-export interface UtilityEngine {
+export interface RuleEngine {
   match: (className: string) => MatchResult | false;
   render: (match: MatchResult, meta: any, ctx: BuilderContext) => CSSObject[];
   enumerate: (ctx: BuilderContext, opts?: { families?: string[] }) => string[];

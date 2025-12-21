@@ -1,7 +1,26 @@
 export * from "./styleOptions";
 export * from "./CSSProperties";
 
-export type Theme = Record<string, any>;
+export type Theme = {
+  colors: Record<string, string>;
+  spacing: Record<string, string>;
+  sizes: Record<string, string>;
+  typography: Record<string, string>;
+  fontWeight: Record<string, string>;
+  lineHeight: Record<string, string>;
+  letterSpacing: Record<string, string>;
+  fontSize: Record<string, string | [string, { lineHeight?: string }]>;
+  borderWidth: Record<string, string>;
+  radius: Record<string, string>;
+  opacity: Record<string, string>;
+  shadow: Record<string, string>;
+  ringWidth: Record<string, string>;
+  ringColor: Record<string, string>;
+  ringOffsetWidth: Record<string, string>;
+  ringOffsetColor: Record<string, string>;
+  zIndex: Record<string, string>;
+};
+
 export type ScreenOptions = Record<string, string>;
 
 export type CSSObject = {

@@ -47,9 +47,9 @@ export function register(reg: RuleRegistry, theme: Theme) {
     });
   }
 
-  // line-height / letter-spacing
-  addScale(reg, "leading-", "line-height", theme.lineHeight);
-  addScale(reg, "tracking-", "letter-spacing", theme.letterSpacing);
+  // line-height / letter-spacing TODO:
+  // addScale(reg, "leading-", "line-height", theme.lineHeight);
+  // addScale(reg, "tracking-", "letter-spacing", theme.letterSpacing);
 
   // alignment
   addExactDecl(reg, "text-left", "text-align", "left");

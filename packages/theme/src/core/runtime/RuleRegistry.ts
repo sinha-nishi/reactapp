@@ -1,16 +1,16 @@
 import { BuilderContext } from "@/@types";
-import { UtilityRule } from "@/styles/utilities/types";
+import { Rule } from "@/styles/utilities/types";
 
-type UtilityRuleWithoutKind = Omit<UtilityRule, "kind">;
+type UtilityRuleWithoutKind = Omit<Rule, "kind">;
 
 export type EnumerateOptions = {
   families?: string[];
 };
 
 export class RuleRegistry {
-  exact = new Map<string, UtilityRule>();
-  prefixes: Array<{ key: string; rule: UtilityRule }> = [];
-  patterns: UtilityRule[] = [];
+  exact = new Map<string, Rule>();
+  prefixes: Array<{ key: string; rule: Rule }> = [];
+  patterns: Rule[] = [];
   finalized = false;
 
   addExactRule(key: string, rule: UtilityRuleWithoutKind) {
@@ -42,7 +42,7 @@ export class RuleRegistry {
     const allow = opts.families?.length ? new Set(opts.families) : null;
     const out: string[] = [];
 
-    const push = (r: UtilityRule) => {
+    const push = (r: Rule) => {
       if (allow && (!r.family || !allow.has(r.family))) return;
       if (r.enumerate) out.push(...r.enumerate(ctx));
     };

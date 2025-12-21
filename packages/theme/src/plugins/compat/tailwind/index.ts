@@ -1,5 +1,5 @@
 // Tailwind-compat entrypoint: registers utilities, variants, and resolver
-import { buildUtilities } from "./utilities";
+import { tailwindRules } from "./rules";
 import { variants } from "../../../utils/variants";
 import type {
   CSSObject,
@@ -30,7 +30,7 @@ export const TailwindCompat = (
     "2xl": "1536px",
   };
 
-  const util = buildUtilities(theme, {
+  const rules = tailwindRules(theme, {
     enableArbitraryValues: opts.enableArbitraryValues !== false,
     prefix: opts.prefix ?? "",
   });
@@ -46,8 +46,8 @@ export const TailwindCompat = (
         string?,
       ];
       // TODO: fix reference to light view
-      // const hex = (theme.view("light").colors as Record<string, string>)[base] ?? base; 
-      const hex = "#FFFFFF"
+      // const hex = (theme.view("light").colors as Record<string, string>)[base] ?? base;
+      const hex = "#FFFFFF";
       if (!a) return hex;
       // convert hex to rgba with alpha percentage (00..100 or 0..1)
       const alphaVal = a.includes("%")
@@ -64,12 +64,12 @@ export const TailwindCompat = (
     name: "tailwind-compat",
     variants: variants(screens),
     match(className: string) {
-      return util.match(className);
+      return rules.match(className);
     },
     render(match, meta): CSSObject[] {
-      return util.render(match, meta, ctx);
+      return rules.render(match, meta, ctx);
     },
-    enumerate: (ctx, o) => util.enumerate(ctx, o),
+    enumerate: (ctx, o) => rules.enumerate(ctx, o),
   };
 };
 

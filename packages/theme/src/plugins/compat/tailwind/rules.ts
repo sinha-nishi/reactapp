@@ -4,7 +4,7 @@ import type {
   Theme,
   BuilderContext,
 } from "../../../@types";
-import type { UtilityEngine } from "../../../styles/utilities/types";
+import type { RuleEngine } from "../../../styles/utilities/types";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
 
@@ -45,7 +45,7 @@ function styleFromScale(
   );
 }
 
-export function buildUtilities(theme: Theme, opts: Options): UtilityEngine {
+export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
   const rules: Array<UtilityRule> = [];
 
   // helpers

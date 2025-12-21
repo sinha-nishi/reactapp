@@ -1,6 +1,6 @@
 import { BuilderContext, ScreenOptions, Theme } from "../../@types";
 import { CSSProperties } from "../../@types/CSSProperties";
-import { Tokens } from "../../@types/styleOptions";
+import { LoadedTheme, Tokens } from "../../@types/styleOptions";
 import { packs } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 export type LayerName =
@@ -68,7 +68,7 @@ interface Options {
   prefix?: string;
   classPrefix?: string;
   classPrefixLayers?: LayerName[];
-  theme?: Theme;
+  theme?: LoadedTheme;
   screens?: ScreenOptions;
   important?: boolean;
   layerOrder?: LayerName[];
@@ -80,7 +80,7 @@ export class CssBuilder {
   private rules: Rule[] = [];
   private usedKeys = new Set<string>();
   private styleEl?: HTMLStyleElement;
-  private opts: Required<Options>;
+  readonly opts: Required<Options>;
   private _beforeSerialize: Array<() => void> = [];
 
   constructor(options?: Options) {

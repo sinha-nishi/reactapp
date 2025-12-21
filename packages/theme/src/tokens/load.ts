@@ -6,6 +6,7 @@ import {
   TokenValue,
   CssVarMap,
   LayerName,
+  Theme,
 } from "@/@types";
 import { defaultTokens } from "./defaultTokens";
 
@@ -207,12 +208,26 @@ export function loadTheme(
     return flattenToPathMap(g as any, "");
   }
 
-  function view(themeName: ThemeName) {
+  function view(themeName: ThemeName): Theme {
     return {
       colors: group(themeName, "primitive.color"),
       spacing: group(themeName, "primitive.space"),
+      sizes: group(themeName, "primitive.size"),
+      lineHeight: group(themeName, "primitive.lineHeight"),
+      letterSpacing: group(themeName, "primitive.letterSpacing"),
+      fontSize: group(themeName, "primitive.fontSize"),
+      typography: group(themeName, "primitive.font"),
+      fontWeight: group(themeName, "primitive.fontWeight"),
+      borderWidth: group(themeName, "primitive.borderWidth"),
       radius: group(themeName, "primitive.radius"),
-      semantic: group(themeName, "semantic"),
+      opacity: group(themeName, "primitive.opacity"),
+      shadow: group(themeName, "primitive.shadow"),
+      ringWidth: group(themeName, "primitive.ringWidth"),
+      ringColor: group(themeName, "primitive.ringColor"),
+      ringOffsetWidth: group(themeName, "primitive.ringOffsetWidth"),
+      ringOffsetColor: group(themeName, "primitive.ringOffsetColor"),
+      zIndex: group(themeName, "primitive.zIndex"),
+      // semantic: group(themeName, "semantic"),
     };
   }
 

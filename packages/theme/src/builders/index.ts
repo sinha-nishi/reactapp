@@ -7,7 +7,7 @@ import { elementsPlugin } from "../styles/elements";
 import { objectsPlugin } from "../styles/objects";
 import { componentsPlugin } from "../styles/components";
 import { utilitiesPlugin } from "../styles/utilities";
-import { compatTailwindPlugin } from "../plugins/compat";
+// import { compatTailwindPlugin } from "../plugins/compat";
 import { presetCollectorPlugin } from "../plugins";
 
 export function createThemeBuilder(opts?: BuilderOptions) {
@@ -29,19 +29,14 @@ export function createThemeBuilder(opts?: BuilderOptions) {
   opts?.layers?.components !== false && builder.use(componentsPlugin(opts));
 
   // utilities layer
-  opts?.layers?.utilities !== false &&
-    builder.use(
-      utilitiesPlugin(
-        opts?.layers?.utilities === true ? undefined : opts?.layers?.utilities,
-      ),
-    );
+  opts?.layers?.utilities !== false && builder.use(utilitiesPlugin(opts));
 
   if ((opts as any)?.compat?.tailwind) {
     console.log(
       "found compat tailwind config in config: ",
       (opts as any).compat.tailwind,
     );
-    builder.use(compatTailwindPlugin((opts as any).compat.tailwind));
+    // builder.use(compatTailwindPlugin((opts as any).compat.tailwind));
   }
 
   return builder;

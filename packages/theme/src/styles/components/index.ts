@@ -12,35 +12,35 @@ export const componentsPlugin =
     const { theme } = b.ctx;
     const focusRing = opts?.a11y?.focusRing ?? true;
 
-    opts.components?.alert === true &&
+    opts.components?.alert !== false &&
       alertStyles(
         b,
         opts.components?.alert === true
           ? { focusRing }
           : opts.components?.alert || {},
       );
-    opts.components?.badge === true &&
+    opts.components?.badge !== false &&
       badgeStyles(
         b,
         opts.components?.badge === true
           ? { focusRing }
           : opts.components?.badge || {},
       );
-    opts.components?.button === true &&
+    opts.components?.button !== false &&
       buttonStyles(
         b,
         opts.components?.button === true
           ? { focusRing }
           : opts.components?.button || {},
       );
-    opts.components?.card === true &&
+    opts.components?.card !== false &&
       cardStyles(
         b,
         opts.components?.card === true
           ? { focusRing }
           : opts.components?.card || {},
       );
-    opts.components?.input === true &&
+    opts.components?.input !== false &&
       inputStyles(
         b,
         opts.components?.input === true
