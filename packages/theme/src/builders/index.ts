@@ -1,5 +1,5 @@
 import { CssBuilder } from "../core/builder";
-import type { BuilderOptions } from "../@types/styleOptions";
+import type { BuilderOptions } from "../@types";
 import { settingsPlugin } from "../styles/settings";
 import { toolsPlugin } from "../styles/tools";
 import { genericPlugin } from "../styles/generic";

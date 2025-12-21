@@ -195,12 +195,13 @@ program
         );
         const engine = new ClassEngine({
           plugins: [
-            TailwindCompat({
-              important: cfg.compat?.tailwind?.important ?? !!opts.important,
-              screens: cfg.compat?.tailwind?.screens,
-              theme: cfg.compat?.tailwind?.theme,
-              prefix: cfg.compat?.tailwind?.prefix,
-            }),
+            // TODO: fix how to pass builder
+            // TailwindCompat({
+            //   important: cfg.compat?.tailwind?.important ?? !!opts.important,
+            //   screens: cfg.compat?.tailwind?.screens,
+            //   theme: cfg.compat?.tailwind?.theme,
+            //   prefix: cfg.compat?.tailwind?.prefix,
+            // }),
           ],
         });
         const classes = await scanClassNames({

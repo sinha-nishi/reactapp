@@ -1,10 +1,5 @@
-import type {
-  CSSObject,
-  MatchResult,
-  Theme,
-  BuilderContext,
-} from "../../../@types";
-import type { RuleEngine } from "../../../styles/utilities/types";
+import type { CSSObject, MatchResult, Theme } from "../../../@types";
+import type { RuleContext, RuleEngine } from "../../../styles/utilities/types";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
 
@@ -20,7 +15,7 @@ function styleFromScale(
   m: any,
   prop: string | string[],
   scale: Record<string, string>,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   let val = scale[m.key];
@@ -320,7 +315,7 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
 
   function applyFilterVar(
     meta: any,
-    ctx: BuilderContext,
+    ctx: RuleContext,
     vars: Record<string, string>,
   ) {
     return finalize(
@@ -447,7 +442,7 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
       return false;
     },
 
-    render(m: any, meta, ctx: BuilderContext): CSSObject[] {
+    render(m: any, meta, ctx: RuleContext): CSSObject[] {
       // each rule apply() yields CSSObject(s) with {selector, decls, media?}
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];
@@ -461,7 +456,7 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
 interface UtilityRule {
   name: string;
   match: (cls: string) => any | false;
-  apply: (m: any, meta: any, ctx: BuilderContext) => CSSObject | CSSObject[];
+  apply: (m: any, meta: any, ctx: RuleContext) => CSSObject | CSSObject[];
 }
 
 function stripPrefix(cls: string, prefix: string) {
@@ -498,7 +493,7 @@ function withInt(cls: string, prefix: string) {
 function style(
   prop: string | string[],
   value: string,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   const decls = Array.isArray(prop)
@@ -508,14 +503,14 @@ function style(
 }
 function styleMany(
   obj: Record<string, string>,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   return finalize(obj, ctx, meta);
 }
 function finalize(
   decls: Record<string, string>,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   // handle important override + negative value

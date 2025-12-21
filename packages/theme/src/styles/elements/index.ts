@@ -100,8 +100,7 @@ export const elementsPlugin =
       "elements-tables",
     );
 
-    b.elements(
-      `
+    const formsCss: string = `
 :where(input, button, textarea, select) { box-sizing: border-box; }
 
 :where(input, textarea, select) {
@@ -127,9 +126,8 @@ export const elementsPlugin =
   opacity: 0.6;
   cursor: not-allowed;
 }
-`,
-      "elements-forms",
-    );
+`;
+    b.elements(formsCss, "elements-forms");
 
     if (focusRing) {
       b.elements(

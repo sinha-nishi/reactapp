@@ -1,6 +1,6 @@
-import { BuilderContext, ScreenOptions, Theme } from "../../@types";
+import { BuilderContext, ScreenOptions } from "../../@types";
 import { CSSProperties } from "../../@types/CSSProperties";
-import { LoadedTheme, Tokens } from "../../@types/styleOptions";
+import { LoadedTheme, Tokens } from "../../@types";
 import { packs } from "../../tokens";
 import { hexToRgb } from "../../utils/colors";
 export type LayerName =

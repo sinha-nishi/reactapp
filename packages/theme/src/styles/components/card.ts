@@ -7,8 +7,7 @@ export function cardStyles(b: CssBuilder, opts: CardStyleOptions): CssBuilder {
   /* =========================
    * Card
    * ========================= */
-  b.components(
-    `
+  const componentCss: string = `
 :where(.card) {
   background: ${theme.value("colors.surface")};
   color: ${theme.value("colors.text")};
@@ -42,9 +41,8 @@ export function cardStyles(b: CssBuilder, opts: CardStyleOptions): CssBuilder {
   color: ${theme.value("colors.textMuted")};
   font-size: ${theme.value("fontSizes.sm")};
 }
-`,
-    "components-card",
-  );
+`;
+  b.components(componentCss, "components-card");
 
   return b;
 }

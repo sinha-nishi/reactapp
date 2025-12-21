@@ -1,6 +1,6 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
-import { CSSObject, MatchResult, BuilderContext, Theme } from "../../@types";
-import type { RuleEngine } from "./types";
+import { CSSObject, MatchResult, Theme } from "../../@types";
+import type { RuleContext, RuleEngine } from "./types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";
@@ -101,7 +101,7 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
       return false;
     },
 
-    render(m: any, meta, ctx: BuilderContext): CSSObject[] {
+    render(m: any, meta, ctx: RuleContext): CSSObject[] {
       if (!m || !m.rule || typeof m.rule.apply !== "function") return [];
       const out = m.rule.apply(m, meta, ctx);
       return Array.isArray(out) ? out : [out];

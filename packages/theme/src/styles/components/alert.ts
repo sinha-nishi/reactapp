@@ -10,8 +10,7 @@ export function alertStyles(
   /* =========================
    * Alert
    * ========================= */
-  b.components(
-    `
+  const alertCss: string = `
 :where(.alert) {
   display: flex;
   gap: ${theme.value("spacing.md")};
@@ -50,9 +49,8 @@ export function alertStyles(
   margin-top: ${theme.value("spacing.xs")};
   color: ${theme.value("colors.textMuted")};
 }
-`,
-    "components-alert",
-  );
+`;
+  b.components(alertCss, "components-alert");
 
   return b;
 }

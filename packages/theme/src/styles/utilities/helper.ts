@@ -1,5 +1,6 @@
-import { CSSObject, Theme, BuilderContext } from "@/@types";
+import { CSSObject, Theme } from "@/@types";
 import { RuleRegistry } from "@/core/runtime/RuleRegistry";
+import { RuleContext } from "./types";
 
 export function stripPrefix(cls: string, prefix: string) {
   return prefix && cls.startsWith(prefix) ? cls.slice(prefix.length) : cls;
@@ -29,7 +30,7 @@ export function withColorKey(
 export function style(
   prop: string | string[],
   value: string,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   const decls = Array.isArray(prop)
@@ -40,7 +41,7 @@ export function style(
 
 export function styleMany(
   obj: Record<string, string>,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   return finalize(obj, ctx, meta);
@@ -48,7 +49,7 @@ export function styleMany(
 
 function finalize(
   decls: Record<string, string>,
-  ctx: BuilderContext,
+  ctx: RuleContext,
   meta: any,
 ): CSSObject {
   const negative = meta.negative;
@@ -115,7 +116,7 @@ export function util(reg: RuleRegistry, theme: Theme) {
     m: any,
     prop: string | string[],
     scale: Record<string, string>,
-    ctx: BuilderContext,
+    ctx: RuleContext,
     meta: any,
   ): CSSObject {
     let val = scale[m.key];

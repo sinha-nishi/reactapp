@@ -70,7 +70,7 @@ export function buttonStyles(
         }
         `
         : ""
-    }`,
+    }` as string,
     "components-button",
   );
 

@@ -1,5 +1,5 @@
 import { CssBuilder, BuilderPlugin } from "../../core/builder";
-import type { BuilderOptions } from "../../@types/styleOptions";
+import type { BuilderOptions } from "../../@types";
 import { buttonStyles } from "./button";
 import { cardStyles } from "./card";
 import { inputStyles } from "./input";
