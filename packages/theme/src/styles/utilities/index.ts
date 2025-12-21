@@ -29,9 +29,8 @@ export function withTheme<B extends CssBuilder>(
 
 const utilitiesEngine = (b: CssBuilder): ClassEnginePlugin => {
   const { theme } = b.ctx;
-  const themeView = theme.view("light");
 
-  const util = buildUtilities(themeView, {
+  const util = buildUtilities(theme, {
     enableArbitraryValues: false /*b.opts.enableArbitraryValues !== false*/,
     prefix: b.opts.prefix ?? "",
   });

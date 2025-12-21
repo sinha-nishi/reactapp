@@ -187,19 +187,19 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
     },
   });
 
-  propRaw("font-thin", "font-weight", { "": theme.fontWeight.thin });
+  propRaw("font-thin", "font-weight", { "": String(theme.fontWeight.thin) });
   propRaw("font-extralight", "font-weight", {
-    "": theme.fontWeight.extralight,
+    "": String(theme.fontWeight.extralight),
   });
-  propRaw("font-light", "font-weight", { "": theme.fontWeight.light });
-  propRaw("font-normal", "font-weight", { "": theme.fontWeight.normal });
-  propRaw("font-medium", "font-weight", { "": theme.fontWeight.medium });
-  propRaw("font-semibold", "font-weight", { "": theme.fontWeight.semibold });
-  propRaw("font-bold", "font-weight", { "": theme.fontWeight.bold });
-  propRaw("font-extrabold", "font-weight", { "": theme.fontWeight.extrabold });
-  propRaw("font-black", "font-weight", { "": theme.fontWeight.black });
+  propRaw("font-light", "font-weight", { "": String(theme.fontWeight.light) });
+  propRaw("font-normal", "font-weight", { "": String(theme.fontWeight.normal) });
+  propRaw("font-medium", "font-weight", { "": String(theme.fontWeight.medium) });
+  propRaw("font-semibold", "font-weight", { "": String(theme.fontWeight.semibold) });
+  propRaw("font-bold", "font-weight", { "": String(theme.fontWeight.bold) });
+  propRaw("font-extrabold", "font-weight", { "": String(theme.fontWeight.extrabold) });
+  propRaw("font-black", "font-weight", { "": String(theme.fontWeight.black) });
 
-  propScale("leading", "line-height", theme.lineHeight);
+  // propScale("leading", "line-height", theme.lineHeight); // TODO: support number values
   propScale("tracking", "letter-spacing", theme.letterSpacing);
   propRaw("text-left", "text-align", { "": "left" });
   propRaw("text-center", "text-align", { "": "center" });
@@ -242,19 +242,19 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
   rules.push({
     name: "opacity-<n>",
     match: (cls) => withKey(cls, "opacity-", theme.opacity),
-    apply: (m, meta, ctx) => style("opacity", theme.opacity[m.key], ctx, meta),
+    apply: (m, meta, ctx) => style("opacity", String(theme.opacity[m.key]), ctx, meta),
   });
   rules.push({
     name: "shadow-<k>",
     match: (cls) => withKey(cls, "shadow-", theme.shadow),
     apply: (m, meta, ctx) =>
-      style("box-shadow", theme.shadow[m.key], ctx, meta),
+      style("box-shadow", String(theme.shadow?.[m.key]), ctx, meta),
   });
   rules.push({
     name: "shadow",
     match: (cls) => (cls === "shadow" ? { raw: cls } : false),
     apply: (m, meta, ctx) =>
-      style("box-shadow", theme.shadow.DEFAULT, ctx, meta),
+      style("box-shadow", String(theme.shadow?.DEFAULT), ctx, meta),
   });
 
   // ring
@@ -362,7 +362,7 @@ export function tailwindRules(theme: Theme, opts: Options): RuleEngine {
   rules.push({
     name: "z-<k>",
     match: (cls) => withKey(cls, "z-", theme.zIndex),
-    apply: (m, meta, ctx) => style("z-index", theme.zIndex[m.key], ctx, meta),
+    apply: (m, meta, ctx) => style("z-index", String(theme.zIndex[m.key]), ctx, meta),
   });
 
   // transforms (basic)

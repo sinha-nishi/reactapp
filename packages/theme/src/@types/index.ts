@@ -3,23 +3,58 @@ export * from "./CSSProperties";
 import { TailwindCompatOptions } from "../plugins/compat/tailwind";
 
 export type Theme = {
+  // --- Layout & Responsive ---
+  /** Breakpoints for responsive design (e.g., sm: '640px', md: '768px') */
+  screens?: Record<string, string>;
+
+  // --- Colors ---
+  /** Semantic and palette colors */
   colors: Record<string, string>;
-  spacing: Record<string, string>;
-  sizes: Record<string, string>;
+
+  // --- Typography ---
+  /** Font families (e.g., sans, serif, mono) - Renamed from 'typography' */
   fontFamily: Record<string, string | string[]>;
-  fontWeight: Record<string, string>;
-  lineHeight: Record<string, string>;
+  /** Font weights (allow number for raw values like 400, 700) */
+  fontWeight: Record<string, string | number>;
+  lineHeight: Record<string, string | number>;
   letterSpacing: Record<string, string>;
-  fontSize: Record<string, string | [string, { lineHeight?: string }]>;
+  /** Tuple allows setting default lineHeight with size */
+  fontSize: Record<
+    string,
+    string | [string, { lineHeight?: string; letterSpacing?: string }]
+  >;
+
+  // --- Spacing & Sizing ---
+  /** Padding, margin, gap tokens */
+  spacing: Record<string, string>;
+  /** Specific dimensions (width, height, max-width) */
+  sizes: Record<string, string>;
+
+  // --- Borders & Radius ---
   borderWidth: Record<string, string>;
   radius: Record<string, string>;
-  opacity: Record<string, string>;
-  shadow: Record<string, string>;
+
+  // --- Effects ---
+  opacity: Record<string, string | number>;
+  shadow?: Record<string, string>; // Box shadow
+
+  // --- Outlines & Rings (Accessibility & Focus) ---
   ringWidth: Record<string, string>;
   ringColor: Record<string, string>;
   ringOffsetWidth: Record<string, string>;
   ringOffsetColor: Record<string, string>;
-  zIndex: Record<string, string>;
+
+  // --- Motion & Animation (New) ---
+  /** CSS transitions (e.g., 'transform 0.2s ease') */
+  transitionProperty?: Record<string, string>;
+  transitionDuration?: Record<string, string>;
+  transitionTimingFunction?: Record<string, string>;
+  /** Keyframe animations */
+  keyframes?: Record<string, string>;
+  animation?: Record<string, string>;
+
+  // --- Layout Control ---
+  zIndex: Record<string, string | number>;
 };
 
 export type Rule = {

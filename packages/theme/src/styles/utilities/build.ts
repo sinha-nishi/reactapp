@@ -1,5 +1,11 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
-import { CSSObject, MatchResult, Theme, RuleContext, RuleEngine } from "../../@types";
+import {
+  CSSObject,
+  MatchResult,
+  LoadedTheme,
+  RuleContext,
+  RuleEngine,
+} from "../../@types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";
@@ -14,14 +20,12 @@ const re = {
   arbitrary: /^\[(.+)\]$/,
 };
 
-export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
+export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   const reg = new RuleRegistry();
 
-  // ---- family registrations
   registerSpacing(reg, theme);
   registerTypography(reg, theme);
   registerColors(reg, theme);
-  // ---- end family registrations
 
   // Arbitrary property [prop:value]
   if (opts.enableArbitraryValues) {
@@ -43,7 +47,6 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
 
   reg.finalize();
 
-  // small match cache to avoid recomputation on repeated classes
   const cache = new Map<string, MatchResult | false>();
 
   return {
@@ -54,17 +57,20 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
       const cls = stripPrefix(className, opts.prefix);
       const tokens: string[] = [];
       let base = cls;
+
       while (re.variantToken.test(base)) {
         const t = base.slice(0, base.indexOf(":"));
         tokens.push(t);
         base = base.slice(base.indexOf(":") + 1);
       }
+
       const important = re.important.test(base);
       if (important) base = base.slice(1);
+
       const negative = re.negative.test(base);
       if (negative) base = base.slice(1);
 
-      // 1) exact
+      // exact
       const r1 = reg.exact.get(base);
       if (r1) {
         const m = r1.match(base);
@@ -75,7 +81,8 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
           return res;
         }
       }
-      // 2) prefix (longest first)
+
+      // prefix (longest first)
       for (const { key, rule } of reg.prefixes) {
         if (!base.startsWith(key)) continue;
         const m = rule.match(base);
@@ -86,7 +93,8 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
           return res;
         }
       }
-      // 3) pattern
+
+      // pattern
       for (const rule of reg.patterns) {
         const m = rule.match(base);
         if (m) {
@@ -96,6 +104,7 @@ export function buildUtilities(theme: Theme, opts: Options): RuleEngine {
           return res;
         }
       }
+
       cache.set(className, false);
       return false;
     },
