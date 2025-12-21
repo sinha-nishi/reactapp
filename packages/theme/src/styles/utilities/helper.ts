@@ -1,6 +1,5 @@
-import { CSSObject, Theme } from "@/@types";
+import { CSSObject, Theme, RuleContext } from "@/@types";
 import { RuleRegistry } from "@/core/runtime/RuleRegistry";
-import { RuleContext } from "./types";
 
 export function stripPrefix(cls: string, prefix: string) {
   return prefix && cls.startsWith(prefix) ? cls.slice(prefix.length) : cls;

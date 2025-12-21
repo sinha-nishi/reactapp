@@ -1,5 +1,4 @@
-import type { CSSObject, MatchResult, Theme } from "../../../@types";
-import type { RuleContext, RuleEngine } from "../../../styles/utilities/types";
+import type { CSSObject, MatchResult, Theme, RuleContext, RuleEngine } from "../../../@types";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
 

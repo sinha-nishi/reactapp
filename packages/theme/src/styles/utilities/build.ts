@@ -1,6 +1,5 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
-import { CSSObject, MatchResult, Theme } from "../../@types";
-import type { RuleContext, RuleEngine } from "./types";
+import { CSSObject, MatchResult, Theme, RuleContext, RuleEngine } from "../../@types";
 import { register as registerSpacing } from "./spacing";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";

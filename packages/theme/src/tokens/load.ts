@@ -515,6 +515,88 @@ export function loadTheme(
     }
   }
 
+  function viewNames(): ThemeName[] {
+    // runtime-usable views (exclude abstract like "base")
+    return runtimeThemes();
+  }
+
+  function normalizeScaleKey(scale: string): string {
+    const s = (scale ?? "").trim();
+    if (!s) return s;
+
+    // singular is canonical
+    const aliases: Record<string, string> = {
+      // plural -> singular (your new standard)
+      fontSizes: "fontSize",
+      fontWeights: "fontWeight",
+      lineHeights: "lineHeight",
+      letterSpacings: "letterSpacing",
+      borderWidths: "borderWidth",
+      radii: "radius",
+      opacities: "opacity",
+      shadows: "shadow",
+      ringWidths: "ringWidth",
+      ringColors: "ringColor",
+      ringOffsetWidths: "ringOffsetWidth",
+      ringOffsetColors: "ringOffsetColor",
+      zIndices: "zIndex",
+
+      // keep common synonyms if you ever used these:
+      color: "colors",
+      spaces: "spacing",
+    };
+
+    return aliases[s] ?? s;
+  }
+
+  /**
+   * keys(scale):
+   * Union of keys across all runtime themes for a given scale name.
+   *
+   * - For flat maps (spacing/fontSize/radius...), returns "4", "md", "lg"...
+   * - For nested maps (colors), returns dot-keys like "red.9", "slate.1" etc.
+   *
+   * If you want ONLY top-level keys for nested objects, set opts.flatten=false.
+   */
+  function keys(
+    scale: keyof Theme | string,
+    opts?: { flatten?: boolean; includeAbstract?: boolean; sort?: boolean },
+  ): string[] {
+    const key = normalizeScaleKey(String(scale));
+    if (!key) return [];
+
+    const flatten = opts?.flatten ?? true;
+    const sort = opts?.sort ?? true;
+
+    const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
+
+    const out = new Set<string>();
+
+    for (const t of themes) {
+      const v = view(t as any) as any;
+      const obj = v?.[key];
+
+      if (!obj || typeof obj !== "object") continue;
+
+      if (!flatten) {
+        for (const k of Object.keys(obj)) out.add(k);
+        continue;
+      }
+
+      // flatten nested structures into dot-keys (colors often are nested)
+      const flat = flattenToPathMap(obj as any, "");
+      for (const k of Object.keys(flat)) out.add(k);
+    }
+
+    const arr = Array.from(out);
+
+    // deterministic ordering is important for DX / tests / snapshots
+    if (sort)
+      arr.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+
+    return arr;
+  }
+
   // Return object + attach helpers
   const loaded: any = {
     meta: {
@@ -544,6 +626,8 @@ export function loadTheme(
     view,
     token: tokenFn,
     value: valueFn,
+    viewNames,
+    keys,
 
     // runtime helpers
     isAbstractTheme,

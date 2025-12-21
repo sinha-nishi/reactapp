@@ -151,6 +151,11 @@ export type LoadedTheme = {
   varNamePublic: (publicPath: string) => `--${string}`;
   varRefPublic: (publicPath: string) => string;
   view: (themeName: ThemeName) => Theme;
+  viewNames: () => ThemeName[];
+  keys: (
+    scale: keyof Theme | string,
+    opts?: { flatten?: boolean; includeAbstract?: boolean; sort?: boolean },
+  ) => string[];
 
   isAbstractTheme: (t: string) => boolean;
   runtimeThemes: () => ThemeName[];

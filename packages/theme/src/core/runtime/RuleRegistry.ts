@@ -1,4 +1,4 @@
-import { Rule, RuleContext } from "@/styles/utilities/types";
+import { Rule, RuleContext } from "../../@types";
 
 type UtilityRuleWithoutKind = Omit<Rule, "kind">;
 
