@@ -38,7 +38,7 @@ export const defaultTokens: TokenTree = {
       96: "24rem",
     },
 
-    sizes: {
+    size: {
       auto: "auto",
       full: "100%",
       screen: "100vh",
@@ -190,7 +190,7 @@ export const defaultTokens: TokenTree = {
       "2xl": "{primitive.spacing.12}",
     },
 
-    fontSizes: {
+    fontSize: {
       xs: "{primitive.fontSize.xs}",
       sm: "{primitive.fontSize.sm}",
       md: "{primitive.fontSize.base}",
@@ -202,26 +202,26 @@ export const defaultTokens: TokenTree = {
       "5xl": "{primitive.fontSize.5xl}",
     },
 
-    fontWeights: {
+    fontWeight: {
       regular: "{primitive.fontWeight.normal}",
       medium: "{primitive.fontWeight.medium}",
       bold: "{primitive.fontWeight.bold}",
     },
 
-    lineHeights: {
+    lineHeight: {
       base: "{primitive.lineHeight.normal}",
       tight: "{primitive.lineHeight.tight}",
       relaxed: "{primitive.lineHeight.relaxed}",
     },
 
-    radii: {
+    radius: {
       sm: "{primitive.radius.md}",
       md: "{primitive.radius.lg}",
       lg: "{primitive.radius.xl}",
       full: "{primitive.radius.full}",
     },
 
-    borders: {
+    border: {
       width: {
         sm: "{primitive.borderWidth.DEFAULT}",
         md: "{primitive.borderWidth.2}",

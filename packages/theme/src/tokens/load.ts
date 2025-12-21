@@ -242,7 +242,6 @@ export function loadTheme(
    */
 
   // -------- public DX resolver ----------
-  // -------- public DX resolver ----------
   function resolvePublicPath(publicPath: string) {
     const p = publicPath.replace(/^\./, "").trim();
     if (!p) return p;
