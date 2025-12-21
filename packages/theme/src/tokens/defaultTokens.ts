@@ -2,6 +2,13 @@ import { TokenTree } from "../@types";
 
 export const defaultTokens: TokenTree = {
   primitive: {
+    fontFamily: {
+      body: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"',
+      mono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+      // optional:
+      heading:
+        'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans"',
+    },
     spacing: {
       px: "1px",
       0: "0px",
@@ -171,6 +178,25 @@ export const defaultTokens: TokenTree = {
       lg: "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
       xl: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 10px 10px -5px rgb(0 0 0 / 0.1)",
       none: "none",
+    },
+
+    ringWidth: {
+      0: "0px",
+      1: "1px",
+      2: "2px",
+      4: "4px",
+    },
+    ringOffsetWidth: {
+      0: "0px",
+      1: "1px",
+      2: "2px",
+      4: "4px",
+    },
+    ringColor: {
+      DEFAULT: "{semantic.color.focusRing}", // or a primitive fallback
+    },
+    ringOffsetColor: {
+      DEFAULT: "{semantic.color.bg}",
     },
   },
 

@@ -6,7 +6,7 @@ export type Theme = {
   colors: Record<string, string>;
   spacing: Record<string, string>;
   sizes: Record<string, string>;
-  typography: Record<string, string>;
+  fontFamily: Record<string, string | string[]>;
   fontWeight: Record<string, string>;
   lineHeight: Record<string, string>;
   letterSpacing: Record<string, string>;

@@ -122,6 +122,7 @@ export function loadTheme(
   // Also compute "resolved vars per theme"
   const tokensByTheme: Record<string, Record<string, TokenValue>> = {};
   const cssVarsByTheme: Record<string, Record<`--${string}`, TokenValue>> = {};
+  const mergedTreeByTheme: Record<string, TokenTree> = {};
 
   for (const theme of themeNames) {
     const order = resolveThemeOrder(theme, allThemes, getParents);
@@ -130,6 +131,7 @@ export function loadTheme(
       defaultsTree,
       ...order.map((t) => (pack.themes?.[t]?.tokens ?? {}) as TokenTree),
     );
+    mergedTreeByTheme[theme] = mergedTokens;
 
     const flatPath = flattenToPathMap(mergedTokens);
     flatPathByTheme[theme] = flatPath;
@@ -197,9 +199,8 @@ export function loadTheme(
 
   // raw grouping helpers (by internal paths)
   function group(theme: ThemeName, path: string) {
-    const src = pack.themes?.[theme];
-    if (!src) return undefined;
-    return getPathValue((src.tokens ?? {}) as any, path) as any;
+    const src = mergedTreeByTheme[theme] ?? {};
+    return getPathValue(src as any, path) as any;
   }
 
   function flatGroup(theme: ThemeName, path: string) {
@@ -209,25 +210,35 @@ export function loadTheme(
   }
 
   function view(themeName: ThemeName): Theme {
+    // Use the same public-path resolver that plugin authors use
+    const groupPublic = (publicScale: string) => {
+      const candidate = resolvePublicPath(publicScale); // e.g. "semantic.spacing||primitive.spacing||primitive.space"
+      const internal = pickExistingPath(themeName, candidate);
+      return group(themeName, internal);
+    };
+
     return {
-      colors: group(themeName, "primitive.color"),
-      spacing: group(themeName, "primitive.space"),
-      sizes: group(themeName, "primitive.size"),
-      lineHeight: group(themeName, "primitive.lineHeight"),
-      letterSpacing: group(themeName, "primitive.letterSpacing"),
-      fontSize: group(themeName, "primitive.fontSize"),
-      typography: group(themeName, "primitive.font"),
-      fontWeight: group(themeName, "primitive.fontWeight"),
-      borderWidth: group(themeName, "primitive.borderWidth"),
-      radius: group(themeName, "primitive.radius"),
-      opacity: group(themeName, "primitive.opacity"),
-      shadow: group(themeName, "primitive.shadow"),
-      ringWidth: group(themeName, "primitive.ringWidth"),
-      ringColor: group(themeName, "primitive.ringColor"),
-      ringOffsetWidth: group(themeName, "primitive.ringOffsetWidth"),
-      ringOffsetColor: group(themeName, "primitive.ringOffsetColor"),
-      zIndex: group(themeName, "primitive.zIndex"),
-      // semantic: group(themeName, "semantic"),
+      colors: groupPublic("colors"),
+      spacing: groupPublic("spacing"),
+      sizes: groupPublic("sizes"),
+
+      fontFamily: groupPublic("fontFamily"), // maps to primitive.font via resolvePublicPath
+      fontWeight: groupPublic("fontWeight"),
+      lineHeight: groupPublic("lineHeight"),
+      letterSpacing: groupPublic("letterSpacing"),
+      fontSize: groupPublic("fontSize"),
+
+      borderWidth: groupPublic("borderWidth"),
+      radius: groupPublic("radius"),
+      opacity: groupPublic("opacity"),
+      shadow: groupPublic("shadow"),
+
+      ringWidth: groupPublic("ringWidth"),
+      ringColor: groupPublic("ringColor"),
+      ringOffsetWidth: groupPublic("ringOffsetWidth"),
+      ringOffsetColor: groupPublic("ringOffsetColor"),
+
+      zIndex: groupPublic("zIndex"),
     };
   }
 
@@ -254,6 +265,24 @@ export function loadTheme(
     const or = (...c: string[]) => c.filter(Boolean).join("||");
 
     switch (ns) {
+      case "fontFamily":
+      case "fonts": {
+        return rest
+          ? or(
+              `semantic.fontFamily.${rest}`,
+              `semantic.fonts.${rest}`,
+              `primitive.fontFamily.${rest}`,
+              `primitive.fonts.${rest}`,
+              `primitive.font.${rest}`,
+            )
+          : or(
+              "semantic.fontFamily",
+              "primitive.fontFamily",
+              "primitive.fonts",
+              "primitive.font",
+            );
+      }
+
       case "colors":
       case "color": {
         // Option A: canonical internal keys are semantic.color + primitive.color (Radix)
@@ -366,17 +395,116 @@ export function loadTheme(
           ? or(`primitive.shadow.${rest}`, `semantic.shadow.${rest}`)
           : or("primitive.shadow", "semantic.shadow");
 
+      case "sizes":
+      case "size": {
+        return rest
+          ? or(
+              `semantic.sizes.${rest}`,
+              `semantic.size.${rest}`,
+              `primitive.size.${rest}`,
+              `primitive.sizes.${rest}`,
+            )
+          : or("semantic.sizes", "primitive.size", "primitive.sizes");
+      }
+
       case "motion":
       case "easing":
         return rest
           ? or(`primitive.motion.${rest}`, `semantic.motion.${rest}`)
           : or("primitive.motion", "semantic.motion");
 
-      case "z":
       case "zIndex":
+      case "zIndices": {
         return rest
-          ? or(`primitive.z.${rest}`, `semantic.z.${rest}`)
-          : or("primitive.z", "semantic.z");
+          ? or(
+              `semantic.zIndex.${rest}`,
+              `semantic.zIndices.${rest}`,
+              `primitive.zIndex.${rest}`,
+              `primitive.zIndices.${rest}`,
+            )
+          : or("semantic.zIndex", "primitive.zIndex");
+      }
+
+      case "opacity":
+      case "opacities": {
+        return rest
+          ? or(
+              `semantic.opacity.${rest}`,
+              `semantic.opacities.${rest}`,
+              `primitive.opacity.${rest}`,
+              `primitive.opacities.${rest}`,
+            )
+          : or("semantic.opacity", "primitive.opacity");
+      }
+      case "letterSpacing":
+      case "letterSpacings": {
+        return rest
+          ? or(
+              `semantic.letterSpacing.${rest}`,
+              `semantic.letterSpacings.${rest}`,
+              `primitive.letterSpacing.${rest}`,
+              `primitive.letterSpacings.${rest}`,
+            )
+          : or("semantic.letterSpacing", "primitive.letterSpacing");
+      }
+      case "borderWidth":
+      case "borderWidths": {
+        return rest
+          ? or(
+              `semantic.borderWidth.${rest}`,
+              `semantic.borderWidths.${rest}`,
+              `primitive.borderWidth.${rest}`,
+              `primitive.borderWidths.${rest}`,
+            )
+          : or("semantic.borderWidth", "primitive.borderWidth");
+      }
+      case "ringWidth":
+      case "ringWidths": {
+        return rest
+          ? or(
+              `semantic.ringWidth.${rest}`,
+              `semantic.ringWidths.${rest}`,
+              `primitive.ringWidth.${rest}`,
+              `primitive.ringWidths.${rest}`,
+            )
+          : or("semantic.ringWidth", "primitive.ringWidth");
+      }
+
+      case "ringColor":
+      case "ringColors": {
+        return rest
+          ? or(
+              `semantic.ringColor.${rest}`,
+              `semantic.ringColors.${rest}`,
+              `primitive.ringColor.${rest}`,
+              `primitive.ringColors.${rest}`,
+            )
+          : or("semantic.ringColor", "primitive.ringColor");
+      }
+
+      case "ringOffsetWidth":
+      case "ringOffsetWidths": {
+        return rest
+          ? or(
+              `semantic.ringOffsetWidth.${rest}`,
+              `semantic.ringOffsetWidths.${rest}`,
+              `primitive.ringOffsetWidth.${rest}`,
+              `primitive.ringOffsetWidths.${rest}`,
+            )
+          : or("semantic.ringOffsetWidth", "primitive.ringOffsetWidth");
+      }
+
+      case "ringOffsetColor":
+      case "ringOffsetColors": {
+        return rest
+          ? or(
+              `semantic.ringOffsetColor.${rest}`,
+              `semantic.ringOffsetColors.${rest}`,
+              `primitive.ringOffsetColor.${rest}`,
+              `primitive.ringOffsetColors.${rest}`,
+            )
+          : or("semantic.ringOffsetColor", "primitive.ringOffsetColor");
+      }
 
       default:
         // allow internal paths too
@@ -385,10 +513,28 @@ export function loadTheme(
   }
 
   function pickExistingPath(theme: string, candidate: string) {
-    const candidates = candidate.split("||").map((s) => s.trim());
+    const candidates = candidate
+      .split("||")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
     const flat = flatPathByTheme[theme] ?? {};
-    for (const c of candidates) if (c in flat) return c;
-    return candidates[0];
+
+    // 1) exact leaf match
+    for (const c of candidates) {
+      if (c in flat) return c;
+    }
+
+    // 2) prefix match: if any leaf starts with "candidate."
+    // needed because flatPathByTheme stores ONLY leaf paths
+    for (const c of candidates) {
+      const prefix = c.endsWith(".") ? c : `${c}.`;
+      for (const k of Object.keys(flat)) {
+        if (k.startsWith(prefix)) return c;
+      }
+    }
+
+    return candidates[0] ?? candidate;
   }
 
   function varNamePublic(
@@ -520,30 +666,34 @@ export function loadTheme(
     return runtimeThemes();
   }
 
-  function normalizeScaleKey(scale: string): string {
-    const s = (scale ?? "").trim();
-    if (!s) return s;
+  function normalizeScaleKey(input: string): string {
+    const s = input.trim();
 
-    // singular is canonical
     const aliases: Record<string, string> = {
-      // plural -> singular (your new standard)
+      // singular is canonical
+      space: "spacing",
+      spacings: "spacing",
+
       fontSizes: "fontSize",
       fontWeights: "fontWeight",
       lineHeights: "lineHeight",
       letterSpacings: "letterSpacing",
-      borderWidths: "borderWidth",
+
       radii: "radius",
-      opacities: "opacity",
       shadows: "shadow",
+      opacities: "opacity",
+      zIndices: "zIndex",
+
+      borderWidths: "borderWidth",
       ringWidths: "ringWidth",
       ringColors: "ringColor",
       ringOffsetWidths: "ringOffsetWidth",
       ringOffsetColors: "ringOffsetColor",
-      zIndices: "zIndex",
 
-      // keep common synonyms if you ever used these:
-      color: "colors",
-      spaces: "spacing",
+      // optional convenience
+      font: "typography",
+      fonts: "typography",
+      size: "sizes",
     };
 
     return aliases[s] ?? s;
@@ -562,20 +712,20 @@ export function loadTheme(
     scale: keyof Theme | string,
     opts?: { flatten?: boolean; includeAbstract?: boolean; sort?: boolean },
   ): string[] {
-    const key = normalizeScaleKey(String(scale));
-    if (!key) return [];
-
     const flatten = opts?.flatten ?? true;
     const sort = opts?.sort ?? true;
 
-    const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
+    const publicScale = normalizeScaleKey(String(scale));
+    if (!publicScale) return [];
 
+    const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
     const out = new Set<string>();
 
     for (const t of themes) {
-      const v = view(t as any) as any;
-      const obj = v?.[key];
+      const candidate = resolvePublicPath(publicScale);
+      const internal = pickExistingPath(t, candidate);
 
+      const obj = group(t, internal);
       if (!obj || typeof obj !== "object") continue;
 
       if (!flatten) {
@@ -583,17 +733,14 @@ export function loadTheme(
         continue;
       }
 
-      // flatten nested structures into dot-keys (colors often are nested)
+      // flatten nested structures (colors -> "amber.1")
       const flat = flattenToPathMap(obj as any, "");
       for (const k of Object.keys(flat)) out.add(k);
     }
 
     const arr = Array.from(out);
-
-    // deterministic ordering is important for DX / tests / snapshots
     if (sort)
       arr.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-
     return arr;
   }
 
