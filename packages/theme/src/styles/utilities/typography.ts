@@ -3,11 +3,9 @@ import type { LoadedTheme } from "../../@types";
 import { style, styleMany, util } from "./helper";
 
 export function register(reg: RuleRegistry, theme: LoadedTheme) {
-  const { addScale, addExactDecl, defaultThemeName } = util(reg, theme);
-
   const fontSizeKeys = new Set(theme.keys("fontSize"));
+  const colorKeys = theme.keys("colors");
 
-  // text-* (font-size OR semantic color)
   reg.addPrefixRule("text-", {
     family: "typography",
     match: (cls) => {
@@ -18,64 +16,52 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     },
     apply: (m: any, meta, ctx) => {
       if (m.kind === "fontSize") {
-        // Prefer theme.value() so theme switching works via vars.
-        // If your view stores tuple values, we apply the extra lineHeight if present.
-        const viewFontSize = (theme.view(defaultThemeName) as any)?.fontSize?.[
-          m.key
-        ];
-        const fs = theme.value(`fontSize.${m.key}`);
-
-        if (Array.isArray(viewFontSize)) {
-          const [, more] = viewFontSize as [
-            string,
-            { lineHeight?: string; letterSpacing?: string },
-          ];
-          const extra: Record<string, string> = {};
-          if (more?.lineHeight) extra["line-height"] = more.lineHeight;
-          if (more?.letterSpacing) extra["letter-spacing"] = more.letterSpacing;
-          return styleMany({ "font-size": String(fs), ...extra }, ctx, meta);
-        }
-
-        return style("font-size", String(fs), ctx, meta);
+        const fs = String(theme.value(`fontSize.${m.key}`));
+        return styleMany({ "font-size": fs }, ctx, meta);
       }
-
-      return style("color", ctx.resolveColor(m.key), ctx, meta);
+      return style("color", theme.resolveColor(m.key), ctx, meta);
     },
+    enumerate: () => [
+      ...Array.from(fontSizeKeys).map((k) => `text-${k}`),
+      ...colorKeys.map((k) => `text-${k}`),
+    ],
   });
 
-  // font weight (exact tailwind-style names)
-  const fwNames = [
-    "thin",
-    "extralight",
-    "light",
-    "normal",
-    "medium",
-    "semibold",
-    "bold",
-    "extrabold",
-    "black",
-  ] as const;
+  const { addExactDecl, scaleMap } = util(reg, theme);
 
-  for (const k of fwNames) {
-    // only emit if key exists
-    const all = new Set(theme.keys("fontWeight"));
-    if (!all.has(k)) continue;
-
+  // font weights
+  const fw = scaleMap("fontWeight");
+  for (const k of Object.keys(fw)) {
     reg.addExactRule(`font-${k}`, {
       family: "typography",
       match: (cls) => (cls === `font-${k}` ? { raw: cls } : false),
-      apply: (m, meta, ctx) => {
-        const fw = theme.value(`fontWeight.${k}`);
-        return style("font-weight", String(fw), ctx, meta);
-      },
+      apply: (m, meta, ctx) => style("font-weight", fw[k], ctx, meta),
+      enumerate: () => [`font-${k}`],
     });
   }
 
-  // line-height (leading-*)
-  addScale(reg, "typography", "leading-", "line-height", "lineHeight");
+  // leading / tracking
+  const lh = scaleMap("lineHeight");
+  reg.addPrefixRule("leading-", {
+    family: "typography",
+    match: (cls) => {
+      const key = cls.slice("leading-".length);
+      return key in lh ? { key, raw: cls } : false;
+    },
+    apply: (m, meta, ctx) => style("line-height", lh[m.key], ctx, meta),
+    enumerate: () => Object.keys(lh).map((k) => `leading-${k}`),
+  });
 
-  // letter-spacing (tracking-*)
-  addScale(reg, "typography", "tracking-", "letter-spacing", "letterSpacing");
+  const ls = scaleMap("letterSpacing");
+  reg.addPrefixRule("tracking-", {
+    family: "typography",
+    match: (cls) => {
+      const key = cls.slice("tracking-".length);
+      return key in ls ? { key, raw: cls } : false;
+    },
+    apply: (m, meta, ctx) => style("letter-spacing", ls[m.key], ctx, meta),
+    enumerate: () => Object.keys(ls).map((k) => `tracking-${k}`),
+  });
 
   // alignment
   addExactDecl(reg, "text-left", "text-align", "left");

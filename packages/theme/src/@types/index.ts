@@ -211,6 +211,8 @@ export type LoadedTheme = {
     ref: string;
   };
   value: (publicPath: string, themeName?: ThemeName) => TokenValue | undefined;
+  resolveRef(value: string, themeName?: ThemeName): string;
+  resolveColor(key: string, themeName?: ThemeName): string;
 };
 
 export type UtilitiesOptions = {

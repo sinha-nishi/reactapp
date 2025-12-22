@@ -13,9 +13,7 @@ import { routes } from "./utils/routes";
 import type { AppConfig } from "./@types/AppConfig";
 
 function attachCss() {
-  const builder = createThemeBuilder({
-    tokens: { "color-primary-500": "#16a34a" },
-  });
+  const builder = createThemeBuilder();
   // builder.use(compatPlugin({ tailwind: true }));
   builder.inject();
 }

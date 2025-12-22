@@ -1,4 +1,4 @@
-import { CSSObject, LoadedTheme, RuleContext } from "@/@types";
+import { CSSObject, LoadedTheme, RuleContext } from "../../@types";
 import { RuleRegistry } from "@/core/runtime/RuleRegistry";
 
 export function stripPrefix(cls: string, prefix: string) {
@@ -16,13 +16,9 @@ export function withKey(
   return false;
 }
 
-/**
- * For colors we don't need a scale map here because we resolve via ctx.resolveColor(key).
- * This only extracts the key after the prefix.
- */
 export function withColorKey(cls: string, prefix: string) {
   if (!cls.startsWith(prefix)) return false;
-  const key = cls.slice(prefix.length); // may include "/80" later
+  const key = cls.slice(prefix.length);
   return { key, raw: cls };
 }
 
@@ -51,18 +47,11 @@ function finalize(
   ctx: RuleContext,
   meta: any,
 ): CSSObject {
-  const negative = meta.negative;
   const important = meta.important || ctx.important === true;
   const importantSuffix = important ? " !important" : "";
 
   const out: Record<string, string> = {};
-  for (const [k, v] of Object.entries(decls)) {
-    let val = v;
-    if (negative && /^-?\d/.test(val)) {
-      val = val.startsWith("-") ? val.slice(1) : `-${val}`;
-    }
-    out[k] = `${val}${importantSuffix}`;
-  }
+  for (const [k, v] of Object.entries(decls)) out[k] = `${v}${importantSuffix}`;
 
   let selector = `.${escapeClass(meta.raw ?? "")}`;
   if (typeof ctx.important === "string")
@@ -74,24 +63,14 @@ function escapeClass(cls: string) {
   return cls.replace(/([^a-zA-Z0-9_-])/g, "\\$1");
 }
 
-/**
- * Utility registration helper.
- * Builds a scale map using theme.keys(scaleName) + theme.value(`${scaleName}.${k}`)
- */
 export function util(reg: RuleRegistry, theme: LoadedTheme) {
-  const defaultThemeName = (theme as any).meta?.defaultTheme ?? "light";
-
   const scaleMap = (scaleName: string): Record<string, string> => {
     const keys = theme.keys(scaleName);
     const out: Record<string, string> = {};
-    for (const k of keys) {
-      let v = theme.value(`${scaleName}.${k}`);
-      if (v) out[k] = String(v);
-    }
+    for (const k of keys) out[k] = String(theme.value(`${scaleName}.${k}`));
     return out;
   };
 
-  // spacing
   const S = scaleMap("spacing");
 
   const propScale = (prefix: string, prop: string | string[]) =>
@@ -102,28 +81,6 @@ export function util(reg: RuleRegistry, theme: LoadedTheme) {
       enumerate: () => Object.keys(S).map((k) => `${prefix}${k}`),
     });
 
-  function addScale(
-    reg: RuleRegistry,
-    family: string,
-    prefix: string,
-    prop: string | string[],
-    scaleOrName: Record<string, string> | string,
-  ) {
-    const scale =
-      typeof scaleOrName === "string"
-        ? scaleMap(scaleOrName)
-        : (scaleOrName ?? {});
-
-    reg.addPrefixRule(prefix, {
-      family,
-      match: (cls) => withKey(cls, prefix, scale),
-      apply: (m, meta, ctx) => styleFromScale(m, prop, scale, ctx, meta),
-      enumerate: () => Object.keys(scale).map((k) => `${prefix}${k}`),
-    });
-
-    return scale;
-  }
-
   function addExactDecl(
     reg: RuleRegistry,
     name: string,
@@ -133,6 +90,7 @@ export function util(reg: RuleRegistry, theme: LoadedTheme) {
     reg.addExactRule(name, {
       match: (cls) => (cls === name ? { raw: cls } : false),
       apply: (m, meta, ctx) => style(prop, value, ctx, meta),
+      enumerate: () => [name],
     });
   }
 
@@ -143,9 +101,7 @@ export function util(reg: RuleRegistry, theme: LoadedTheme) {
     ctx: RuleContext,
     meta: any,
   ): CSSObject {
-    let val = scale[m.key];
-    if (val === undefined && m.key) val = m.key;
-
+    const val = scale[m.key] ?? m.key;
     return finalize(
       Array.isArray(prop)
         ? Object.fromEntries((prop as string[]).map((p) => [p, val]))
@@ -155,11 +111,5 @@ export function util(reg: RuleRegistry, theme: LoadedTheme) {
     );
   }
 
-  return {
-    defaultThemeName,
-    scaleMap,
-    propScale,
-    addScale,
-    addExactDecl,
-  };
+  return { propScale, addExactDecl, scaleMap };
 }

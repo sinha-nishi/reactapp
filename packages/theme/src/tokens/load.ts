@@ -706,8 +706,8 @@ export function loadTheme(
     return aliases[s] ?? s;
   }
 
-  const UNION_SCALES = new Set(["spacing"]);
-  const NUMERIC_SCALES = new Set(["spacing"]);
+  const UNION_SCALES = new Set(["spacing", "zIndex", "sizes"]);
+  const NUMERIC_SCALES = new Set(["spacing", "zIndex", "sizes"]);
 
   /**
    * keys(scale):
@@ -803,6 +803,40 @@ export function loadTheme(
     return [...nums, ...nonNums];
   }
 
+  /**
+   * resolveRef(value):
+   * Converts "{a.b.c}" references inside a string into var(--a-b-c).
+   * Works for composite strings too: "0 0 0 {primitive.opacity.50}".
+   */
+  function resolveRefFn(
+    value: string,
+    themeName: ThemeName = defaultTheme,
+  ): string {
+    const flat = flatPathByTheme[themeName] ?? {};
+    if (typeof value !== "string") return String(value);
+
+    return resolveRefs(
+      value,
+      (p) => `var(${pathToCssVar(p, varNaming)})`,
+      flat,
+    );
+  }
+
+  /**
+   * resolveColor(key):
+   * Returns a resolved CSS value for semantic color keys:
+   *   theme.resolveColor("accent") => "var(--color-blue-9)" (or similar)
+   * Never returns "{...}".
+   */
+  function resolveColorFn(
+    key: string,
+    themeName: ThemeName = defaultTheme,
+  ): string {
+    const v = valueFn(`colors.${key}`, themeName);
+    if (v == null) return String(key);
+    return typeof v === "string" ? resolveRefFn(v, themeName) : String(v);
+  }
+
   // Return object + attach helpers
   const loaded: any = {
     meta: {
@@ -832,6 +866,8 @@ export function loadTheme(
     view,
     token: tokenFn,
     value: valueFn,
+    resolveRef: resolveRefFn,
+    resolveColor: resolveColorFn,
     viewNames,
     keys,
 

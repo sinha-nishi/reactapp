@@ -348,13 +348,13 @@ export class CssBuilder {
   inject(doc: Document = document, attrs?: Record<string, string>) {
     const css = this.toString();
     if (this.styleEl) {
-      this.styleEl.textContent = css;
+      this.styleEl.appendChild(doc.createTextNode(css));
       return this.styleEl;
     }
     const el = doc.createElement("style");
-    el.setAttribute("data-css-builder", this.opts.prefix || "theme-builder");
+    el.setAttribute("data-kitsy-theme", this.opts.prefix || "kitsy-theme-builder");
     if (attrs) Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
-    el.textContent = css;
+    el.appendChild(doc.createTextNode(css));
     doc.head.prepend(el);
     this.styleEl = el;
     return el;
