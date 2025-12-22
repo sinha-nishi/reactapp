@@ -7,7 +7,7 @@ import type {
   RenderOptions,
 } from "./@types/ApplicationConfiguration";
 import { attachBrowserAdapter } from "@pkvsinha/react-navigate";
-import { compatPlugin, createThemeBuilder } from "@pkvsinha/react-theme";
+import { createThemeBuilder } from "@pkvsinha/react-theme";
 import { compile } from "./utils/compile";
 import { routes } from "./utils/routes";
 import type { AppConfig } from "./@types/AppConfig";
@@ -16,7 +16,7 @@ function attachCss() {
   const builder = createThemeBuilder({
     tokens: { "color-primary-500": "#16a34a" },
   });
-  builder.use(compatPlugin({ tailwind: true }));
+  // builder.use(compatPlugin({ tailwind: true }));
   builder.inject();
 }
 
