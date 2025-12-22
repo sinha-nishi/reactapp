@@ -209,6 +209,15 @@ export function loadTheme(
     return flattenToPathMap(g as any, "");
   }
 
+  function mergeGroups(themeName: ThemeName, ...paths: string[]) {
+    const out: any = {};
+    for (const p of paths) {
+      const g = group(themeName, p);
+      if (g && typeof g === "object") Object.assign(out, g);
+    }
+    return Object.keys(out).length ? out : undefined;
+  }
+
   function view(themeName: ThemeName): Theme {
     // Use the same public-path resolver that plugin authors use
     const groupPublic = (publicScale: string) => {
@@ -219,7 +228,7 @@ export function loadTheme(
 
     return {
       colors: groupPublic("colors"),
-      spacing: groupPublic("spacing"),
+      spacing: mergeGroups(themeName, "primitive.spacing", "semantic.spacing"),
       sizes: groupPublic("sizes"),
 
       fontFamily: groupPublic("fontFamily"), // maps to primitive.font via resolvePublicPath
@@ -265,24 +274,6 @@ export function loadTheme(
     const or = (...c: string[]) => c.filter(Boolean).join("||");
 
     switch (ns) {
-      case "fontFamily":
-      case "fonts": {
-        return rest
-          ? or(
-              `semantic.fontFamily.${rest}`,
-              `semantic.fonts.${rest}`,
-              `primitive.fontFamily.${rest}`,
-              `primitive.fonts.${rest}`,
-              `primitive.font.${rest}`,
-            )
-          : or(
-              "semantic.fontFamily",
-              "primitive.fontFamily",
-              "primitive.fonts",
-              "primitive.font",
-            );
-      }
-
       case "colors":
       case "color": {
         // Option A: canonical internal keys are semantic.color + primitive.color (Radix)
@@ -323,6 +314,22 @@ export function loadTheme(
             )
           : or("semantic.radii", "primitive.radius", "primitive.radii");
 
+      case "fontFamily": {
+        return rest
+          ? or(
+              `semantic.fontFamily.${rest}`,
+              `semantic.fonts.${rest}`,
+              `primitive.fontFamily.${rest}`,
+              `primitive.fonts.${rest}`,
+              `primitive.font.${rest}`,
+            )
+          : or(
+              "semantic.fontFamily",
+              "primitive.fontFamily",
+              "primitive.fonts",
+              "primitive.font",
+            );
+      }
       case "fonts":
       case "font":
         // Common alias: fonts.body should map to sans by default
@@ -691,13 +698,16 @@ export function loadTheme(
       ringOffsetColors: "ringOffsetColor",
 
       // optional convenience
-      font: "typography",
-      fonts: "typography",
+      font: "fontFamily",
+      fonts: "fontFamily",
       size: "sizes",
     };
 
     return aliases[s] ?? s;
   }
+
+  const UNION_SCALES = new Set(["spacing"]);
+  const NUMERIC_SCALES = new Set(["spacing"]);
 
   /**
    * keys(scale):
@@ -717,6 +727,23 @@ export function loadTheme(
 
     const publicScale = normalizeScaleKey(String(scale));
     if (!publicScale) return [];
+
+    if (UNION_SCALES.has(publicScale)) {
+      console.log("running the union scale for ", publicScale);
+      const out = new Set<string>();
+      const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
+      for (const t of themes) {
+        const merged = mergeGroups(
+          t as any,
+          "primitive.spacing",
+          "semantic.spacing",
+        );
+        if (!merged) continue;
+        const flat = flattenToPathMap(merged, "");
+        for (const k of Object.keys(flat)) out.add(k);
+      }
+      return finalizeKeys(out, publicScale, opts?.sort ?? true);
+    }
 
     const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
     const out = new Set<string>();
@@ -742,6 +769,38 @@ export function loadTheme(
     if (sort)
       arr.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
     return arr;
+  }
+
+  function finalizeKeys(
+    set: Set<string>,
+    scale: string,
+    sort = true,
+  ): string[] {
+    const arr = Array.from(set).filter(Boolean);
+    if (!sort) return arr;
+
+    const s = (scale ?? "").trim();
+    console.log("sorting the union scale for ", scale);
+
+    // Special sort for spacing: numeric first in numeric order, then semantic keys alpha
+    if (NUMERIC_SCALES.has(scale)) return sortSpacingKeys(arr);
+
+    // Default deterministic sort (handles numeric-ish strings reasonably)
+    return arr.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  }
+
+  function sortSpacingKeys(keys: string[]): string[] {
+    const isNum = (s: string) => /^-?\d+(\.\d+)?$/.test(s);
+
+    const nums = keys
+      .filter(isNum)
+      .sort((a, b) => parseFloat(a) - parseFloat(b));
+
+    const nonNums = keys
+      .filter((k) => !isNum(k))
+      .sort((a, b) => a.localeCompare(b));
+
+    return [...nums, ...nonNums];
   }
 
   // Return object + attach helpers
