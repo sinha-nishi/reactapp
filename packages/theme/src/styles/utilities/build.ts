@@ -6,6 +6,7 @@ import {
   RuleContext,
   RuleEngine,
 } from "../../@types";
+import { register as registerAnimate } from "./animate";
 import { register as registerBorder } from "./border";
 import { register as registerColors } from "./colors";
 import { register as registerDisplay } from "./display";
@@ -15,6 +16,7 @@ import { register as registerGapSpace } from "./gap";
 import { register as registerGradient } from "./gradient";
 import { register as registerGrid } from "./grid";
 import { register as registerOpacity } from "./opacity";
+import { register as registerOutline } from "./outline";
 import { register as registerPallette } from "./pallette";
 import { register as registerPosition } from "./position";
 import { register as registerRing } from "./ring";
@@ -25,7 +27,7 @@ import { register as registerSpacing } from "./spacing";
 import { register as registerTransform } from "./transform";
 import { register as registerTypography } from "./typography";
 
-
+import { register as registerIgnore } from "./ignore";
 import { register as registerMisc } from "./misc";
 import { stripPrefix, style } from "./helper";
 
@@ -41,6 +43,7 @@ const re = {
 export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   const reg = new RuleRegistry();
 
+  registerAnimate(reg, theme);
   registerSpacing(reg, theme);
   registerSizes(reg, theme);
   registerTypography(reg, theme);
@@ -55,11 +58,13 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   registerRounded(reg, theme);
   registerShadow(reg, theme);
   registerOpacity(reg, theme);
+  registerOutline(reg, theme);
   registerBorder(reg, theme);
   registerRing(reg, theme);
   registerFilter(reg, theme);
   registerGradient(reg, theme);
   registerMisc(reg, theme);
+  registerIgnore(reg, theme);
 
   // Arbitrary property [prop:value]
   if (opts.enableArbitraryValues) {

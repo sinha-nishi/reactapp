@@ -1,5 +1,21 @@
 import type { VariantBuilder } from "../@types";
 
+const applySelectorVariant = (t: string, sel: string): string[] => {
+  if (t === "hover") return [`${sel}:hover`];
+  if (t === "focus") return [`${sel}:focus`];
+  if (t === "active") return [`${sel}:active`];
+  if (t === "disabled") return [`${sel}:disabled`];
+
+  if (t === "group-hover") return [`.group:hover ${sel}`];
+  if (t === "dark") return [`.dark ${sel}`];
+
+  // ✅ placeholder: expands into both selectors
+  if (t === "placeholder")
+    return [`${sel}::placeholder`, `${sel}::-moz-placeholder`];
+
+  return [sel];
+};
+
 // builds responsive + state variant wrappers
 export const variants = (screens: Record<string, string>): VariantBuilder => {
   const pseudo: Record<string, string> = {
@@ -14,6 +30,7 @@ export const variants = (screens: Record<string, string>): VariantBuilder => {
     even: ":nth-child(even)",
     focuswithin: ":focus-within",
     focusvisible: ":focus-visible",
+    placeholder: "::placeholder",
   };
 
   return (tokens, decls) => {
@@ -22,6 +39,14 @@ export const variants = (screens: Record<string, string>): VariantBuilder => {
 
     tokens.forEach((t) => {
       if (t in pseudo) {
+        if (t === "placeholder") {
+          wrapped = wrapped.flatMap((rule) => [
+            { ...rule, selector: `${rule.selector}::placeholder` },
+            { ...rule, selector: `${rule.selector}::-moz-placeholder` },
+          ]);
+          return;
+        }
+
         wrapped = wrapped.map((rule) => ({
           ...rule,
           selector: `${rule.selector}${pseudo[t]}`,

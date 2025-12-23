@@ -281,7 +281,9 @@ export class CssBuilder {
     for (const fn of this._beforeSerialize)
       try {
         fn();
-      } catch {}
+      } catch (e) {
+        console.error("Error Running on Before Serialize: ", e);
+      }
 
     const lf = minify ? "" : "\n";
     const rootVars = Object.entries(this.tokens)
@@ -335,7 +337,10 @@ export class CssBuilder {
       return this.styleEl;
     }
     const el = doc.createElement("style");
-    el.setAttribute("data-kitsy-theme", this.opts.prefix || "kitsy-theme-builder");
+    el.setAttribute(
+      "data-kitsy-theme",
+      this.opts.prefix || "kitsy-theme-builder",
+    );
     if (attrs) Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
     el.appendChild(doc.createTextNode(css));
     doc.head.prepend(el);

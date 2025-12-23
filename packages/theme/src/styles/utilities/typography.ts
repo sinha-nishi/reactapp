@@ -41,7 +41,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) => (cls === `font-mono` ? { raw: cls } : false),
     apply: (m, meta, ctx) =>
       style("font-family", String(theme.value("fonts.mono")), ctx, meta),
-    enumerate: () => [`font-sans`],
+    enumerate: () => [`font-mono`],
   });
 
   const { addExactDecl, scaleMap } = util(reg, theme);
