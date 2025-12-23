@@ -1,7 +1,10 @@
-import type { CSSObject, ClassEnginePlugin, BuilderContext } from "@/@types";
+import type {
+  CSSObject,
+  ClassEnginePlugin,
+  BuilderContext,
+} from "../../@types";
 import { mergeRules } from "../../utils/rules";
 import { stringify } from "./stringify";
-import { variants } from "@/utils/variants";
 
 function expandVariants(base: string[], ctx: BuilderContext): string[] {
   // responsive variants
@@ -56,7 +59,10 @@ export class ClassEngine {
     }
   }
 
-  enumerate(ctx: BuilderContext, opts?: { families?: string[], variants?: boolean }): string[] {
+  enumerate(
+    ctx: BuilderContext,
+    opts?: { families?: string[]; variants?: boolean },
+  ): string[] {
     const out: string[] = [];
     for (const p of this.plugins) {
       out.push(...p.enumerate(ctx, opts));

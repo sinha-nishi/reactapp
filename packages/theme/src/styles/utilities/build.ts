@@ -6,24 +6,27 @@ import {
   RuleContext,
   RuleEngine,
 } from "../../@types";
-import { register as registerSpacing } from "./spacing";
-import { register as registerSizes } from "./sizes";
-import { register as registerTypography } from "./typography";
+import { register as registerBorder } from "./border";
 import { register as registerColors } from "./colors";
-import { register as registerPosition } from "./position";
-import { register as registerTransform } from "./transform";
 import { register as registerDisplay } from "./display";
+import { register as registerFilter } from "./filter";
 import { register as registerFlex } from "./flex";
-import { register as registerGrid } from "./grid";
 import { register as registerGapSpace } from "./gap";
+import { register as registerGradient } from "./gradient";
+import { register as registerGrid } from "./grid";
+import { register as registerOpacity } from "./opacity";
+import { register as registerPallette } from "./pallette";
+import { register as registerPosition } from "./position";
+import { register as registerRing } from "./ring";
 import { register as registerRounded } from "./rounded";
 import { register as registerShadow } from "./shadow";
-import { register as registerOpacity } from "./opacity";
-import { register as registerBorder } from "./border";
-import { register as registerRing } from "./ring";
-import { register as registerFilter } from "./filter";
+import { register as registerSizes } from "./sizes";
+import { register as registerSpacing } from "./spacing";
+import { register as registerTransform } from "./transform";
+import { register as registerTypography } from "./typography";
+
+
 import { register as registerMisc } from "./misc";
-import { register as registerPallette } from "./pallette";
 import { stripPrefix, style } from "./helper";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
@@ -42,7 +45,7 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   registerSizes(reg, theme);
   registerTypography(reg, theme);
   registerColors(reg, theme);
-  // registerPallette(reg, theme);
+  registerPallette(reg, theme);
   registerPosition(reg, theme);
   registerTransform(reg, theme);
   registerDisplay(reg, theme);
@@ -55,6 +58,7 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   registerBorder(reg, theme);
   registerRing(reg, theme);
   registerFilter(reg, theme);
+  registerGradient(reg, theme);
   registerMisc(reg, theme);
 
   // Arbitrary property [prop:value]

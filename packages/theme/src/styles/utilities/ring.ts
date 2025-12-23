@@ -6,20 +6,20 @@ import { presetColors } from "./preset";
 export function register(reg: RuleRegistry, theme: LoadedTheme) {
   const { addExactDecl } = util(reg, theme);
 
-  addExactDecl(reg, "ring", "--tw-ring-width", "3px");
-  addExactDecl(reg, "ring-1", "--tw-ring-width", "1px");
+  addExactDecl(reg, "ring", "--ky-ring-width", "3px");
+  addExactDecl(reg, "ring-1", "--ky-ring-width", "1px");
 
   // default ring color
   addExactDecl(
     reg,
     "ring",
-    "--tw-ring-color",
+    "--ky-ring-color",
     theme.resolveColor?.("accent") ?? "currentColor",
   );
   addExactDecl(
     reg,
     "ring-1",
-    "--tw-ring-color",
+    "--ky-ring-color",
     theme.resolveColor?.("accent") ?? "currentColor",
   );
 
@@ -30,7 +30,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m, meta, ctx) =>
       styleMany(
         {
-          "box-shadow": `0 0 0 var(--tw-ring-width) var(--tw-ring-color)`,
+          "box-shadow": `0 0 0 var(--ky-ring-width) var(--ky-ring-color)`,
         },
         ctx,
         meta,
@@ -44,7 +44,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m, meta, ctx) =>
       styleMany(
         {
-          "box-shadow": `0 0 0 var(--tw-ring-width) var(--tw-ring-color)`,
+          "box-shadow": `0 0 0 var(--ky-ring-width) var(--ky-ring-color)`,
         },
         ctx,
         meta,
@@ -64,7 +64,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
       return [
         {
           selector: `.${m.raw.replace(/([:.\/\\])/g, "\\$1")}`,
-          "--tw-ring-color": c,
+          "--ky-ring-color": c,
         } as any,
       ];
     },
@@ -78,7 +78,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m, meta, ctx) => {
       const c = theme.resolveColor(m.key);
       return [
-        { selector: `.${escapeClass(m.raw)}`, "--tw-ring-color": c } as any,
+        { selector: `.${escapeClass(m.raw)}`, "--ky-ring-color": c } as any,
       ];
     },
     enumerate: () => presetColors(true).map((c) => `ring-${c}`),

@@ -7,6 +7,7 @@ export const PRESET_COLOR_FAMILIES = [
   "gray",
   "pink",
   "red",
+  "sky",
   "yellow",
 ] as const;
 
