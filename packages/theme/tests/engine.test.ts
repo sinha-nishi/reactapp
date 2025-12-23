@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 import { ClassEngine } from "../src/core/runtime/ClassEngine";
-import { utilitiesEngine } from "../src/styles/utilities";
 
 describe("sum", () => {
   test("adds two numbers", () => {

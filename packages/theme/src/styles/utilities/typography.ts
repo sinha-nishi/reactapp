@@ -28,6 +28,22 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     ],
   });
 
+  reg.addExactRule(`font-sans`, {
+    family: "typography",
+    match: (cls) => (cls === `font-sans` ? { raw: cls } : false),
+    apply: (m, meta, ctx) =>
+      style("font-family", String(theme.value("fonts.body")), ctx, meta),
+    enumerate: () => [`font-sans`],
+  });
+
+  reg.addExactRule(`font-mono`, {
+    family: "typography",
+    match: (cls) => (cls === `font-mono` ? { raw: cls } : false),
+    apply: (m, meta, ctx) =>
+      style("font-family", String(theme.value("fonts.mono")), ctx, meta),
+    enumerate: () => [`font-sans`],
+  });
+
   const { addExactDecl, scaleMap } = util(reg, theme);
 
   // font weights
