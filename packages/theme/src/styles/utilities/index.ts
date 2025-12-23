@@ -11,14 +11,11 @@ export function withTheme<B extends CssBuilder>(
   builder: B,
   opts: BuilderOptions,
 ): CssBuilder {
-  console.log("applying utilitiesPlugin with opts: ");
   const engine = new ClassEngine({ plugins: [utilitiesEngine(builder)] });
 
   // Late injection into the "utilities" layer
   builder.onBeforeSerialize(() => {
-    console.log("stsarted presetClasses utilities count: 2 = ");
-    const presetClasses = engine.enumerate(builder.ctx, {});
-    console.log("presetClasses utilities count: 3 = ", presetClasses);
+    const presetClasses = engine.enumerate(builder.ctx, { variants: true });
     const cssObjects = engine.compile(presetClasses);
     const css = ClassEngine.toCss(cssObjects);
     if (css && css.trim()) builder.utilities(css, "key");
@@ -35,9 +32,80 @@ const utilitiesEngine = (b: CssBuilder): ClassEnginePlugin => {
     prefix: b.opts.prefix ?? "",
   });
 
+  const v = variants(
+    b.ctx?.screens ?? {
+      sm: "640px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
+      "2xl": "1536px",
+    },
+  );
+
   return {
     name: "utilities-engine",
-    variants: variants(b.opts.screens),
+    variants(tokens, decls) {
+      return v(tokens ?? [], decls ?? []);
+    },
+    // variants(tokens: string[], decls: CSSObject[]): CSSObject[] {
+    //   console.log("Utility variants:", tokens, decls);
+    //   if (!tokens?.length) return decls;
+
+    //   const responsive = new Set(["sm", "md", "lg", "xl", "2xl"]);
+
+    //   // NOTE: put your actual breakpoint values here (Tailwind defaults)
+    //   const screens: Record<string, string> = b.ctx?.screens ??
+    //     (theme as any)?.screens ?? {
+    //       sm: "640px",
+    //       md: "768px",
+    //       lg: "1024px",
+    //       xl: "1280px",
+    //       "2xl": "1536px",
+    //     };
+
+    //   const applySelectorVariant = (t: string, sel: string) => {
+    //     if (t === "hover") return `${sel}:hover`;
+    //     if (t === "focus") return `${sel}:focus`;
+    //     if (t === "active") return `${sel}:active`;
+    //     if (t === "disabled") return `${sel}:disabled`;
+
+    //     if (t === "group-hover") return `.group:hover ${sel}`;
+    //     if (t === "dark") return `.dark ${sel}`;
+
+    //     return sel;
+    //   };
+
+    //   // First apply selector-level variants
+    //   let out = decls.map((o) => {
+    //     let selector = o.selector;
+    //     for (const t of tokens) {
+    //       if (responsive.has(t)) continue;
+    //       selector = applySelectorVariant(t, selector);
+    //     }
+    //     return { ...o, selector };
+    //   });
+
+    //   // Then wrap responsive tokens (media queries)
+    //   // Your stringify already outputs @media blocks (seen in pkv.theme.css),
+    //   // so we can safely emit media wrapper objects.
+    //   for (const t of tokens) {
+    //     if (!responsive.has(t)) continue;
+    //     const min = screens[t];
+    //     if (!min) continue;
+
+    //     out = [
+    //       {
+    //         selector: `@media (min-width: ${min})`,
+    //         // IMPORTANT: this assumes your CSSObject supports nesting via `children`.
+    //         // If your type uses `rules`/`body` instead, tell me and I’ll adjust.
+    //         children: out,
+    //       } as any,
+    //     ];
+    //   }
+
+    //   return out;
+    // },
+
     match(className: string) {
       return util.match(className);
     },

@@ -7,8 +7,19 @@ import {
   RuleEngine,
 } from "../../@types";
 import { register as registerSpacing } from "./spacing";
+import { register as registerSizes } from "./sizes";
 import { register as registerTypography } from "./typography";
 import { register as registerColors } from "./colors";
+import { register as registerPosition } from "./position";
+import { register as registerTransform } from "./transform";
+import { register as registerDisplay } from "./display";
+import { register as registerFlex } from "./flex";
+import { register as registerGrid } from "./grid";
+import { register as registerGapSpace } from "./gap";
+import { register as registerRounded } from "./rounded";
+import { register as registerShadow } from "./shadow";
+import { register as registerOpacity } from "./opacity";
+import { register as registerMisc } from "./misc";
 import { stripPrefix, style } from "./helper";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
@@ -24,8 +35,19 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   const reg = new RuleRegistry();
 
   registerSpacing(reg, theme);
+  registerSizes(reg, theme);
   registerTypography(reg, theme);
   registerColors(reg, theme);
+  registerPosition(reg, theme);
+  registerTransform(reg, theme);
+  registerDisplay(reg, theme);
+  registerFlex(reg, theme);
+  registerGrid(reg, theme);
+  // registerGapSpace(reg, theme);
+  registerRounded(reg, theme);
+  registerShadow(reg, theme);
+  registerOpacity(reg, theme);
+  registerMisc(reg, theme);
 
   // Arbitrary property [prop:value]
   if (opts.enableArbitraryValues) {

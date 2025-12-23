@@ -729,7 +729,6 @@ export function loadTheme(
     if (!publicScale) return [];
 
     if (UNION_SCALES.has(publicScale)) {
-      console.log("running the union scale for ", publicScale);
       const out = new Set<string>();
       const themes = opts?.includeAbstract ? themeNames : runtimeThemes();
       for (const t of themes) {
@@ -780,7 +779,6 @@ export function loadTheme(
     if (!sort) return arr;
 
     const s = (scale ?? "").trim();
-    console.log("sorting the union scale for ", scale);
 
     // Special sort for spacing: numeric first in numeric order, then semantic keys alpha
     if (NUMERIC_SCALES.has(scale)) return sortSpacingKeys(arr);

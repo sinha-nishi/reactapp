@@ -101,7 +101,20 @@ export function util(reg: RuleRegistry, theme: LoadedTheme) {
     ctx: RuleContext,
     meta: any,
   ): CSSObject {
-    const val = scale[m.key] ?? m.key;
+    let val = scale[m.key] ?? m.key;
+
+    // support negative utilities like -mt-4, -mx-2, etc.
+    if (meta?.negative) {
+      const s = String(val);
+
+      // safe fast-path for numeric-ish values (px/rem/em/%/vh/vw/etc.)
+      // if it's already negative, keep it
+      if (!s.startsWith("-")) {
+        // if it's a var(...) or something complex, use calc()
+        if (s.startsWith("var(") || s.includes(" ")) val = `calc(${s} * -1)`;
+        else val = `-${s}`;
+      }
+    }
     return finalize(
       Array.isArray(prop)
         ? Object.fromEntries((prop as string[]).map((p) => [p, val]))

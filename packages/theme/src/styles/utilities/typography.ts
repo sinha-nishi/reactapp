@@ -10,6 +10,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     family: "typography",
     match: (cls) => {
       const body = cls.slice(5);
+      if (["left", "right", "center", "justify"].includes(body)) return false;
       if (fontSizeKeys.has(body))
         return { kind: "fontSize", key: body, raw: cls };
       return { kind: "color", key: body, raw: cls };
