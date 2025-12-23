@@ -67,7 +67,6 @@ export type Rule = {
 export type RuleContext = {
   screens: Record<string, string>;
   important: boolean | string | undefined;
-  resolveColor: (key: string) => string;
 };
 
 export interface RuleEngine {

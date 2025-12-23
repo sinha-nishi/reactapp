@@ -11,8 +11,6 @@ function compile(classes: string[]) {
     theme: defaultTokens,
     screens: { sm: "640px", md: "768px" },
     important: false,
-    resolveColor: (k: string) =>
-      ((defaultTokens.primitive as Record<string, any>)?.["colors"] as Record<string, string> | undefined)?.[k] || k,
   };
   const results = [];
   for (const c of classes) {

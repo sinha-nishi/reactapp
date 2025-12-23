@@ -59,8 +59,8 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
       cls.startsWith("ring-") ? { key: cls.slice(5), raw: cls } : false,
     apply: (m, meta, ctx) => {
       // reuse your color resolver if it supports "slate-900/10"
-      const c =
-        ctx.resolveColor?.(m.key) ?? theme.resolveColor?.(m.key) ?? m.key;
+      const c = theme.resolveColor(m.key);
+
       return [
         {
           selector: `.${m.raw.replace(/([:.\/\\])/g, "\\$1")}`,
@@ -76,8 +76,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) =>
       cls.startsWith("ring-") ? { key: cls.slice(5), raw: cls } : false,
     apply: (m, meta, ctx) => {
-      const fn = ctx?.resolveColor ?? (theme as any)?.resolveColor;
-      const c = typeof fn === "function" ? fn(m.key) : m.key;
+      const c = theme.resolveColor(m.key);
       return [
         { selector: `.${escapeClass(m.raw)}`, "--tw-ring-color": c } as any,
       ];

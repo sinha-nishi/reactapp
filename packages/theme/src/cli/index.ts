@@ -14,7 +14,6 @@ import { lookupConfig } from "./config";
 import { scanClassNames } from "./scan";
 import { ClassEngine } from "../core/runtime/ClassEngine";
 import { stringify } from "../core/runtime/stringify";
-import { TailwindCompat } from "@/plugins/compat/tailwind";
 
 const program = new Command();
 

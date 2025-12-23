@@ -23,7 +23,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m: Match, meta, ctx) =>
       style(
         "background-color",
-        resolveTailwindColor(ctx, theme, m.color),
+        theme.resolveColor(normalizeColorKey(m.color)),
         ctx,
         meta,
       ),
@@ -34,7 +34,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     family: "palette",
     match: (cls) => parsePalette("text", cls),
     apply: (m: Match, meta, ctx) =>
-      style("color", resolveTailwindColor(ctx, theme, m.color), ctx, meta),
+      style("color", theme.resolveColor(normalizeColorKey(m.color)), ctx, meta),
     enumerate: () => colors("text", false),
   });
 
@@ -52,7 +52,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m: Match, meta, ctx) =>
       style(
         "border-color",
-        resolveTailwindColor(ctx, theme, m.color),
+        theme.resolveColor(normalizeColorKey(m.color)),
         ctx,
         meta,
       ),
@@ -79,24 +79,4 @@ function normalizeColorKey(key: string) {
     /^([a-zA-Z]+)-([0-9]+)(\/[0-9]+)?$/,
     (_, fam, shade, alpha) => `${fam}.${shade}${alpha ?? ""}`,
   );
-}
-
-/**
- * Resolve Tailwind-ish color strings like:
- * - "slate-900"
- * - "slate-900/50"
- * - "cyan-200"
- *
- * Uses ctx.resolveColor/theme.resolveColor if available.
- * This is important because you already fixed token paths + resolveRefs.
- */
-function resolveTailwindColor(
-  ctx: any,
-  theme: LoadedTheme,
-  key: string,
-): string {
-  if (typeof theme.resolveColor === "function")
-    return theme.resolveColor(normalizeColorKey(key));
-  // fallback: use raw if resolver not present (shouldn't happen)
-  return key;
 }

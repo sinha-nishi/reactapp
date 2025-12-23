@@ -51,8 +51,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) =>
       cls.startsWith("shadow-") ? { key: cls.slice(7), raw: cls } : false,
     apply: (m, meta, ctx) => {
-      const fn = ctx?.resolveColor ?? (theme as any)?.resolveColor;
-      const c = typeof fn === "function" ? fn(m.key) : m.key;
+      const c = theme.resolveColor(m.key);
       // Use a safe “colored shadow” preset.
       return styleMany(
         { "box-shadow": `0 10px 15px -3px ${c}, 0 4px 6px -4px ${c}` },

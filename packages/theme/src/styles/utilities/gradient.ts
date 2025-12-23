@@ -40,8 +40,8 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) =>
       cls.startsWith("from-") ? { key: cls.slice(5), raw: cls } : false,
     apply: (m, meta, ctx) => {
-      const c =
-        (ctx.resolveColor ?? (theme as any).resolveColor)?.(m.key) ?? m.key;
+      const c = theme.resolveColor(m.key);
+
       return styleMany(
         {
           "--tw-gradient-from": c,
@@ -60,8 +60,8 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) =>
       cls.startsWith("via-") ? { key: cls.slice(4), raw: cls } : false,
     apply: (m, meta, ctx) => {
-      const c =
-        (ctx.resolveColor ?? (theme as any).resolveColor)?.(m.key) ?? m.key;
+      const c = theme.resolveColor(m.key);
+
       return styleMany(
         {
           "--tw-gradient-stops":
@@ -81,8 +81,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     match: (cls) =>
       cls.startsWith("to-") ? { key: cls.slice(3), raw: cls } : false,
     apply: (m, meta, ctx) => {
-      const c =
-        (ctx.resolveColor ?? (theme as any).resolveColor)?.(m.key) ?? m.key;
+      const c = theme.resolveColor(m.key);
       return styleMany({ "--tw-gradient-to": c }, ctx, meta);
     },
     enumerate: () => presetColors(false).map((c) => `to-${c}`),
