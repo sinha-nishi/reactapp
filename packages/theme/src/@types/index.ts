@@ -1,7 +1,5 @@
 export * from "./CSSProperties";
 
-import { TailwindCompatOptions } from "../plugins/compat/tailwind";
-
 export type Theme = {
   // --- Layout & Responsive ---
   /** Breakpoints for responsive design (e.g., sm: '640px', md: '768px') */
@@ -270,7 +268,7 @@ export type BuilderOptions = {
     input: boolean | InputStyleOptions;
   };
   compat?: {
-    tailwind?: TailwindCompatOptions;
+    tailwind?: boolean;
   };
   a11y?: {
     reducedMotion?: boolean;
