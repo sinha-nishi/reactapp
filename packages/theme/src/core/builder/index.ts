@@ -98,23 +98,6 @@ export class CssBuilder {
       theme,
       screens,
       important: options?.important ?? false,
-      resolveColor(nameOrHex: string, alpha?: string) {
-        // accepts palette key "red-500" or hex/rgb; supports "/<alpha>" notation
-        const [base, a] = (
-          alpha ? [nameOrHex, alpha] : nameOrHex.split("/")
-        ) as [string, string?];
-        const hex =
-          (theme.view("light").colors as Record<string, string>)[base] ?? base;
-        if (!a) return hex;
-        // convert hex to rgba with alpha percentage (00..100 or 0..1)
-        const alphaVal = a.includes("%")
-          ? parseFloat(a) / 100
-          : parseFloat(a) > 1
-            ? parseFloat(a) / 100
-            : parseFloat(a);
-        const { r, g, b } = hexToRgb(hex);
-        return `rgba(${r}, ${g}, ${b}, ${Number.isFinite(alphaVal) ? alphaVal : 1})`;
-      },
     };
 
     this.opts = {

@@ -1,6 +1,7 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
 import { LoadedTheme } from "../../@types";
 import { util, styleMany } from "./helper";
+import { presetColors } from "./preset";
 
 export function register(reg: RuleRegistry, theme: LoadedTheme) {
   const { addExactDecl } = util(reg, theme);
@@ -69,4 +70,22 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     },
     enumerate: () => [],
   });
+
+  reg.addPrefixRule("ring-", {
+    family: "ring",
+    match: (cls) =>
+      cls.startsWith("ring-") ? { key: cls.slice(5), raw: cls } : false,
+    apply: (m, meta, ctx) => {
+      const fn = ctx?.resolveColor ?? (theme as any)?.resolveColor;
+      const c = typeof fn === "function" ? fn(m.key) : m.key;
+      return [
+        { selector: `.${escapeClass(m.raw)}`, "--tw-ring-color": c } as any,
+      ];
+    },
+    enumerate: () => presetColors(true).map((c) => `ring-${c}`),
+  });
+}
+
+function escapeClass(cls: string) {
+  return cls.replace(/([:.\/\\])/g, "\\$1");
 }

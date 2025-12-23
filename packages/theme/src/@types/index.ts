@@ -304,7 +304,6 @@ export interface BuilderContext {
   theme: LoadedTheme;
   screens: Record<string, string>;
   important: boolean | string;
-  resolveColor(nameOrHex: string, alpha?: string): string;
 }
 
 export interface ClassEnginePlugin {

@@ -826,12 +826,52 @@ export function loadTheme(
    *   theme.resolveColor("accent") => "var(--color-blue-9)" (or similar)
    * Never returns "{...}".
    */
+  // function resolveColorFn(
+  //   key: string,
+  //   themeName: ThemeName = defaultTheme,
+  // ): string {
+  //   const v = valueFn(`colors.${key}`, themeName);
+  //   if (v == null) return String(key);
+  //   return typeof v === "string" ? resolveRefFn(v, themeName) : String(v);
+  // }
   function resolveColorFn(
     key: string,
     themeName: ThemeName = defaultTheme,
   ): string {
-    const v = valueFn(`colors.${key}`, themeName);
-    if (v == null) return String(key);
+    const raw = String(key ?? "").trim();
+
+    // 1) palette form: "orange-600", "orange.600", "slate-900/50", "cyan.900/30"
+    // family: letters, shade: digits, alpha: /digits (0..100)
+    const m = raw.match(/^([a-zA-Z]+)[.-]([0-9]+)(?:\/([0-9]+))?$/);
+    if (m) {
+      const fam = m[1];
+      const shade = m[2];
+      const alpha = m[3]
+        ? Math.max(0, Math.min(100, parseInt(m[3], 10)))
+        : null;
+
+      // Always resolve via primitive path
+      const primitivePath = `primitive.color.${fam}.${shade}`;
+      const base = getResolved(themeName, primitivePath);
+
+      // If missing, fall back to input (but never emit "orange-600" as CSS value)
+      const baseCss = base == null ? null : String(base);
+
+      if (!baseCss) return "currentColor";
+
+      // Apply alpha if requested
+      if (alpha != null) {
+        // Works with both hex and var(...)
+        // Example: color-mix(in srgb, var(--color-slate-900) 50%, transparent)
+        return `color-mix(in srgb, ${baseCss} ${alpha}%, transparent)`;
+      }
+
+      return baseCss;
+    }
+
+    // 2) semantic form: "infoSoft", "accent", etc (existing behavior)
+    const v = valueFn(`colors.${raw}`, themeName);
+    if (v == null) return String(raw);
     return typeof v === "string" ? resolveRefFn(v, themeName) : String(v);
   }
 

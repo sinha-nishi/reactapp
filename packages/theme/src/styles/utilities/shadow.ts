@@ -1,6 +1,7 @@
 import { RuleRegistry } from "../../core/runtime/RuleRegistry";
 import { LoadedTheme } from "../../@types";
-import { util } from "./helper";
+import { styleMany, util } from "./helper";
+import { presetColors } from "./preset";
 
 export function register(reg: RuleRegistry, theme: LoadedTheme) {
   const { addExactDecl } = util(reg, theme);
@@ -44,4 +45,21 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     "inset 0 2px 4px 0 rgb(0 0 0 / 0.06)",
   );
   addExactDecl(reg, "shadow-none", "box-shadow", "none");
+
+  reg.addPrefixRule("shadow-", {
+    family: "shadow",
+    match: (cls) =>
+      cls.startsWith("shadow-") ? { key: cls.slice(7), raw: cls } : false,
+    apply: (m, meta, ctx) => {
+      const fn = ctx?.resolveColor ?? (theme as any)?.resolveColor;
+      const c = typeof fn === "function" ? fn(m.key) : m.key;
+      // Use a safe “colored shadow” preset.
+      return styleMany(
+        { "box-shadow": `0 10px 15px -3px ${c}, 0 4px 6px -4px ${c}` },
+        ctx,
+        meta,
+      );
+    },
+    enumerate: () => presetColors(false).map((c) => `shadow-${c}`),
+  });
 }

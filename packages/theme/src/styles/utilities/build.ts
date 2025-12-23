@@ -23,6 +23,7 @@ import { register as registerBorder } from "./border";
 import { register as registerRing } from "./ring";
 import { register as registerFilter } from "./filter";
 import { register as registerMisc } from "./misc";
+import { register as registerPallette } from "./pallette";
 import { stripPrefix, style } from "./helper";
 
 type Options = { enableArbitraryValues: boolean; prefix: string };
@@ -41,6 +42,7 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   registerSizes(reg, theme);
   registerTypography(reg, theme);
   registerColors(reg, theme);
+  // registerPallette(reg, theme);
   registerPosition(reg, theme);
   registerTransform(reg, theme);
   registerDisplay(reg, theme);

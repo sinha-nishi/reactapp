@@ -434,6 +434,8 @@ export const defaultTokens: TokenTree = {
       "3xl": "1.875rem",
       "4xl": "2.25rem",
       "5xl": "3rem",
+      "6xl": "3.75rem",
+      "9xl": "8rem",
     },
 
     fontWeight: {

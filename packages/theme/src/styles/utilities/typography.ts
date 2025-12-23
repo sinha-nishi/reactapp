@@ -92,4 +92,7 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
   addExactDecl(reg, "sr-only", "clip", "rect(0, 0, 0, 0)");
   addExactDecl(reg, "sr-only", "white-space", "nowrap");
   addExactDecl(reg, "sr-only", "border-width", "0");
+
+  addExactDecl(reg, "bg-clip-text", "background-clip", "text");
+  addExactDecl(reg, "bg-clip-text", "-webkit-background-clip", "text");
 }
