@@ -19,6 +19,9 @@ import { register as registerGapSpace } from "./gap";
 import { register as registerRounded } from "./rounded";
 import { register as registerShadow } from "./shadow";
 import { register as registerOpacity } from "./opacity";
+import { register as registerBorder } from "./border";
+import { register as registerRing } from "./ring";
+import { register as registerFilter } from "./filter";
 import { register as registerMisc } from "./misc";
 import { stripPrefix, style } from "./helper";
 
@@ -43,10 +46,13 @@ export function buildUtilities(theme: LoadedTheme, opts: Options): RuleEngine {
   registerDisplay(reg, theme);
   registerFlex(reg, theme);
   registerGrid(reg, theme);
-  // registerGapSpace(reg, theme);
+  registerGapSpace(reg, theme);
   registerRounded(reg, theme);
   registerShadow(reg, theme);
   registerOpacity(reg, theme);
+  registerBorder(reg, theme);
+  registerRing(reg, theme);
+  registerFilter(reg, theme);
   registerMisc(reg, theme);
 
   // Arbitrary property [prop:value]

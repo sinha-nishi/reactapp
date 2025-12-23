@@ -14,47 +14,37 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
     apply: (m, meta, ctx) => style("gap", S[m.key] ?? m.key, ctx, meta),
     enumerate: () => Object.keys(S).map((k) => `gap-${k}`),
   });
-
-  // space-x-* and space-y-*
-  // minimal Tailwind behavior using child combinator
+  // space-x-*
   reg.addPrefixRule("space-x-", {
     family: "spacing",
     match: (cls) =>
       cls.startsWith("space-x-")
         ? { key: cls.slice("space-x-".length), raw: cls }
         : false,
-    apply: (m, meta, ctx) =>
-      styleMany(
-        {
-          selector: `.${escapeClass(m.raw)} > :not([hidden]) ~ :not([hidden])`,
-          "margin-left": S[m.key] ?? m.key,
-        } as any,
-        ctx,
-        meta,
-      ),
+    apply: (m, meta, ctx) => {
+      const v = S[m.key] ?? m.key;
+      const base = `.${escapeClass(m.raw)} > :not([hidden]) ~ :not([hidden])`;
+      return [{ selector: base, "margin-left": v } as any];
+    },
     enumerate: () => Object.keys(S).map((k) => `space-x-${k}`),
   });
 
+  // space-y-*
   reg.addPrefixRule("space-y-", {
     family: "spacing",
     match: (cls) =>
       cls.startsWith("space-y-")
         ? { key: cls.slice("space-y-".length), raw: cls }
         : false,
-    apply: (m, meta, ctx) =>
-      styleMany(
-        {
-          selector: `.${escapeClass(m.raw)} > :not([hidden]) ~ :not([hidden])`,
-          "margin-top": S[m.key] ?? m.key,
-        } as any,
-        ctx,
-        meta,
-      ),
+    apply: (m, meta, ctx) => {
+      const v = S[m.key] ?? m.key;
+      const base = `.${escapeClass(m.raw)} > :not([hidden]) ~ :not([hidden])`;
+      return [{ selector: base, "margin-top": v } as any];
+    },
     enumerate: () => Object.keys(S).map((k) => `space-y-${k}`),
   });
 }
 
 function escapeClass(cls: string) {
-  // minimal escape: ":" "/" "." etc
   return cls.replace(/([:.\/\\])/g, "\\$1");
 }

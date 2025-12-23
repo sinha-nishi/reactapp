@@ -69,4 +69,27 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
   addExactDecl(reg, "text-center", "text-align", "center");
   addExactDecl(reg, "text-right", "text-align", "right");
   addExactDecl(reg, "text-justify", "text-align", "justify");
+
+  // truncate
+  addExactDecl(reg, "truncate", "overflow", "hidden");
+  addExactDecl(reg, "truncate", "text-overflow", "ellipsis");
+  addExactDecl(reg, "truncate", "white-space", "nowrap");
+
+  // underline
+  addExactDecl(reg, "underline", "text-decoration-line", "underline");
+
+  // case
+  addExactDecl(reg, "uppercase", "text-transform", "uppercase");
+  addExactDecl(reg, "lowercase", "text-transform", "lowercase");
+
+  // sr-only
+  addExactDecl(reg, "sr-only", "position", "absolute");
+  addExactDecl(reg, "sr-only", "width", "1px");
+  addExactDecl(reg, "sr-only", "height", "1px");
+  addExactDecl(reg, "sr-only", "padding", "0");
+  addExactDecl(reg, "sr-only", "margin", "-1px");
+  addExactDecl(reg, "sr-only", "overflow", "hidden");
+  addExactDecl(reg, "sr-only", "clip", "rect(0, 0, 0, 0)");
+  addExactDecl(reg, "sr-only", "white-space", "nowrap");
+  addExactDecl(reg, "sr-only", "border-width", "0");
 }

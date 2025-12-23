@@ -30,6 +30,11 @@ export function register(reg: RuleRegistry, theme: LoadedTheme) {
   addExactDecl(reg, "top-1/2", "top", "50%");
   addExactDecl(reg, "bottom-1/2", "bottom", "50%");
 
+  addExactDecl(reg, "mx-auto", "margin-left", "auto");
+  addExactDecl(reg, "mx-auto", "margin-right", "auto");
+  addExactDecl(reg, "object-cover", "object-fit", "cover");
+  addExactDecl(reg, "object-top", "object-position", "top");
+
   // z-index
   const Z: Record<string, string> = {
     "0": "0",
