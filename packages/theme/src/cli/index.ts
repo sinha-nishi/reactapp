@@ -18,8 +18,8 @@ import { stringify } from "../core/runtime/stringify";
 const program = new Command();
 
 program
-  .name("pkv-design")
-  .description("Build CSS bundles using pkv builder + presets")
+  .name("kitsy-cli")
+  .description("Build CSS bundles using kitsy builder + presets")
   .version("0.1.0");
 
 program
@@ -34,13 +34,13 @@ program
     "--presets-dir <dir>",
     "directory with preset JSONs (name resolution)",
   )
-  .option("-c, --config <path>", "path to pkv.config.(mjs|cjs|js|json)")
+  .option("-c, --config <path>", "path to kitsy.config.(mjs|cjs|js|json)")
   .option(
     "-t, --tokens <path>",
     "path to custom tokens JSON (same shape as presets)",
   )
 
-  .option("-o, --out <file>", "output CSS file", "dist/pkv.custom.css")
+  .option("-o, --out <file>", "output CSS file", "dist/kitsy.custom.css")
   .option("--min", "minify output")
   .option("--legacy", "emit legacy build (no @layer)")
   .option("--compat <list>", "comma-separated: tailwind,bootstrap")

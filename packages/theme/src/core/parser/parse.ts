@@ -3,7 +3,7 @@ import type { Message } from "postcss";
 import { postcssPkv, type Extracted, type PkvOptions } from "./postcss";
 
 interface PkvMessage extends Message {
-  type: "pkv";
+  type: "kitsy";
   out?: Extracted;
 }
 
@@ -15,11 +15,11 @@ export async function parsePkvCss(
     from: undefined,
   });
   // const msg = result.messages.find(
-  //   (m: Message): m is PkvMessage => m.type === "pkv" && !!m.out,
+  //   (m: Message): m is PkvMessage => m.type === "kitsy" && !!m.out,
   // );
   // return (msg?.out || { tokens: {}, rules: [] }) as Extracted;
   const msg = result.messages.find(
-    (m: Message): m is PkvMessage => m.type === "pkv" && !!m.out,
+    (m: Message): m is PkvMessage => m.type === "kitsy" && !!m.out,
   );
   const out = (msg?.out || { tokens: {}, rules: [] }) as any;
   out.diagnostics = msg?.diagnostics || [];

@@ -17,5 +17,5 @@ const builder = createThemeBuilder()
 const css = builder.toString({ minify: false });
 const cssMin = builder.toString({ minify: true });
 
-writeFileSync(resolve(outDir, "pkv.widgets.css"), css, "utf8");
-writeFileSync(resolve(outDir, "pkv.widgets.min.css"), cssMin, "utf8");
+writeFileSync(resolve(outDir, "kitsy.widgets.css"), css, "utf8");
+writeFileSync(resolve(outDir, "kitsy.widgets.min.css"), cssMin, "utf8");

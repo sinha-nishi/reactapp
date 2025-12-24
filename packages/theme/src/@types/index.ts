@@ -213,7 +213,7 @@ export type LoadedTheme = {
 };
 
 export type UtilitiesOptions = {
-  // allow custom user overrides from pkv.config.ts
+  // allow custom user overrides from kitsy.config.ts
   theme?: LoadedTheme;
   screens?: Record<string, string>; // e.g. { xs:"360px", sm:"640px", md:"768px", ... }
   important?: boolean | string; // true => global !important, or selector prefix like "#app"

@@ -28,9 +28,9 @@ export interface Diagnostics {
 }
 
 export interface PkvOptions {
-  /** Infer layer from @layer pkv.<name> or comment directives; fallback by path */
+  /** Infer layer from @layer kitsy.<name> or comment directives; fallback by path */
   layerFromPath?: boolean;
-  /** If true, accept @layer <name> without pkv. prefix */
+  /** If true, accept @layer <name> without kitsy. prefix */
   acceptUnprefixedLayer?: boolean;
   validation?: {
     classPrefix?: (string | RegExp)[];
@@ -60,7 +60,7 @@ function layerFromFilepath(filepath?: string): LayerName | undefined {
 
 function findCommentMeta(node: ChildNode): { layer?: LayerName; key?: string } {
   const comments = (node as any).raws?.before || "";
-  const m = /pkv:layer=([a-z]+)/i.exec(comments);
+  const m = /kitsy:layer=([a-z]+)/i.exec(comments);
   const k = /key=([a-z0-9-_]+)/i.exec(comments);
   const layer = m?.[1] as LayerName | undefined;
   const key = k?.[1];
@@ -69,7 +69,7 @@ function findCommentMeta(node: ChildNode): { layer?: LayerName; key?: string } {
 
 // The plugin collects tokens & rules, then stores them on result.messages
 export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
-  postcssPlugin: "postcss-pkv",
+  postcssPlugin: "postcss-kitsy",
   Once(root, { result }) {
     const out: Extracted = { tokens: {}, rules: [] };
     const diagnostics: Diagnostics[] = [];
@@ -105,9 +105,9 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
 
     const handleLayerBlock = (at: AtRule, layerHint?: LayerName) => {
       let name = String(at.params || "").trim();
-      // expect "pkv.components" or fallback to bare name
+      // expect "kitsy.components" or fallback to bare name
       let layer: LayerName | undefined;
-      if (name.startsWith("pkv.")) layer = name.slice(4) as LayerName;
+      if (name.startsWith("kitsy.")) layer = name.slice(4) as LayerName;
       else if (opts.acceptUnprefixedLayer) layer = name as LayerName;
       else layer = layerHint;
 
@@ -134,8 +134,8 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
 
       at.walkDecls((d: Declaration) => {
         if (d.parent?.type === "rule") return; // already captured as rule
-        if (d.parent?.type === "root" && String(d.prop).startsWith("--pkv-")) {
-          out.tokens[d.prop.replace(/^--pkv-/, "")] = String(d.value);
+        if (d.parent?.type === "root" && String(d.prop).startsWith("--ky-")) {
+          out.tokens[d.prop.replace(/^--ky-/, "")] = String(d.value);
         }
       });
     };
@@ -144,8 +144,8 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
     root.walkRules((r: Rule) => {
       if (r.selector === ":root") {
         r.walkDecls((d) => {
-          if (String(d.prop).startsWith("--pkv-")) {
-            out.tokens[d.prop.replace(/^--pkv-/, "")] = String(d.value);
+          if (String(d.prop).startsWith("--ky-")) {
+            out.tokens[d.prop.replace(/^--ky-/, "")] = String(d.value);
           }
         });
       }
@@ -166,8 +166,8 @@ export const postcssPkv = (opts: PkvOptions = {}): Plugin => ({
     });
 
     result.messages.push({
-      type: "pkv",
-      plugin: "postcss-pkv",
+      type: "kitsy",
+      plugin: "postcss-kitsy",
       out,
       diagnostics,
     });

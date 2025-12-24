@@ -7,7 +7,7 @@
       "@/*": ["src/*", "tests/*"]
     }
   },
-  "include": ["src", "scripts", "stories", "pkv.config.js"],
+  "include": ["src", "scripts", "stories", "kitsy.config.js"],
   "exclude": [
     "node_modules",
     "dist",

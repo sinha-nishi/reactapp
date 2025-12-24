@@ -18,7 +18,7 @@
     },
     "./sass/*": "./sass/*",
     "./css": {
-      "default": "./dist/pkv.theme.min.css"
+      "default": "./dist/kitsy.theme.min.css"
     },
     "./builder": {
       "types": "./dist/esm/builder/index.d.ts",
@@ -56,8 +56,8 @@
   "scripts": {
     "test": "vitest",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.theme.css -o dist/pkv.theme.css && prettier --write dist/pkv.theme.css dist/pkv.theme.legacy.css",
-    "minify": "cross-env MINIFY=1 postcss dist/pkv.theme.min.css -o dist/pkv.theme.min.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/kitsy.theme.css -o dist/kitsy.theme.css && prettier --write dist/kitsy.theme.css dist/kitsy.theme.legacy.css",
+    "minify": "cross-env MINIFY=1 postcss dist/kitsy.theme.min.css -o dist/kitsy.theme.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",

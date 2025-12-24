@@ -6,7 +6,7 @@
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
-  "style": "dist/pkv.material.min.css",
+  "style": "dist/kitsy.material.min.css",
   "unpkg": "dist/umd/react-app.standalone.min.js",
   "jsdelivr": "dist/umd/react-app.standalone.min.js",
   "sideEffects": [
@@ -30,15 +30,15 @@
     },
     "./material": {
       "types": "./types/css.d.ts",
-      "default": "./dist/pkv.material.min.css"
+      "default": "./dist/kitsy.material.min.css"
     },
     "./material/legacy": {
       "types": "./types/css.d.ts",
-      "default": "./dist/pkv.material.legacy.min.css"
+      "default": "./dist/kitsy.material.legacy.min.css"
     },
     "./material-css": {
       "types": "./types/css.d.ts",
-      "default": "./dist/pkv.material.css"
+      "default": "./dist/kitsy.material.css"
     },
     "./builder/css": {
       "types": "./dist/index.d.ts",
@@ -82,8 +82,8 @@
   "scripts": {
     "test": "vitest",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.material.css -o dist/pkv.material.css && prettier --write dist/pkv.material.css",
-    "minify": "cross-env MINIFY=1 postcss dist/pkv.material.min.css -o dist/pkv.material.min.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/kitsy.material.css -o dist/kitsy.material.css && prettier --write dist/kitsy.material.css",
+    "minify": "cross-env MINIFY=1 postcss dist/kitsy.material.min.css -o dist/kitsy.material.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build:types": "rimraf dist && rollup -c && tsc -p tsconfig.build.json && rollup -c rollup-types.config.js",
     "build": "rollup -c",

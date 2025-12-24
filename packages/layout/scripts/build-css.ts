@@ -11,5 +11,5 @@ const builder = createThemeBuilder().use(basePlugin()).use(layoutPlugin());
 const css = builder.toString({ minify: false });
 const cssMin = builder.toString({ minify: true });
 
-writeFileSync(resolve(outDir, "pkv.layout.css"), css, "utf8");
-writeFileSync(resolve(outDir, "pkv.layout.min.css"), cssMin, "utf8");
+writeFileSync(resolve(outDir, "kitsy.layout.css"), css, "utf8");
+writeFileSync(resolve(outDir, "kitsy.layout.min.css"), cssMin, "utf8");

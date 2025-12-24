@@ -6,20 +6,20 @@ export const componentsPlugin = (): BuilderPlugin => (b) => {
     "components",
     `.c-button`,
     `display:inline-flex;align-items:center;justify-content:center;` +
-      `border-radius:var(--pkv-radius-md);padding:.5rem .875rem;` +
-      `font-family:var(--pkv-font-sans);line-height:1;`,
+      `border-radius:var(--ky-radius-md);padding:.5rem .875rem;` +
+      `font-family:var(--ky-font-sans);line-height:1;`,
     "c-button-base",
   );
   b.rule(
     "components",
     `.c-button--primary`,
-    `background:var(--pkv-color-primary-500);color:#fff`,
+    `background:var(--ky-color-primary-500);color:#fff`,
     "c-button-primary",
   );
   b.rule(
     "components",
     `.c-button--ghost`,
-    `background:transparent;border:1px solid var(--pkv-color-border)`,
+    `background:transparent;border:1px solid var(--ky-color-border)`,
     "c-button-ghost",
   );
 
@@ -27,7 +27,7 @@ export const componentsPlugin = (): BuilderPlugin => (b) => {
   b.rule(
     "components",
     `.c-card`,
-    `border:1px solid var(--pkv-color-border);border-radius:12px;padding:1rem;background:#fff`,
+    `border:1px solid var(--ky-color-border);border-radius:12px;padding:1rem;background:#fff`,
     "c-card",
   );
 };

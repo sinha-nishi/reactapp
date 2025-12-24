@@ -86,7 +86,7 @@ const utilitiesEngine = (b: CssBuilder): ClassEnginePlugin => {
     //   });
 
     //   // Then wrap responsive tokens (media queries)
-    //   // Your stringify already outputs @media blocks (seen in pkv.theme.css),
+    //   // Your stringify already outputs @media blocks (seen in kitsy.theme.css),
     //   // so we can safely emit media wrapper objects.
     //   for (const t of tokens) {
     //     if (!responsive.has(t)) continue;

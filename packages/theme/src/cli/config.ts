@@ -3,17 +3,17 @@ import path from "node:path";
 import fg from "fast-glob";
 
 const CANDIDATES = [
-  "pkv.config.mjs",
-  "pkv.config.cjs",
-  "pkv.config.js",
-  "pkv.config.json",
+  "kitsy.config.mjs",
+  "kitsy.config.cjs",
+  "kitsy.config.js",
+  "kitsy.config.json",
 ];
 
 async function findConfig(cwd = process.cwd()) {
   const matches = await fg(
     [
-      "pkv.config.{mjs,cjs,js,json}",
-      "{src,config}/pkv.config.{mjs,cjs,js,json}",
+      "kitsy.config.{mjs,cjs,js,json}",
+      "{src,config}/kitsy.config.{mjs,cjs,js,json}",
     ],
     {
       cwd,

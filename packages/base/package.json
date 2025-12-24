@@ -16,7 +16,7 @@
       "require": "./dist/cjs/index.js"
     },
     "./css": {
-      "default": "./dist/pkv.base.min.css"
+      "default": "./dist/kitsy.base.min.css"
     },
     "./builder": {
       "types": "./dist/esm/builder/index.d.ts",
@@ -48,8 +48,8 @@
   "scripts": {
     "test": "vitest",
     "clean": "rimraf dist",
-    "build:css": "tsx scripts/build-css.ts && postcss dist/pkv.base.css -o dist/pkv.base.css && prettier --write dist/pkv.base.css",
-    "minify": "cross-env MINIFY=1 postcss dist/pkv.base.min.css -o dist/pkv.base.min.css",
+    "build:css": "tsx scripts/build-css.ts && postcss dist/kitsy.base.css -o dist/kitsy.base.css && prettier --write dist/kitsy.base.css",
+    "minify": "cross-env MINIFY=1 postcss dist/kitsy.base.min.css -o dist/kitsy.base.min.css",
     "prebuild": "pnpm run clean && pnpm run build:css && pnpm run minify",
     "build": "rollup -c",
     "storybook": "storybook dev -p 6006",

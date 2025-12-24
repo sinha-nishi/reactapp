@@ -4,7 +4,7 @@ import { layoutPlugin } from "@pkvsinha/react-layout";
 import { componentsPlugin } from "@pkvsinha/react-components";
 import { widgetsPlugin } from "@pkvsinha/react-widgets";
 
-// Default theme (pkv.app.*)
+// Default theme (kitsy.app.*)
 // const app = createThemeBuilder().use(basePlugin()).use(layoutPlugin()).use(componentsPlugin()).use(widgetsPlugin());
 const app = createThemeBuilder();
 // Material preset
