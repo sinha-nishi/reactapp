@@ -55,6 +55,63 @@ export type Theme = {
   zIndex: Record<string, string | number>;
 };
 
+// 1. Core Breakpoint Tokens (Standard T-shirt sizes)
+// We use a Record type to allow infinite custom sizes (e.g., '3xl', '4k')
+export type BreakpointKey = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | string;
+
+export interface BreakpointDef {
+  values: Record<BreakpointKey, number>; // Store as numbers for calculation (comparison)
+  unit: "px" | "em" | "rem"; // Store unit separately for conversion
+}
+
+export type Breakpoints<CustomBreakpoints extends string = never> = {
+  [K in BreakpointKey | CustomBreakpoints]: string; // e.g. "640px"
+};
+// 2. Device Capabilities (Future Proofing)
+// Captures non-size aspects of the screen
+export interface DeviceCapabilities {
+  // Input: Critical for "fat finger" design vs mouse precision
+  input: "touch" | "mouse" | "hybrid";
+
+  // Hover: Can the user hover? (essential for tooltips)
+  hover: "hover" | "none";
+
+  // Density: For serving correct image assets (1x, 2x, 3x)
+  pixelRatio: number;
+
+  // Preference: Dark mode, reduced motion (accessibility)
+  colorScheme: "light" | "dark" | "system";
+  reducedMotion: boolean;
+}
+
+// 3. Foldable & Screen State (The "Future" part)
+// Supports new form factors like Galaxy Fold or Surface Duo
+export interface ScreenState {
+  orientation: "portrait" | "landscape";
+
+  // Is the device flat or folded? (Foldable support)
+  posture?: "continuous" | "folded";
+
+  // Are we spanning across two physical screens?
+  spanning?: "none" | "single-fold-vertical" | "single-fold-horizontal";
+}
+
+// --- THE MASTER INTERFACE ---
+
+// K allows users to pass their own custom keys (Generics)
+export interface ScreenConfig<CustomBreakpoints extends string = never> {
+  // The raw breakpoint definition
+  breakpoints: Breakpoints;
+
+  // The actual detected state (runtime)
+  // current: {
+  //   breakpoint: BreakpointKey | CustomBreakpoints; // e.g., "md"
+  //   width: number;
+  //   height: number;
+  // } & DeviceCapabilities &
+  //   ScreenState;
+}
+
 export type Rule = {
   kind: "exact" | "prefix" | "pattern";
   family?: string; // e.g. "spacing", "color", "typography", etc.
@@ -276,8 +333,6 @@ export type BuilderOptions = {
   };
 };
 
-export type ScreenOptions = Record<string, string>;
-
 export type CSSObject = {
   selector: string; // ".md\\:hover\\:bg-red-500"
   decls: Record<string, string>; // { "background-color": "..." }
@@ -297,16 +352,10 @@ export type VariantBuilder = (
   decls: CSSObject[],
 ) => CSSObject[];
 
-export interface BuilderContext {
-  theme: LoadedTheme;
-  screens: Record<string, string>;
-  important: boolean | string;
-}
-
 export interface ClassEnginePlugin {
   name: string;
   variants: VariantBuilder;
   match: (className: string) => MatchResult | false;
   render: (match: MatchResult, meta: any) => CSSObject[];
-  enumerate: (ctx: BuilderContext, opts?: { families?: string[] }) => string[];
+  enumerate: (opts?: { families?: string[] }) => string[];
 }

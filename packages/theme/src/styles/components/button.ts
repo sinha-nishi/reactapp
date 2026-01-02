@@ -5,7 +5,7 @@ export function buttonStyles(
   b: CssBuilder,
   opts: ButtonStyleOptions,
 ): CssBuilder {
-  const { theme } = b.ctx;
+  const { theme } = b.opts;
   const focusRing = opts.focusRing ?? true;
 
   /* =========================

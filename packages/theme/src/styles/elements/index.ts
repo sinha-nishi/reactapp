@@ -4,7 +4,7 @@ import { CssBuilder, BuilderPlugin } from "../../core/builder";
 export const elementsPlugin =
   (opts: BuilderOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
-    const { theme } = b.ctx;
+    const { theme } = b.opts;
     const focusRing = opts?.a11y?.focusRing ?? true;
 
     b.elements(

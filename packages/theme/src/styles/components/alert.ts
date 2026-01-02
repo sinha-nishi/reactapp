@@ -5,7 +5,7 @@ export function alertStyles(
   b: CssBuilder,
   opts: AlertStyleOptions,
 ): CssBuilder {
-  const { theme } = b.ctx;
+  const { theme } = b.opts;
   const focusRing = opts.focusRing ?? true;
   /* =========================
    * Alert

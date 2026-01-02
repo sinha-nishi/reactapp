@@ -1,4 +1,4 @@
-import { BuilderContext, ScreenOptions } from "../../@types";
+import { ScreenConfig } from "../../@types";
 import { CSSProperties } from "../../@types/CSSProperties";
 import { LoadedTheme, Tokens } from "../../@types";
 import { packs } from "../../tokens";
@@ -64,41 +64,52 @@ function styleObjToString(style: CSSProperties): string {
 
 type Rule = { selector?: string; css: string; layer: LayerName };
 
-interface Options {
+interface BuilderOptions {
   prefix?: string;
   classPrefix?: string;
   classPrefixLayers?: LayerName[];
   theme?: LoadedTheme;
-  screens?: ScreenOptions;
+  screens?: ScreenConfig;
   important?: boolean;
   layerOrder?: LayerName[];
 }
 
+const defaultBreakpoints: ScreenConfig = {
+  breakpoints: {
+    xs: "360px", // Mobile First base
+    sm: "640px", // Large Phones
+    md: "768px", // Tablets (iPad Portrait)
+    lg: "1024px", // Tablets (iPad Landscape) / Small Laptops
+    xl: "1280px", // Standard Laptops
+    "2xl": "1536px", // Large Monitors
+    "3xl": "1920px", // 1080p Desktop
+    "4k": "2560px", // Ultra-wide / 4K
+  },
+  // current: {
+  //   breakpoint: "md", // Calculated at runtime
+  //   width: 768,
+  //   height: 1024,
+  //   orientation: "portrait",
+  //   input: "touch",
+  //   hover: "none",
+  //   pixelRatio: 2, // Retina display
+  //   colorScheme: "light",
+  //   reducedMotion: false,
+  //   posture: "continuous",
+  // },
+};
+
 export class CssBuilder {
-  readonly ctx: BuilderContext;
   private tokens: Tokens = {};
   private rules: Rule[] = [];
   private usedKeys = new Set<string>();
   private styleEl?: HTMLStyleElement;
-  readonly opts: Required<Options>;
+  readonly opts: Required<BuilderOptions>;
   private _beforeSerialize: Array<() => void> = [];
 
-  constructor(options?: Options) {
-    // const theme = { ...defaultScales, ...(options?.theme ?? {}) };
+  constructor(options?: BuilderOptions) {
     const theme = packs.radix;
-    const screens = options?.screens ?? {
-      xs: "360px",
-      sm: "640px",
-      md: "768px",
-      lg: "1024px",
-      xl: "1280px",
-      "2xl": "1536px",
-    };
-    this.ctx = {
-      theme,
-      screens,
-      important: options?.important ?? false,
-    };
+    const screens = options?.screens ?? defaultBreakpoints;
 
     this.opts = {
       theme,

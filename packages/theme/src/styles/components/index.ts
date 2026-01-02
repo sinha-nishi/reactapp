@@ -9,7 +9,7 @@ import { alertStyles } from "./alert";
 export const componentsPlugin =
   (opts: BuilderOptions = {}): BuilderPlugin =>
   (b: CssBuilder) => {
-    const { theme } = b.ctx;
+    const { theme } = b.opts;
     const focusRing = opts?.a11y?.focusRing ?? true;
 
     opts.components?.alert !== false &&

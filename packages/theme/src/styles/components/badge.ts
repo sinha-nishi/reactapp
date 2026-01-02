@@ -5,7 +5,7 @@ export function badgeStyles(
   b: CssBuilder,
   opts: BadgeStyleOptions,
 ): CssBuilder {
-  const { theme } = b.ctx;
+  const { theme } = b.opts;
   const focusRing = opts.focusRing ?? true;
 
   /* =========================

@@ -13,7 +13,7 @@ function toCssVarOverrides(map?: Record<string, string | number>): CssVarMap {
 export const settingsPlugin =
   (opts?: SettingsPluginOptions): BuilderPlugin =>
   (b: CssBuilder) => {
-    const { theme } = b.ctx;
+    const { theme } = b.opts;
     const def = theme.meta.defaultTheme;
 
     // Default theme goes into :root via tokens

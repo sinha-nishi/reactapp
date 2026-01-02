@@ -2,7 +2,7 @@ import { CardStyleOptions } from "../../@types";
 import { CssBuilder } from "../../core/builder";
 
 export function cardStyles(b: CssBuilder, opts: CardStyleOptions): CssBuilder {
-  const { theme } = b.ctx;
+  const { theme } = b.opts;
 
   /* =========================
    * Card

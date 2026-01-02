@@ -1,14 +1,13 @@
 import type {
   CSSObject,
   ClassEnginePlugin,
-  BuilderContext,
 } from "../../@types";
 import { mergeRules } from "../../utils/rules";
 import { stringify } from "./stringify";
 
-function expandVariants(base: string[], ctx: BuilderContext): string[] {
+function expandVariants(base: string[], opts?: { screens: Record<string, string> }): string[] {
   // responsive variants
-  const screens = ctx?.screens ?? {
+  const screens = opts?.screens ?? {
     sm: "640px",
     md: "768px",
     lg: "1024px",
@@ -60,15 +59,14 @@ export class ClassEngine {
   }
 
   enumerate(
-    ctx: BuilderContext,
     opts?: { families?: string[]; variants?: boolean },
   ): string[] {
     const out: string[] = [];
     for (const p of this.plugins) {
-      out.push(...p.enumerate(ctx, opts));
+      out.push(...p.enumerate(opts));
     }
     if (opts?.variants) {
-      return expandVariants(out, ctx);
+      return expandVariants(out);
     }
     return Array.from(new Set(out));
   }
